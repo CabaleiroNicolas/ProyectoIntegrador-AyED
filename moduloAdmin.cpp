@@ -5,20 +5,22 @@
 
 int Menu()
 {
-	int opcion = 0;
-	
-	printf("MENU");
-	printf("\n----\n");
-	
-	printf("\n1- Registrar Profesional");
-	printf("\n2- Registrar Usuario Recepcionista");
-	printf("\n3- Atenciones por Profesional");
-	printf("\n4- Ranking de Profesionales por Atenciones");
-	printf("\n5- Cerrar la aplicacion.");
-	printf("\n\nIngrese una opcion: ");
-	scanf("%d", &opcion);
-	
-	return opcion;
+	int opc = 0;
+
+    printf("\n==================================");
+    printf("\n      MODULO ADMINISTRACION");
+    printf("\n==================================");
+
+    printf("\n\n1.- Registrar Profesional");
+    printf("\n2.- Registrar Usuario Recepcionista");
+    printf("\n3.- Atenciones por Profesional");
+    printf("\n4.- Ranking de Profesionales por Atenciones");
+    printf("\n0.- Cerrar Aplicacion");
+
+    printf("\n\nIngrese una Opcion: ");
+    scanf("%d", &opc);
+
+    return opc;
 }
 main()
 {
