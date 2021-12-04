@@ -7,7 +7,7 @@
 int MenuGeneral()
 {
     int opc = 0;
-
+	printf("-- Menu Principal --");
     printf("\n\n1.- Modulo Espacios.");
     printf("\n2.- Modulo Recepcionista");
     printf("\n3.- Modulo Administracion");
@@ -52,7 +52,7 @@ int MenuAdministracion()
     printf("\n==================================");
 
     printf("\n\n1.- Registrar Profesional");
-    printf("\n2.- Registrar Usuario Recepcionista");
+    printf("\n2.- Registrar Usuario");
     printf("\n3.- Atenciones por Profesional");
     printf("\n4.- Ranking de Profesionales por Atenciones");
     printf("\n0.- Cerrar Aplicacion");
@@ -96,7 +96,7 @@ struct Fecha
 struct Usuario
 {
     char usuario[10];
-    char contraseña[10];
+    char contra [10];
     char apeNom[60];
 };
 
@@ -112,7 +112,7 @@ struct Profesional
 struct Cliente
 {
     char apeNom[60];
-    char domicilio[60]
+    char domicilio[60];
     int dniCliente;
     char localidad[60];
     Fecha fechaDeNacimiento;
@@ -128,9 +128,15 @@ struct Turnos
     char detalleDeAtencion[380];
 };
 
+void login ()
+{
+	
+}
+
 
 main()
 {
+   
     int opcion = 0;
 
     do
