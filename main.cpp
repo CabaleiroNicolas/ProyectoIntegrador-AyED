@@ -142,7 +142,7 @@ void ValidUser(char usuario[10])
 	
 	longitud = strlen(usuario);
 	
-	if(longitud > 10)
+	if(longitud > 10 || longitud < 6)
 	{
 		printf("\nEl usuario no puede contener mas de 10 caracteres...")
 	}
