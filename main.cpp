@@ -304,8 +304,49 @@ void enterPassword(char* verify) //Enmasca la contrasenia ingresada
  } while(ch!=13);
 }
 
-void cargarUsuario (char myfile [])
+
+void ValidUser(char usuario[10])
 {
+	int longitud = 0;
+	int letrasMayusculas = 0;
+	int digitos = 0;
+	
+	longitud = strlen(usuario);
+	
+	if(longitud > 10 || longitud < 6)
+	{
+		printf("\nEl usuario no puede contener mas de 10 caracteres...")
+	}
+	else
+	{
+		
+		for(int i = 0; i < 10: i++)
+		{
+			if(usuario[1] >= 'a' && usuario[1] <= 'z')
+			{
+				if(usuario[i] >= 'A' && usuario[i] <= 'Z')
+				{
+					letrasMayusculas++;
+				}
+				
+				if(usuario[i] >= '0' && usuario[i] <= '9')
+				{
+					digitos++;
+				}
+			}
+			
+		}
+		
+		if(letrasMayusculas > 1 && digitos < 4)
+		{
+			printf("\nUsuario Creado correctamente");
+		}
+		else
+		{
+			printf("\nEl Nombre de usuario ingresado no cumple con lo terminos indicados...");
+		}
+					
+	}
 	
 }
 
