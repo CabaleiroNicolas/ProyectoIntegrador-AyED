@@ -61,7 +61,7 @@ main()
 			
 			case 1:
 				{
-					printf("Iniciar Sesión");
+					printf("Iniciar SesiÃ³n");
 					break;
 				}
 				
@@ -99,3 +99,4 @@ main()
 		system("pause");
 		
 	} while ( opc != 0);
+}
