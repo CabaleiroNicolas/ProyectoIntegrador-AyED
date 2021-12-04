@@ -170,11 +170,11 @@ void ValidUser(char usuario[10])
 		{
 			printf("\nUsuario Creado correctamente");
 		}
+		else
+		{
+			printf("\nEl Nombre de usuario ingresado no cumple con lo terminos indicados...");
+		}
 					
-	}
-	else
-	{
-		printf("\nEl Nombre de usuario ingresado no cumple con lo terminos indicados...");
 	}
 	
 }
