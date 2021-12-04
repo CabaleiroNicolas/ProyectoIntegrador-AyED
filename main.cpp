@@ -144,12 +144,12 @@ void ValidUser(char usuario[10])
 	
 	if(longitud > 10 || longitud < 6)
 	{
-		printf("\nEl usuario no puede contener mas de 10 caracteres...")
+		printf("\nEl usuario no puede contener mas de 10 caracteres...");
 	}
 	else
 	{
 		
-		for(int i = 0; i < 10: i++)
+		for(int i = 0; i < 10; i++)
 		{
 			if(usuario[1] >= 'a' && usuario[1] <= 'z')
 			{
