@@ -10,12 +10,20 @@
 #include <wincon.h>
 #include <cstdlib>
 #include <unistd.h>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4b25dd1ac18bceb8b1a6febdbb18eafd6460d923
 
 int MenuGeneral()
 {
     int opc = 0;
     setTextColor(9);
+<<<<<<< HEAD
 	printf("-- Menu Principal --");
+=======
+    printf("-- Menu Principal --");
+>>>>>>> 4b25dd1ac18bceb8b1a6febdbb18eafd6460d923
     printf("\n\n1.- Modulo Espacios.");
     printf("\n2.- Modulo Recepcionista");
     printf("\n3.- Modulo Administracion");
@@ -68,7 +76,10 @@ int MenuAdministracion()
 
     return opc;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4b25dd1ac18bceb8b1a6febdbb18eafd6460d923
 int MenuEspacios(bool sesionInic)
 {
     int opc = 0;
@@ -130,6 +141,7 @@ struct Turnos
     char detalleDeAtencion[380];
 };
 
+<<<<<<< HEAD
 void ValidUser(char usuario[10])
 {
 	int longitud = 0;
@@ -173,6 +185,10 @@ void ValidUser(char usuario[10])
 
 int checkPassword(char clave[32])
 {
+=======
+int checkPassword(char clave[32])
+{
+>>>>>>> 4b25dd1ac18bceb8b1a6febdbb18eafd6460d923
 	 int longitud;
 	 int i = 0;
 	 int flag = 0;
@@ -281,6 +297,7 @@ int checkPassword(char clave[32])
 	  }
 	  return  retorno;
 	 
+<<<<<<< HEAD
 }
 
 void enterPassword(char* verify) //Enmasca la contrasenia ingresada
@@ -302,8 +319,30 @@ void enterPassword(char* verify) //Enmasca la contrasenia ingresada
 		   verify[i++]='\0';
 		}
  } while(ch!=13);
+=======
+>>>>>>> 4b25dd1ac18bceb8b1a6febdbb18eafd6460d923
 }
 
+void enterPassword(char* verify) //Enmasca la contrasenia ingresada
+{
+
+ char ch;
+ int i=0;
+
+ do
+ {
+	  ch=getch();
+	  if(ch!=13)
+	   {
+		verify[i++]=ch; //Va cargando los caracteres ingresados
+		   cout<<"*";
+	  }
+	 else
+		{
+		   verify[i++]='\0';
+		}
+ } while(ch!=13);
+}
 
 void ValidUser(char usuario[10])
 {
@@ -356,9 +395,15 @@ main()
     FILE *prof;
     FILE *cliente;
     FILE *turno;
+<<<<<<< HEAD
 	char myfile [255]={"Usuarios.dat"}; //Nombre del archivo de usuarios
 	bool sesionInic = false;
 	int opcEspacios = 0;
+=======
+    char myfile [255]={"Usuarios.dat"}; //Nombre del archivo de usuarios
+    bool sesionInic = false;
+    int opcEspacios = 0;
+>>>>>>> 4b25dd1ac18bceb8b1a6febdbb18eafd6460d923
     int opcRecep =0;
     int opcAdmin=0;
     int opcion = 0;
@@ -389,6 +434,7 @@ main()
 
                             case 2:
                             {
+<<<<<<< HEAD
 								printf("Listado de espera de Turnos.");
 								if(sesionInic == false)
 									{
@@ -399,6 +445,18 @@ main()
 									{
 										
 									}
+=======
+				printf("Listado de espera de Turnos.");
+				if(sesionInic == false)
+				{
+					printf("Debe iniciar sesion para realizar una accion, por favor escoja la opcion 1: ");
+									
+				}
+				else
+				{
+										
+				}
+>>>>>>> 4b25dd1ac18bceb8b1a6febdbb18eafd6460d923
                                 break;
                             }
 
@@ -406,6 +464,7 @@ main()
                             {
                                 printf("Registrar evolucion del tratamiento.");
                                 if(sesionInic == false)
+<<<<<<< HEAD
 									{
 										printf("Debe iniciar sesion para realizar una accion, por favor escoja la opcion 1: ");
 									
@@ -414,21 +473,41 @@ main()
 								{
 										
 								}
+=======
+				{
+					printf("Debe iniciar sesion para realizar una accion, por favor escoja la opcion 1: ");	
+				}
+				else
+				{
+										
+				}
+>>>>>>> 4b25dd1ac18bceb8b1a6febdbb18eafd6460d923
                                 break;
                             }
 
                             case 0:
                             {
+<<<<<<< HEAD
 								printf("Salir. ");
+=======
+				printf("Salir. ");
+>>>>>>> 4b25dd1ac18bceb8b1a6febdbb18eafd6460d923
                                 break;
                             }
 
                             default:
                             {
+<<<<<<< HEAD
 							     printf("\n=======================================");
 				                 printf("\nEsa Opcion no se encuentra en el Menu.\n");
 				                 printf("\n=======================================\n\n");
 				                 system("pause");
+=======
+				printf("\n=======================================");
+				printf("\nEsa Opcion no se encuentra en el Menu.\n");
+				printf("\n=======================================\n\n");
+				system("pause");
+>>>>>>> 4b25dd1ac18bceb8b1a6febdbb18eafd6460d923
                                 break;
                             }
 
@@ -447,13 +526,18 @@ main()
                         {
                             case 1:
                             {
+<<<<<<< HEAD
 								printf("Iniciar sesion.");
+=======
+				printf("Iniciar sesion.");
+>>>>>>> 4b25dd1ac18bceb8b1a6febdbb18eafd6460d923
 								
                                 break;
                             }
 
                             case 2:
                             {
+<<<<<<< HEAD
 								printf("Registrar a un cliente.");
 								if(sesionInic == false)
 								{
@@ -464,6 +548,18 @@ main()
 								{
 										
 								}
+=======
+				printf("Registrar a un cliente.");
+				if(sesionInic == false)
+				{
+					printf("Debe iniciar sesion para realizar una accion, por favor escoja la opcion 1: ");
+									
+				}
+				else
+				{
+						
+				}
+>>>>>>> 4b25dd1ac18bceb8b1a6febdbb18eafd6460d923
                                 break;
                             }
 
@@ -471,6 +567,7 @@ main()
                             {
                                 printf("Registrar un turno.");
                                 if(sesionInic == false)
+<<<<<<< HEAD
 								{
 									printf("Debe iniciar sesion para realizar una accion, por favor escoja la opcion 1: ");
 									
@@ -479,6 +576,16 @@ main()
 								{
 										
 								}  
+=======
+				{
+					printf("Debe iniciar sesion para realizar una accion, por favor escoja la opcion 1: ");
+									
+				}
+				else
+				{
+										
+				}  
+>>>>>>> 4b25dd1ac18bceb8b1a6febdbb18eafd6460d923
                                 break;
                             }
 
@@ -486,6 +593,7 @@ main()
                             {
                                 printf("Listado de Atenciones por profesional y fecha.");
                                 if(sesionInic == false)
+<<<<<<< HEAD
 								{
 									printf("Debe iniciar sesion para realizar una accion, por favor escoja la opcion 1: ");
 									
@@ -494,21 +602,41 @@ main()
 								{
 										
 								}
+=======
+				{
+					printf("Debe iniciar sesion para realizar una accion, por favor escoja la opcion 1: ");
+				}
+				else
+				{
+										
+				}
+>>>>>>> 4b25dd1ac18bceb8b1a6febdbb18eafd6460d923
                                 break;
                             }
 
                             case 0:
                             {
+<<<<<<< HEAD
 								printf("Salir.");
+=======
+				printf("Salir.");
+>>>>>>> 4b25dd1ac18bceb8b1a6febdbb18eafd6460d923
                                 break;
                             }
 
                             default:
                             {
+<<<<<<< HEAD
  								 printf("\n=======================================");
 				                 printf("\nEsa Opcion no se encuentra en el Menu.\n");
 				                 printf("\n=======================================\n\n");
 				                 system("pause");
+=======
+ 				printf("\n=======================================");
+				printf("\nEsa Opcion no se encuentra en el Menu.\n");
+				printf("\n=======================================\n\n");
+				system("pause");
+>>>>>>> 4b25dd1ac18bceb8b1a6febdbb18eafd6460d923
                                 break;
                             }
 
@@ -527,40 +655,67 @@ main()
                         {
                             case 1:
                             {
+<<<<<<< HEAD
 								printf("Registrar a un profesioanl.");
+=======
+				printf("Registrar a un profesioanl.");
+>>>>>>> 4b25dd1ac18bceb8b1a6febdbb18eafd6460d923
                                 break;
                             }
 
                             case 2:
                             {
+<<<<<<< HEAD
 								printf("Registrar a un recepcionista.");
+=======
+				printf("Registrar a un recepcionista.");
+>>>>>>> 4b25dd1ac18bceb8b1a6febdbb18eafd6460d923
                                 break;
                             }
 
                             case 3:
                             {
+<<<<<<< HEAD
    								printf("Atenciones por profesional.");
+=======
+   				printf("Atenciones por profesional.");
+>>>>>>> 4b25dd1ac18bceb8b1a6febdbb18eafd6460d923
                                 break;
                             }
 
                             case 4:
                             {
+<<<<<<< HEAD
 								printf("Ranking de Profesionales por atencion.");
+=======
+				printf("Ranking de Profesionales por atencion.");
+>>>>>>> 4b25dd1ac18bceb8b1a6febdbb18eafd6460d923
                                 break;
                             }
 
                             case 0:
                             {
+<<<<<<< HEAD
 								printf("Salir.");
+=======
+				printf("Salir.");
+>>>>>>> 4b25dd1ac18bceb8b1a6febdbb18eafd6460d923
                                 break;
                             }
 
                             default:
                             {
+<<<<<<< HEAD
 								 printf("\n=======================================");
 				                 printf("\nEsa Opcion no se encuentra en el Menu.\n");
 				                 printf("\n=======================================\n\n");
 				                 system("pause");
+=======
+				printf("\n=======================================");
+			        printf("\nEsa Opcion no se encuentra en el Menu.\n");
+				printf("\n=======================================\n\n");
+				system("pause");
+>>>>>>> 4b25dd1ac18bceb8b1a6febdbb18eafd6460d923
 
                                 break;
                             }
