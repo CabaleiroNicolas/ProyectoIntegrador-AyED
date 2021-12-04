@@ -158,7 +158,7 @@ void ValidUser(char usuario[10])
 					letrasMayusculas++;
 				}
 				
-				if(usuario[i] >= 0 && usuario[i] <= 9)
+				if(usuario[i] >= '0' && usuario[i] <= '9')
 				{
 					digitos++;
 				}
