@@ -1,7 +1,15 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <conio.h>
+#include <cstring>
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <windows.h>
+#include <wincon.h>
+#include <cstdlib>
+#include <unistd.h>
 
 
 int MenuGeneral()
