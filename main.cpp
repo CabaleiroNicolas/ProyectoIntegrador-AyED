@@ -386,6 +386,79 @@ void RegistrarRecepcionista(FILE *archRecepcionista)
 
 }
 
+void AtencionPorProf (Turnos turno, Profesional profs, char auxprof[80],FILE *turno,FILE *prof)
+{
+	int i=0;
+	bool band = false;
+	
+	prof=fopen("Profesionales.dat","r+b"); // cambio a+b * r+b
+	
+	shift=fopen("turnos.dat","r+b");
+
+	printf("\nATENCIONES POR PROFESIONALES\n");
+	_flushall();
+	printf("\nProfesional: ");
+	gets(auxpro);
+	
+	rewind(shift);
+	rewind(professional);
+	
+	fread(&prof,sizeof(Profesional),1,prof);
+	
+	fread(&t,sizeof(Turnos),1,shift);
+	while(!feof(professional) && band == false)
+	{
+		if(strcmp(auxpro , profs.apeNom) == 0)
+		{
+			while(!feof(shift))
+			{
+			
+				if(profs.idProfesional == turno.idProfesional)
+				{
+					
+					printf("\n Turno numero %d \n" , i);
+					printf("\n --------- \n");
+					printf("\nFecha:");
+					printf("\n\tDia: %d", turno.fechaDeTurno.dia);
+					printf("\n\tMes: %d", turno.fechaDeTurno.mes);
+					printf("\n\tA%co: %d",164, turno.fechaDeTurno.anio);
+					printf("\nDNI del Usuario a registrar: %d", turno.dniCliente);
+					printf("\n --------- \n");
+					i=i+1;
+					
+
+					fread(&turno,sizeof(turnos),1,shift);
+				}
+				
+				else
+				{
+					
+					fread(&turno,sizeof(turnos),1,shift);	
+					
+				}
+				
+				band = true;
+				
+			}
+	
+		}
+		else
+		{
+			
+			fread(&prof,sizeof(Profesional),1,professional);
+			
+		}
+							
+	}
+
+	printf("\n\n");
+	system("pause");
+	system("cls");
+	
+}
+
+
+
 main()
 {
     FILE *recep;
