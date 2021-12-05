@@ -14,7 +14,7 @@
 int MenuGeneral()
 {
     int opc = 0;
-    setTextColor(9);
+    
 	printf("-- Menu Principal --");
     printf("\n\n1.- Modulo Espacios.");
     printf("\n2.- Modulo Recepcionista");
@@ -22,7 +22,7 @@ int MenuGeneral()
     printf("\n0.- Cerrar Aplicacion");
     printf("\n\nIngrese una Opcion: ");
     scanf("%d", &opc);
-	setTextColor(7);
+	
     return opc;
 }
 
@@ -100,13 +100,13 @@ struct Fecha
 struct Recepcionista
 {
     char usuario[10];
-    char contraseña [10];
+    char contrasenia [10];
     char apeNom[60];
 };
 struct Profesional
 {
     char apeNom[60];
-	char contraseña[10]
+	char contrasenia[10];
     int idProfesional;
     int dniProfesional;
     char telefono[25];
@@ -145,7 +145,7 @@ int checkPassword(char clave[32])
 	 //Valida la longitud de la clave
 	 if (longitud <6  || longitud > 32)
 	 {
-	 	cout << "\nLong. invalida de clave.";
+	 	printf("\nLong. invalida de clave.");
 	 	retorno = 1;
 	 }
 	  //Valida que contenga al menos un caracter en mayuscula
@@ -161,7 +161,7 @@ int checkPassword(char clave[32])
 	  }
 	 if (flag == 0)  
 	 { 
-		cout << "\nLa clave debe contener al menos una mayuscula.";
+		printf("\nLa clave debe contener al menos una mayuscula.");
 		retorno = 1;
 	 }
 	 //Valida que contenga al menos un caracter en minuscula
@@ -177,9 +177,10 @@ int checkPassword(char clave[32])
 	  }
 	 if (flag == 0)  
 	 { 
-		cout << "\nLa clave debe contener al menos una minuscula.";
+		printf("\nLa clave debe contener al menos una minuscula.");
 		retorno = 1;
 	 }
+	 
 	 //Valida que contenga solo caracteres alfanumericos
 	 i=0;
 	 flag = 0;
@@ -187,7 +188,7 @@ int checkPassword(char clave[32])
 	  {
 	    if (!isalnum(clave[i]) ) 
 	    {
-			cout << "\nLa clave debe tener solo caracteres alfanumericos.";
+			printf("\nLa clave debe tener solo caracteres alfanumericos.");
 			flag = 1;
 			retorno = 1;
 		}	
@@ -214,7 +215,7 @@ int checkPassword(char clave[32])
 	  
 	  if (flag > 3)
 	  {
-	  	cout << "\nLa clave no puede tener mas de 3 numeros consecutivos seguidos.";
+	  	printf("\nLa clave no puede tener mas de 3 numeros consecutivos seguidos.");
 	  	retorno = 1;
 	  }
 	 
@@ -232,7 +233,7 @@ int checkPassword(char clave[32])
 	    		ascii = (int) toupper(clave[j]);//Obtiene el valor ascii del sgte caracter
 	    		if ((aux+1) == ascii)
 	    			{
-	    				cout << "\nLa clave no puede contener caracteres alfabeticos consecutivos.";
+	    				printf("\nLa clave no puede contener caracteres alfabeticos consecutivos.");
 	    				flag = 1;
 	    				retorno = 1;
 					}
@@ -255,7 +256,7 @@ void enterPassword(char* verify) //Enmasca la contrasenia ingresada
 	  if(ch!=13)
 		{
 		   verify[i++]=ch; //Va cargando los caracteres ingresados
-		   cout<<"*";
+		   printf("*");
 		}
 		  else
 		{
@@ -319,7 +320,7 @@ void RegistrarProfesional(FILE *archProfesional)
 
 	if(archProfesional == NULL)
 	{
-		archProfesional = fopen("Profesionales.dat", "w+b")
+		archProfesional = fopen("Profesionales.dat", "w+b");
 
 		if(archProfesional == NULL)printf("\nNo se pudo crear archivo Profesionales.dat");
 	}
@@ -335,7 +336,7 @@ void RegistrarProfesional(FILE *archProfesional)
 
 	printf("Contrasenia: ");
 	_flushall();
-	gets(prof.contraseña);
+	gets(prof.contrasenia);
 
 	printf("DNI: ");
 	scanf("%d", &prof.dniProfesional);
@@ -344,15 +345,50 @@ void RegistrarProfesional(FILE *archProfesional)
 	_flushall();
 	gets(prof.telefono);
 
-	fwrite(prof, sizeof(Profesional), 1,archProfesional);
+	fwrite(&prof, sizeof(Profesional), 1,archProfesional);
 
 	fclose(archProfesional);
 
 }
 
+
+void RegistrarRecepcionista(FILE *archRecepcionista)
+{
+
+	Recepcionista recep;
+
+	archRecepcionista = fopen("Recepcionistas.dat", "r+b");
+
+	if(archRecepcionista == NULL)
+	{
+		archRecepcionista = fopen("Recepcionistas.dat", "w+b");
+
+		if(archRecepcionista == NULL)printf("\nNo se pudo crear archivo Profesionales.dat");
+	}
+
+	fseek(archRecepcionista, 0, SEEK_END);
+
+	printf("Usuario: ");
+	_flushall();
+	gets(recep.usuario);
+
+	printf("Contrasenia: ");
+	_flushall();
+	gets(recep.contrasenia);
+
+	printf("Nombre y Apellido: ");
+	_flushall();
+	gets(recep.apeNom);
+
+	fwrite(&recep, sizeof(Recepcionista), 1,archRecepcionista);
+
+	fclose(archRecepcionista);
+
+}
+
 main()
 {
-    FILE *usuario;
+    FILE *recep;
     FILE *prof;
     FILE *cliente;
     FILE *turno;
@@ -527,7 +563,7 @@ main()
                         {
                             case 1:
                             {
-								printf("Registrar a un profesioanl.");
+								printf("Registrar a un profesioanl.\n\n");
 								RegistrarProfesional(prof);
 								printf("\n\nProfesional Registrado con Exito!\n\n");
 								system("pause");
@@ -536,7 +572,10 @@ main()
 
                             case 2:
                             {
-								printf("Registrar a un recepcionista.");
+								printf("Registrar a un recepcionista.\n\n");
+								RegistrarRecepcionista(recep);
+								printf("\n\nRecepcionista Registrado con Exito!\n\n");
+								system("pause");
                                 break;
                             }
 
