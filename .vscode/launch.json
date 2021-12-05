@@ -30,9 +30,9 @@
         ""
       ],
       "stopAtEntry": false,
-      "cwd": "c:/Users/nicoc/Documents/ProyectoIntegrador-AyED",
+      "cwd": "c:/Users/nicoc/Documents/ProyectoIntegrador-AyED-1",
       "environment": [],
-      "program": "c:/Users/nicoc/Documents/ProyectoIntegrador-AyED/build/Debug/outDebug",
+      "program": "c:/Users/nicoc/Documents/ProyectoIntegrador-AyED-1/build/Debug/outDebug",
       "internalConsoleOptions": "openOnSessionStart",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
