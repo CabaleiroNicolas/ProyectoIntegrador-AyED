@@ -100,12 +100,13 @@ struct Fecha
 struct Recepcionista
 {
     char usuario[10];
-    char contra [10];
+    char contraseña [10];
     char apeNom[60];
 };
 struct Profesional
 {
     char apeNom[60];
+	char contraseña[10]
     int idProfesional;
     int dniProfesional;
     char telefono[25];
@@ -129,46 +130,6 @@ struct Turnos
     char detalleDeAtencion[380];
 };
 
-void ValidUser(char usuario[10])
-{
-	int longitud = 0;
-	int letrasMayusculas = 0;
-	int digitos = 0;
-	
-	longitud = strlen(usuario);
-	
-	if(longitud > 10 || longitud < 6)
-	{
-		printf("\nEl usuario no puede contener mas de 10 caracteres...")
-	}
-	else
-	{
-		for(int i = 0; i < 10: i++)
-		{
-			if(usuario[1] >= 'a' && usuario[1] <= 'z')
-			{
-				if(usuario[i] >= 'A' && usuario[i] <= 'Z')
-				{
-					letrasMayusculas++;
-				}
-				
-				if(usuario[i] >= '0' && usuario[i] <= '9')
-				{
-					digitos++;
-				}
-			}	
-		}
-		
-		if(letrasMayusculas > 1 && digitos < 4)
-		{
-			printf("\nUsuario Creado correctamente");
-		}
-		else
-		{
-			printf("\nEl Nombre de usuario ingresado no cumple con lo terminos indicados...");
-		}				
-	}	
-}
 
 int checkPassword(char clave[32])
 {
@@ -303,27 +264,6 @@ void enterPassword(char* verify) //Enmasca la contrasenia ingresada
  } while(ch!=13);
 }
 
-void enterPassword(char* verify) //Enmasca la contrasenia ingresada
-{
-
- char ch;
- int i=0;
-
- do
- {
-	  ch=getch();
-	  if(ch!=13)
-	   {
-		verify[i++]=ch; //Va cargando los caracteres ingresados
-		   cout<<"*";
-	  }
-	 else
-		{
-		   verify[i++]='\0';
-		}
- } while(ch!=13);
-}
-
 void ValidUser(char usuario[10])
 {
 	int longitud = 0;
@@ -370,21 +310,43 @@ void ValidUser(char usuario[10])
 }
 
 
-void RegistrarProfesional(FILE *arch)
+void RegistrarProfesional(FILE *archProfesional)
 {
-	arch = fopen("Profesionales.dat", "r+b");
 
-	if(arch == NULL)
+	Profesional prof;
+
+	archProfesional = fopen("Profesionales.dat", "r+b");
+
+	if(archProfesional == NULL)
 	{
-		arch = fopen("Profesionales.dat", "w+b")
+		archProfesional = fopen("Profesionales.dat", "w+b")
 
-		if(arch == NULL)printf("\nNo se pudo crear archivo Profesionales.dat");
+		if(archProfesional == NULL)printf("\nNo se pudo crear archivo Profesionales.dat");
 	}
 
-	fseek(arch, 0, SEEK_END);
+	fseek(archProfesional, 0, SEEK_END);
 
-	
+	printf("ID de Profesional: ");
+	scanf("%d", &prof.idProfesional);
 
+	printf("Nombre y Apellido: ");
+	_flushall();
+	gets(prof.apeNom);
+
+	printf("Contrasenia: ");
+	_flushall();
+	gets(prof.contraseña);
+
+	printf("DNI: ");
+	scanf("%d", &prof.dniProfesional);
+
+	printf("Telefono: ");
+	_flushall();
+	gets(prof.telefono);
+
+	fwrite(prof, sizeof(Profesional), 1,archProfesional);
+
+	fclose(archProfesional);
 
 }
 
@@ -566,8 +528,9 @@ main()
                             case 1:
                             {
 								printf("Registrar a un profesioanl.");
-
-
+								RegistrarProfesional(prof);
+								printf("\n\nProfesional Registrado con Exito!\n\n");
+								system("pause");
                                 break;
                             }
 
