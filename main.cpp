@@ -416,9 +416,12 @@ void RegistrarProfesional(FILE *archProfesional) //modulo Administracion
 
 	if(archProfesional == NULL)
 	{
-		archProfesional = fopen("Profesionales.dat", "w+b");
+		archProfesional = fopen("Profesionales.dat", "a+b");
 
-		if(archProfesional == NULL)printf("\nNo se pudo crear archivo Profesionales.dat");
+		if(archProfesional == NULL)
+		{
+			printf("\nNo se pudo crear archivo Profesionales.dat");
+		}
 	}
 
 	fseek(archProfesional, 0, SEEK_END);
@@ -471,7 +474,7 @@ void RegistrarUsuario (char userfile[], Login logins [255], int *cantLogins) //m
 	 do 
     {
 
-	printf("\nUsuario: ");
+	printf("\nPor favor, ingrese el Usuario: ");
 	_flushall();
 	gets(reg.usuario);
 	
@@ -479,28 +482,28 @@ void RegistrarUsuario (char userfile[], Login logins [255], int *cantLogins) //m
 
 	while (valida == 1) 
 	{
-		printf( "\nUsuario: ");
+		printf( "\nPor favor, ingrese el Usuario: ");
 		_flushall();
 		gets(reg.usuario);
 		valida =ValidUser(reg.usuario, logins, cantLogins);
 	
 	}
 
-	printf("\nContrasenia: ");
+	printf("\nPor favor, ingrese la Contrasenia: ");
 	_flushall();
 	enterPassword(reg.password);//lee caracter a caracter la constraseña y la enmascara 
 		
 	while (checkPassword(reg.password)!=0) 
 	{
-		printf( "\nContrasenia: ");
+		printf( "\nPor favor, ingrese la Contrasenia:  ");
 		enterPassword(reg.password);
 	}
 	
-	printf("\nNombre y Apellido: ");
+	printf("\nNombre y Apellido del usuario: ");
 	_flushall();
 	gets(reg.ApeNom);
 
-	fwrite(&reg, sizeof(reg), 1,fp);
+	fwrite(&reg, sizeof(Usuario), 1,fp);
 		
   	printf ("\nContinua cargando usuarios (S/N)?");
   	_flushall();
@@ -619,6 +622,69 @@ void regiTurnos(FILE *turno) //modulo recepcionista
 	
 	fclose(turno);
 
+}
+
+void RegistrarCliente (FILE *cliente)//modulo recepcionista
+{
+	Cliente clientes;
+	string continua ; 
+	cliente = fopen("Clientes.dat", "r+b");
+
+	if(cliente == NULL)
+	{
+		cliente = fopen("Clientes.dat", "a+b");
+
+		if(cliente == NULL)
+		{
+			printf("\nNo se pudo crear archivo Clientes.dat");
+			exit(EXIT_FAILURE);
+		}
+	}
+
+	do 
+	{
+		printf ("\nIngrese el Apellido y nombre del cliente: ");
+		_flushall();
+		gets (clientes.apeNom);
+		
+		printf ("\nIngrese el domicilio del cliente: ");
+		_flushall();
+		gets (clientes.domicilio);	
+		
+		printf ("\nIngrese el D.N.I del cliente sin puntos ni espacios: ");
+		scanf ("%d", &clientes.dniCliente);
+		
+		printf ("\nLocalidad a la que pertenece el cliente : ");
+		_flushall();
+		gets (clientes.localidad);
+		
+		printf ("\nIngrese el peso del cliente: ");
+		scanf ("%.2f", &clientes.peso);
+			
+		printf ("\nIngrese la fecha de nacimiento del cliente: ");
+		printf ("\n\tDia: ");
+		scanf("%d" &clientes.fechaDeNacimiento.dia);
+		printf ("\n\tMes: ");
+		scanf("%d" &clientes.fechaDeNacimiento.mes);
+	    printf ("\n\tAnio: " );
+		scanf("%d" &clientes.fechaDeNacimiento.anio);
+		
+		cliente.edad = 2021 - clientes.fechaDeNacimiento.anio;
+		
+		printf ("Ingrese un Telefono de contacto del cliente: ");
+		_flushall();
+		gets (clientes.telefono);
+			
+		printf ("\nContinua cargando clientes (S/N)?");
+	  	_flushall();
+		gets (continua);
+		strupr (continua);
+		
+		fwrite(&clientes, sizeof(Clientes), 1,cliente);
+	
+	}while (strcmp (continua, "N")!= 0)
+	
+	fclose (cliente);
 }
 
 void AtencionPorProf (FILE *turno,FILE *prof) //modulo admin
@@ -776,7 +842,6 @@ void listadoAtencionProf (FILE *prof , FILE *turno , FILE *cliente) //modulo rec
 				
 	do
 	{
-		printf("\nFecha");
 		if(profs.idProfesional==turnos.idProfesional)
 		{
 					
@@ -787,9 +852,8 @@ void listadoAtencionProf (FILE *prof , FILE *turno , FILE *cliente) //modulo rec
 			printf("\nA%co: %d",164,turnos.fechaDeTurno.anio);
 			printf("\nDNI del cliente: %d", turnos.dniCliente);
 			printf("\nNombre y apellido: %s",clientes.apeNom);
-			printf("\nEdad: %d a%cos",t.fn.anio-m.fn.anio, 164);
-			printf("\nLocalidad: %s" );
-			puts(m.localidad);
+			printf("\nEdad: %d a%cos", , 164);
+			printf("\nLocalidad: %s", cliente.localidad );
 			printf("\nPeso: %.2f",c.peso);
 						
 			fread(&profs,sizeof(Profesional),1,prof);
@@ -804,6 +868,7 @@ void listadoAtencionProf (FILE *prof , FILE *turno , FILE *cliente) //modulo rec
 			fread(&clientes,sizeof(Cliente),1,cliente);
 		}
 		
+		i++;
 	}while(!feof(prof)&&!feof(turno)&&!feof(cliente));
 				
 	fclose(prof);
