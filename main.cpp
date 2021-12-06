@@ -288,9 +288,8 @@ int ValidUser(char usuario[10], Login logins [255], int *cantLogins)
 	int n=0;
 	
 	n = *cantLogins;
-	printf ("Long n: %d\n", n);
 	
-	for (int i=0; i<n; i++)
+	for (int i=0; i<=n; i++)
 	{
 		if (strcmp (usuario, logins[i].usuario)==0)
 		{
@@ -420,24 +419,25 @@ int leerLogins (char userfile[], Login logins [255])
 	if (fp==NULL)
 	{
 		printf("Error al abrir el archivo % \n",userfile);
-		exit(EXIT_FAILURE);
+		//exit(EXIT_FAILURE);
+		return -1; 
 	}
 
 	rewind(fp);
 	fread(&reg,sizeof(reg),1,fp);
-    strcpy(reg.usuario,logins[i].usuario);
-    printf ("reg usuario: %s", reg.usuario);
+    strcpy(logins[i].usuario, reg.usuario);
+    //printf ("reg usuario: %s", reg.usuario);
 	while (!feof(fp))
 	{
 		if (!feof(fp))
 		{
-			strcpy(reg.usuario,logins[i++].usuario);
-			printf ("reg usuario: %s\n", reg.usuario);
-       }
+			strcpy(logins[i++].usuario, reg.usuario);
+			//printf ("reg usuario: %s\n", reg.usuario);
+     }
 		fread(&reg,sizeof(reg),1,fp);
 	}  
 	fclose(fp);
-	system ("pause");
+	//system ("pause");
 	return i;
 }
 
@@ -496,7 +496,7 @@ void RegistrarUsuario (char userfile[], Login logins [255], int *cantLogins)
 
 	cantLogins++;
 	//al usuario registrado lo agrego al vector de logins para futuar validaciones 
-	strcpy(reg.usuario,logins[*cantLogins].usuario);
+	strcpy(logins[*cantLogins].usuario,reg.usuario);
 	
 	}while(strcmp (continua, "N")!= 0); 
 
