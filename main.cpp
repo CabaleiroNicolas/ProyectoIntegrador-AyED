@@ -161,7 +161,7 @@ int checkPassword(char clave[32])
 	 //Valida la longitud de la clave
 	 if (longitud <6  || longitud > 32)
 	 {
-	 	printf("\nLong. invalida de clave.");
+	 	printf("\nLa Clave tiene que tener 6 caracteres como minimo y 32 como maximo.");
 	 	retorno = 1;
 	 }
 	  //Valida que contenga al menos un caracter en mayuscula
@@ -294,7 +294,8 @@ int leerLogins (char userfile[], Login logins [255])
 
 int ValidUser(char usuario[10], Login logins [255], int *cantLogins)
 {
-	int flag = 0;
+	
+ int flag = 0;
  int longitud;
  int mayusculas=0;
  int digitos = 0;
@@ -334,23 +335,23 @@ int ValidUser(char usuario[10], Login logins [255], int *cantLogins)
  //Valida que contenga al 2 letra en mayuscula
  
  i=0;
- while ((usuario[i]) && flag == 0)
+ for(i = 0; i < longitud; i++)
   {
-    if (isupper(usuario[i])) 
+  	
+    if (usuario[i] >= 'A' && usuario[i] <= 'Z') 
     {
-			mayusculas++;
+		mayusculas++;
 	}	
-    i++;
+
   }
   
 if (mayusculas < 2)
 {
 	   printf("\nEl nombre del usuario debe contener al menos 2 letra en mayuscula.");
        flag = 1;
-
 }
 
- flag=0;
+ 
  i=0;
  while (usuario[i])
   {
@@ -367,7 +368,7 @@ if (mayusculas < 2)
   } 
  
  //Valida que no contenga espacios en blanco
- flag=0;
+ 
  i=0;
  while (usuario[i])
   {
@@ -438,8 +439,13 @@ void RegistrarProfesional(FILE *archProfesional) //modulo Administracion
 	_flushall();
 	enterPassword(prof.contrasenia); //lee caracter a caracter la constraseña y la enmascara 
 		
-	while (checkPassword(prof.contrasenia)!=0) 
+	while (checkPassword(prof.contrasenia) != 0) 
 	{
+	
+		printf("\n\n");
+		system("pause");
+		system("cls");
+		printf("Registrar a un profesioanl.\n\n");
 		printf( "\nContrasenia: ");
 		enterPassword(prof.contrasenia);
 	}
@@ -472,8 +478,6 @@ void RegistrarUsuario (char userfile[], Login logins [255], int *cantLogins) //m
 		exit(EXIT_FAILURE);
 	}
 	
-	 do 
-    {
 
 	printf("\nNombre de Usuario: ");
 	_flushall();
@@ -481,8 +485,12 @@ void RegistrarUsuario (char userfile[], Login logins [255], int *cantLogins) //m
 	
 	valida = ValidUser(reg.usuario, logins, cantLogins);
 
-	while (valida == 0) 
+	while (valida == 1) 
 	{
+		printf("\n\n");
+		system("pause");
+		system("cls");
+		printf("Registrar a un Usuario.\n\n");
 		printf( "\nNombre Usuario: ");
 		_flushall();
 		gets(reg.usuario);
@@ -495,6 +503,10 @@ void RegistrarUsuario (char userfile[], Login logins [255], int *cantLogins) //m
 		
 	while (checkPassword(reg.password)!=0) 
 	{
+		printf("\n\n");
+		system("pause");
+		system("cls");
+		printf("Registrar a un Usuario.\n\n");
 		printf( "\nContrasenia:  ");
 		enterPassword(reg.password);
 	}
@@ -505,15 +517,12 @@ void RegistrarUsuario (char userfile[], Login logins [255], int *cantLogins) //m
 
 	fwrite(&reg, sizeof(Usuario), 1,fp);
 		
-  	printf ("\nContinua cargando usuarios (S/N)?");
-  	_flushall();
-	gets (continua);
 
 	cantLogins++;
-	//al usuario registrado lo agrego al vector de logins para futuar validaciones 
+	//al usuario registrado lo agrego al vector de logins para futuras validaciones 
+	
 	strcpy(logins[*cantLogins].usuario,reg.usuario);
 	
-	}while(strcmp (continua, "N")!= 0); 
 
 	fclose(fp);
 
@@ -641,8 +650,6 @@ void RegistrarCliente (FILE *cliente)//modulo recepcionista
 		}
 	}
 
-	do 
-	{
 		printf ("\nIngrese el Apellido y nombre del cliente: ");
 		_flushall();
 		gets (clientes.apeNom);
@@ -675,14 +682,8 @@ void RegistrarCliente (FILE *cliente)//modulo recepcionista
 		_flushall();
 		gets (clientes.telefono);
 			
-		printf ("\nContinua cargando clientes (S/N)?");
-	  	_flushall();
-		gets (continua);
-		strupr (continua);
 		
 		fwrite(&clientes, sizeof(Cliente), 1,cliente);
-	
-	}while (strcmp (continua, "N")!= 0);
 	
 	fclose (cliente);
 }
@@ -773,40 +774,50 @@ void listadoAtencionProf (FILE *prof , FILE *turno , FILE *cliente) //modulo rec
 	turno=fopen("turnos.dat","r+b");
 	cliente=fopen("Clientes.dat","r+b");
 	
-	printf("LISTADO DE ATENCIONES POR PROFESIONALES Y FECHA\n");
-	printf("Profesional: ");
-	_flushall();
-	gets(auxpro);
 	
-	fread(&profs,sizeof(Profesional),1,prof);
-	fread(&turnos,sizeof(Turnos),1,turno);
-	fread(&clientes,sizeof(Cliente),1,cliente);
-	
-	while(!feof(prof)&&!feof(turno)&&!feof(cliente))
+	if(prof == NULL)
 	{
-		if(strcmp(auxpro,profs.apeNom)==0)
+		printf("\nNo se Registro Ningun Profesional...\n\n");
+		system("pause");
+	}
+	else
+	{
+	
+		printf("LISTADO DE ATENCIONES POR PROFESIONALES Y FECHA\n\n");
+		printf("Profesional: ");
+		_flushall();
+		gets(auxpro);
+		
+		fread(&profs,sizeof(Profesional),1,prof);
+		fread(&turnos,sizeof(Turnos),1,turno);
+		fread(&clientes,sizeof(Cliente),1,cliente);
+		
+		while(!feof(prof)&&!feof(turno)&&!feof(cliente))
 		{
-			
-				if(turnos.idProfesional==profs.idProfesional)
-				{
-					printf("\nNombre del cliente: %s",clientes.apeNom);
-					printf("\nFecha de turno:");
-					printf("\nDia: %d", turnos.fechaDeTurno.dia);
-					printf("\nMes: %d", turnos.fechaDeTurno.mes);
-					printf("\nA%co: %d",164, turnos.fechaDeTurno.anio);
-					printf("\nNombre del profesional: %s",profs.apeNom);
-					printf("\nID: %d",profs.idProfesional);
-					
-					fread(&profs,sizeof(Profesional),1,prof);
-					fread(&turnos,sizeof(Turnos),1,turno);
-					fread(&clientes,sizeof(Cliente),1,cliente);
-				}	
-		}
-		else
-		{
-			fread(&profs,sizeof(Profesional),1,prof);
-			fread(&turnos,sizeof(Turnos),1,turno);
-			fread(&clientes,sizeof(Cliente),1,cliente);
+			if(strcmp(auxpro,profs.apeNom)==0)
+			{
+				
+					if(turnos.idProfesional==profs.idProfesional)
+					{
+						printf("\nNombre del cliente: %s",clientes.apeNom);
+						printf("\nFecha de turno:");
+						printf("\nDia: %d", turnos.fechaDeTurno.dia);
+						printf("\nMes: %d", turnos.fechaDeTurno.mes);
+						printf("\nA%co: %d",164, turnos.fechaDeTurno.anio);
+						printf("\nNombre del profesional: %s",profs.apeNom);
+						printf("\nID: %d",profs.idProfesional);
+						
+						fread(&profs,sizeof(Profesional),1,prof);
+						fread(&turnos,sizeof(Turnos),1,turno);
+						fread(&clientes,sizeof(Cliente),1,cliente);
+					}	
+			}
+			else
+			{
+				fread(&profs,sizeof(Profesional),1,prof);
+				fread(&turnos,sizeof(Turnos),1,turno);
+				fread(&clientes,sizeof(Cliente),1,cliente);
+			}
 		}
 	}
 	
@@ -816,61 +827,71 @@ void listadoAtencionProf (FILE *prof , FILE *turno , FILE *cliente) //modulo rec
 
 }
 
- void listaEspera (FILE *turno, FILE *prof, FILE *cliente) // modulo espacios
+ void listaEspera(FILE *turno, FILE *prof, FILE *cliente) // modulo espacios
 {
 
 	turno=fopen("turnos.dat","r+b");
 	prof=fopen("Profesionales.dat","r+b");
 	cliente=fopen("Clientes.dat","r+b");
+	
 	Turnos turnos;
 	Profesional profs;
 	Cliente clientes;
 	int i=0;
     int op;
-               
-		
-	system("cls");
-	printf("LISTA DE ESPERA DE CLIENTES");
-	
-	rewind(turno);
-	rewind(prof);
-	rewind(cliente);
-				
-	fread(&profs,sizeof(Profesional),1,prof);
-	fread(&turnos,sizeof(Turnos),1,turno);
-	fread(&clientes,sizeof(Cliente),1,cliente);
-				
-	do
+            
+	if(turno == NULL)
 	{
-		if(profs.idProfesional==turnos.idProfesional)
-		{
+		printf("No hay Turnos...");
+		system("pause");
+	}
+	else
+	{
+	
+		
+		system("cls");
+		printf("LISTA DE ESPERA DE CLIENTES");
+		
+		rewind(turno);
+		rewind(prof);
+		rewind(cliente);
 					
-			printf("\nTurno %d:",i+1);
-			printf("\nFecha De Turno :");
-			printf("\n\nDia: %d",turnos.fechaDeTurno.dia);
-			printf("\nMes: %d",turnos.fechaDeTurno.mes);
-			printf("\nA%co: %d",164,turnos.fechaDeTurno.anio);
-			printf("\nDNI del cliente: %d", turnos.dniCliente);
-			printf("\nNombre y apellido: %s",clientes.apeNom);
-			printf("\nEdad: %d a%cos", clientes.edad, 164);
-			printf("\nLocalidad: %s", clientes.localidad );
-			printf("\nPeso: %.2f",clientes.peso);
-						
-			fread(&profs,sizeof(Profesional),1,prof);
-			fread(&turnos,sizeof(Turnos),1,turno);
-			fread(&clientes,sizeof(Cliente),1,cliente);
-		}
-		
-		else
+		fread(&profs,sizeof(Profesional),1,prof);
+		fread(&turnos,sizeof(Turnos),1,turno);
+		fread(&clientes,sizeof(Cliente),1,cliente);
+					
+		do
 		{
-			fread(&profs,sizeof(Profesional),1,prof);
-			fread(&turnos,sizeof(Turnos),1,turno);
-			fread(&clientes,sizeof(Cliente),1,cliente);
-		}
-		
-		i++;
-	}while(!feof(prof)&&!feof(turno)&&!feof(cliente));
-				
+			if(profs.idProfesional==turnos.idProfesional)
+			{
+						
+				printf("\nTurno %d:",i+1);
+				printf("\nFecha De Turno :");
+				printf("\n\nDia: %d",turnos.fechaDeTurno.dia);
+				printf("\nMes: %d",turnos.fechaDeTurno.mes);
+				printf("\nA%co: %d",164,turnos.fechaDeTurno.anio);
+				printf("\nDNI del cliente: %d", turnos.dniCliente);
+				printf("\nNombre y apellido: %s",clientes.apeNom);
+				printf("\nEdad: %d a%cos", clientes.edad, 164);
+				printf("\nLocalidad: %s", clientes.localidad );
+				printf("\nPeso: %.2f",clientes.peso);
+							
+				fread(&profs,sizeof(Profesional),1,prof);
+				fread(&turnos,sizeof(Turnos),1,turno);
+				fread(&clientes,sizeof(Cliente),1,cliente);
+			}
+			
+			else
+			{
+				fread(&profs,sizeof(Profesional),1,prof);
+				fread(&turnos,sizeof(Turnos),1,turno);
+				fread(&clientes,sizeof(Cliente),1,cliente);
+			}
+			
+			i++;
+		}while(!feof(prof)&&!feof(turno)&&!feof(cliente));	
+	}
+	
 	fclose(prof);
 	fclose(turno);
 	fclose(cliente);
@@ -884,16 +905,16 @@ main()
     FILE *prof;
     FILE *cliente;
     FILE *turno;
-	char userfile [255]={"Usuarios.dat"}; //Nombre del archivo de usuarios
+	char userfile[255] = {"Usuarios.dat"}; //Nombre del archivo de usuarios
 	bool sesionInic = false;
 	int opcEspacios = 0;
-    int opcRecep =0;
-    int opcAdmin=0;
+    int opcRecep = 0;
+    int opcAdmin = 0;
     int opcion = 0;
     int cantLogins =0;
-    Login logins [255];
+    Login logins[255];
     
-    cantLogins= leerLogins (userfile, logins);//leo inicialmente todos los usuarios existentes 
+    cantLogins = leerLogins (userfile, logins);//leo inicialmente todos los usuarios existentes 
     
     do
     {
@@ -922,28 +943,34 @@ main()
 
                             case 2:
                             {
-								printf("Listado de espera de Turnos.\n");
+								printf("Listado de espera de Turnos.\n\n");
 								if(sesionInic == false)
-									{
-										printf("\nDebe iniciar sesion para realizar una accion, por favor escoja la opcion 1 ");
-										printf ("\n\n");
-										system ("pause");
-									}
-									else
-									{
-										
-									}
+								{
+									printf("\n=============================================================================");
+				                 	printf("\nDebe iniciar sesion para realizar una accion, por favor escoja la opcion 1");
+				                 	printf("\n=============================================================================\n\n");
+									system ("pause");
+								}
+								else
+								{
+									listaEspera(turno, prof, cliente);
+								}
+								
                                 break;
                             }
 
                             case 3:
                             {
-                                printf("Registrar evolucion del tratamiento.");
+                                printf("Registrar evolucion del tratamiento.\n\n");
                                 if(sesionInic == false)
-									{
-										printf("Debe iniciar sesion para realizar una accion, por favor escoja la opcion 1: ");
+								{
 									
-									}
+									printf("\n=============================================================================");
+				                 	printf("\nDebe iniciar sesion para realizar una accion, por favor escoja la opcion 1");
+				                 	printf("\n=============================================================================\n\n");
+									system("pause");
+									
+								}
 								else
 								{
 										
@@ -965,8 +992,6 @@ main()
 				                 system("pause");
                                 break;
                             }
-
-
                         }
 
                     break;
@@ -981,7 +1006,6 @@ main()
                         {
                             case 1:
                             {
-								printf("Iniciar sesion.");
 									
 								sesionInic = login (userfile );
 								
@@ -990,10 +1014,13 @@ main()
 
                             case 2:
                             {
-								printf("Registrar a un cliente.");
+								printf("Registrar a un cliente.\n\n");
 								if(sesionInic == false)
 								{
-									printf("Debe iniciar sesion para realizar una accion, por favor escoja la opcion 1: ");
+									printf("\n=============================================================================");
+				                 	printf("\nDebe iniciar sesion para realizar una accion, por favor escoja la opcion 1");
+				                 	printf("\n=============================================================================\n\n");
+									system("pause");
 									
 								}
 								else
@@ -1005,10 +1032,13 @@ main()
 
                             case 3:
                             {
-                                printf("Registrar un turno.");
+                                printf("Registrar un turno.\n\n");
                                 if(sesionInic == false)
 								{
-									printf("Debe iniciar sesion para realizar una accion, por favor escoja la opcion 1: ");
+									printf("\n=============================================================================");
+				                 	printf("\nDebe iniciar sesion para realizar una accion, por favor escoja la opcion 1");
+				                 	printf("\n=============================================================================\n\n");
+									system("pause");
 									
 								}
 								else
@@ -1020,10 +1050,13 @@ main()
 
                             case 4:
                             {
-                                printf("Listado de Atenciones por profesional y fecha.");
+                                printf("Listado de Atenciones por profesional y fecha.\n\n");
                                 if(sesionInic == false)
 								{
-									printf("Debe iniciar sesion para realizar una accion, por favor escoja la opcion 1: ");
+									printf("\n=============================================================================");
+				                 	printf("\nDebe iniciar sesion para realizar una accion, por favor escoja la opcion 1");
+				                 	printf("\n=============================================================================\n\n");
+									system("pause");
 									
 								}
 								else
@@ -1081,8 +1114,7 @@ main()
 
                             case 3:
                             {
-   								printf("Atenciones por profesional.");
-   								
+   								listadoAtencionProf(prof, turno, cliente);
                                 break;
                             }
 
