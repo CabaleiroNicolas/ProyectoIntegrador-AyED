@@ -318,7 +318,7 @@ int ValidUser(char usuario[10], Login logins [255], int *cantLogins)
  longitud = strlen(usuario);
  
  //Valida la longitud de la clave
- if (longitud <6  || longitud > 10)
+ if (longitud < 6  || longitud > 10)
  {
  	printf ("\nLa longitud del nombre debe estar entre 6 y 10 caracteres.");
  	flag = 1;
@@ -332,6 +332,7 @@ int ValidUser(char usuario[10], Login logins [255], int *cantLogins)
   }
 
  //Valida que contenga al 2 letra en mayuscula
+ 
  i=0;
  while ((usuario[i]) && flag == 0)
   {
@@ -474,7 +475,7 @@ void RegistrarUsuario (char userfile[], Login logins [255], int *cantLogins) //m
 	 do 
     {
 
-	printf("\nPor favor, ingrese el Usuario: ");
+	printf("\nNombre de Usuario: ");
 	_flushall();
 	gets(reg.usuario);
 	
@@ -482,20 +483,19 @@ void RegistrarUsuario (char userfile[], Login logins [255], int *cantLogins) //m
 
 	while (valida == 1) 
 	{
-		printf( "\nPor favor, ingrese el Usuario: ");
+		printf( "\nNombre Usuario: ");
 		_flushall();
 		gets(reg.usuario);
-		valida =ValidUser(reg.usuario, logins, cantLogins);
-	
+		valida = ValidUser(reg.usuario, logins, cantLogins);
 	}
 
-	printf("\nPor favor, ingrese la Contrasenia: ");
+	printf("\nContrasenia: ");
 	_flushall();
 	enterPassword(reg.password);//lee caracter a caracter la constraseña y la enmascara 
 		
 	while (checkPassword(reg.password)!=0) 
 	{
-		printf( "\nPor favor, ingrese la Contrasenia:  ");
+		printf( "\nContrasenia:  ");
 		enterPassword(reg.password);
 	}
 	
@@ -663,13 +663,13 @@ void RegistrarCliente (FILE *cliente)//modulo recepcionista
 			
 		printf ("\nIngrese la fecha de nacimiento del cliente: ");
 		printf ("\n\tDia: ");
-		scanf("%d" &clientes.fechaDeNacimiento.dia);
+		scanf("%d" ,&clientes.fechaDeNacimiento.dia);
 		printf ("\n\tMes: ");
-		scanf("%d" &clientes.fechaDeNacimiento.mes);
+		scanf("%d" ,&clientes.fechaDeNacimiento.mes);
 	    printf ("\n\tAnio: " );
-		scanf("%d" &clientes.fechaDeNacimiento.anio);
+		scanf("%d" ,&clientes.fechaDeNacimiento.anio);
 		
-		cliente.edad = 2021 - clientes.fechaDeNacimiento.anio;
+		clientes.edad = 2021 - clientes.fechaDeNacimiento.anio;
 		
 		printf ("Ingrese un Telefono de contacto del cliente: ");
 		_flushall();
@@ -680,9 +680,9 @@ void RegistrarCliente (FILE *cliente)//modulo recepcionista
 		gets (continua);
 		strupr (continua);
 		
-		fwrite(&clientes, sizeof(Clientes), 1,cliente);
+		fwrite(&clientes, sizeof(Cliente), 1,cliente);
 	
-	}while (strcmp (continua, "N")!= 0)
+	}while (strcmp (continua, "N")!= 0);
 	
 	fclose (cliente);
 }
@@ -823,8 +823,8 @@ void listadoAtencionProf (FILE *prof , FILE *turno , FILE *cliente) //modulo rec
 	prof=fopen("Profesionales.dat","r+b");
 	cliente=fopen("Clientes.dat","r+b");
 	Turnos turnos;
-	Profesioanl profs;
-	Clientes clientes;
+	Profesional profs;
+	Cliente clientes;
 	int i=0;
     int op;
                
@@ -852,9 +852,9 @@ void listadoAtencionProf (FILE *prof , FILE *turno , FILE *cliente) //modulo rec
 			printf("\nA%co: %d",164,turnos.fechaDeTurno.anio);
 			printf("\nDNI del cliente: %d", turnos.dniCliente);
 			printf("\nNombre y apellido: %s",clientes.apeNom);
-			printf("\nEdad: %d a%cos", , 164);
-			printf("\nLocalidad: %s", cliente.localidad );
-			printf("\nPeso: %.2f",c.peso);
+			printf("\nEdad: %d a%cos", clientes.edad, 164);
+			printf("\nLocalidad: %s", clientes.localidad );
+			printf("\nPeso: %.2f",clientes.peso);
 						
 			fread(&profs,sizeof(Profesional),1,prof);
 			fread(&turnos,sizeof(Turnos),1,turno);
