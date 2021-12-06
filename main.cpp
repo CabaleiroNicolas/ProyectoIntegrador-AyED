@@ -1206,7 +1206,6 @@ main()
 								printf("Salir.");
                                 break;
                             }
-
                             default:
                             {
 								 printf("\n=======================================");
