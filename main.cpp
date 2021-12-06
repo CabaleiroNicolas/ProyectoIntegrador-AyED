@@ -10,7 +10,9 @@
 #include <wincon.h>
 #include <cstdlib>
 #include <unistd.h>
+//#include "ModuloAdministracion.h"
 typedef char string [2];
+
 int MenuGeneral()
 {
     int opc = 0;
@@ -41,7 +43,30 @@ int MenuRecepcion(bool sesionInic)
     printf("\n2.- Registrar Cliente");
     printf("\n3.- Registrar Turno");
     printf("\n4.- Listado de Atenciones por Profesional y Fecha");
-    printf("\n0.- Cerrar Aplicacion");
+    printf("\n0.- Retornar al menu principal");
+
+    printf("\n\nIngrese una Opcion: ");
+    scanf("%d", &opc);
+
+    return opc;
+}
+
+int MenuEspacios(bool sesionInic)
+{
+    int opc = 0;
+
+    printf("\n===============================");
+    printf("\n      MODULO ESPACIOS");
+    printf("\n===============================");
+
+   
+    if(sesionInic == false)
+	{
+		printf("\n1.- Iniciar Sesion");
+	}
+    printf("\n2.- Visualizar Lista de Espera de Turnos (informe)");
+    printf("\n3.- Registrar Evolucion del tratamiento");
+    printf("\n0.- Retornar al menu principal");
 
     printf("\n\nIngrese una Opcion: ");
     scanf("%d", &opc);
@@ -61,29 +86,7 @@ int MenuAdministracion()
     printf("\n2.- Registrar Usuario Recepcionista");
     printf("\n3.- Atenciones por Profesional");
     printf("\n4.- Ranking de Profesionales por Atenciones");
-    printf("\n0.- Cerrar Aplicacion");
-
-    printf("\n\nIngrese una Opcion: ");
-    scanf("%d", &opc);
-
-    return opc;
-}
-int MenuEspacios(bool sesionInic)
-{
-    int opc = 0;
-
-    printf("\n===============================");
-    printf("\n      MODULO ESPACIOS");
-    printf("\n===============================");
-
-   
-    if(sesionInic == false)
-	{
-		printf("\n1.- Iniciar Sesion");
-	}
-    printf("\n2.- Visualizar Lista de Espera de Turnos (informe)");
-    printf("\n3.- Registrar Evolucion del tratamiento");
-    printf("\n0.- Cerrar Aplicacion");
+    printf("\n0.- Retornar al menu principal");
 
     printf("\n\nIngrese una Opcion: ");
     scanf("%d", &opc);
@@ -118,6 +121,7 @@ struct Cliente
     int dniCliente;
     char localidad[60];
     Fecha fechaDeNacimiento;
+    int edad; 
     float peso;
     char telefono[25];
 };
@@ -142,7 +146,6 @@ struct Login
 {
 	char usuario [10];
 };
-
 
 int checkPassword(char clave[32])
 {
@@ -257,6 +260,132 @@ int checkPassword(char clave[32])
 	 
 }
 
+//Carga en un vector todos los usuarios existentes
+int leerLogins (char userfile[], Login logins [255])
+{
+	FILE *fp; 
+	Usuario reg;
+	int i =0;
+	fp=fopen(userfile,"rb");
+	if (fp==NULL)
+	{
+		printf("Error al abrir el archivo % \n",userfile);
+		//exit(EXIT_FAILURE);
+		return -1; 
+	}
+
+	rewind(fp);
+	fread(&reg,sizeof(reg),1,fp);
+    strcpy(logins[i].usuario, reg.usuario);
+    //printf ("reg usuario: %s", reg.usuario);
+	while (!feof(fp))
+	{
+		if (!feof(fp))
+		{
+			strcpy(logins[i++].usuario, reg.usuario);
+			//printf ("reg usuario: %s\n", reg.usuario);
+     }
+		fread(&reg,sizeof(reg),1,fp);
+	}  
+	fclose(fp);
+	//system ("pause");
+	return i;
+}
+
+int ValidUser(char usuario[10], Login logins [255], int *cantLogins)
+{
+	int flag = 0;
+ int longitud;
+ int mayusculas=0;
+ int digitos = 0;
+ int espacios=0;
+ int i=0;
+ int n=0;
+	
+	n = *cantLogins;
+	
+	for (int j=0; j<=n; j++)
+	{
+		if (strcmp (usuario, logins[j].usuario)==0)
+		{
+			printf ("Usuario ya existente."); 
+			flag=1;
+			break;	
+		}
+		 
+	}
+ 
+ longitud = strlen(usuario);
+ 
+ //Valida la longitud de la clave
+ if (longitud <6  || longitud > 10)
+ {
+ 	printf ("\nLa longitud del nombre debe estar entre 6 y 10 caracteres.");
+ 	flag = 1;
+ }
+  
+  //Chequea el nombre del usuario empice con minuscula
+ if (islower(usuario[0]) == 0)
+  {
+     printf("\nEl nombre del usuario debe comenzar con una letra en minuscula.");
+     flag = 1;
+  }
+
+ //Valida que contenga al 2 letra en mayuscula
+ i=0;
+ while ((usuario[i]) && flag == 0)
+  {
+    if (isupper(usuario[i])) 
+    {
+			mayusculas++;
+	}	
+    i++;
+  }
+  
+if (mayusculas < 2)
+{
+	   printf("\nEl nombre del usuario debe contener al menos 2 letra en mayuscula.");
+       flag = 1;
+
+}
+
+ flag=0;
+ i=0;
+ while (usuario[i])
+  {
+    if (isdigit(usuario[i])) 
+    {
+		digitos++;
+	}	
+    i++;
+  }
+ if (digitos >3)
+ {
+	   printf("\nEl nombre del usuario no debe contener mas de 3 digitos.");
+      flag = 1;
+  } 
+ 
+ //Valida que no contenga espacios en blanco
+ flag=0;
+ i=0;
+ while (usuario[i])
+  {
+    if (isspace(usuario[i])) 
+    {
+		espacios++;
+	}	
+    i++;
+  }
+ if (espacios > 0)
+ {
+	  printf("\nEl nombre del usuario no puede contener espacios.");
+      flag = 1;
+  } 
+  
+  return flag; 
+	
+}
+
 void enterPassword(char* verify) //Enmasca la contrasenia ingresada
 {
 
@@ -278,73 +407,113 @@ void enterPassword(char* verify) //Enmasca la contrasenia ingresada
  } while(ch!=13);
 }
 
-int ValidUser(char usuario[10], Login logins [255], int *cantLogins)
+void RegistrarProfesional(FILE *archProfesional) //modulo Administracion
 {
-	int longitud = 0;
-	int letrasMayusculas = 0;
-	int digitos = 0;
-	int retorno = 0;
-	int flag =0;
-	int n=0;
-	
-	n = *cantLogins;
-	
-	for (int i=0; i<=n; i++)
+
+	Profesional prof;
+
+	archProfesional = fopen("Profesionales.dat", "r+b");
+
+	if(archProfesional == NULL)
 	{
-		if (strcmp (usuario, logins[i].usuario)==0)
-		{
-			printf ("Usuario ya existente."); 
-			flag=1;
-			break;	
-		}
-		 
+		archProfesional = fopen("Profesionales.dat", "w+b");
+
+		if(archProfesional == NULL)printf("\nNo se pudo crear archivo Profesionales.dat");
 	}
-	
-	if (flag ==1)
-	{
-		return retorno; 
-	}
-	
-	longitud = strlen(usuario);
-	
-	if(longitud > 10 || longitud < 6)
-	{
-		printf("\nEl usuario no puede contener mas de 10 caracteres...");
-	}
-	else
-	{
+
+	fseek(archProfesional, 0, SEEK_END);
+
+	printf("ID de Profesional: ");
+	scanf("%d", &prof.idProfesional);
+
+	printf("Nombre y Apellido: ");
+	_flushall();
+	gets(prof.apeNom);
+
+	printf("Contrasenia: ");
+	_flushall();
+	enterPassword(prof.contrasenia); //lee caracter a caracter la constraseña y la enmascara 
 		
-		for(int i = 0; i < 10; i++)
-		{
-			if(usuario[1] >= 'a' && usuario[1] <= 'z')
-			{
-				if(usuario[i] >= 'A' && usuario[i] <= 'Z')
-				{
-					letrasMayusculas++;
-				}
-				
-				if(usuario[i] >= '0' && usuario[i] <= '9')
-				{
-					digitos++;
-				}
-			}
-			
-		}
-		
-		if(letrasMayusculas > 1 && digitos < 4)
-		{
-			retorno = 1; 
-		}
-		else
-		{
-			printf("\nEl Nombre de usuario ingresado no cumple con lo terminos indicados...");
-			retorno = 0;
-		}
-					
+	while (checkPassword(prof.contrasenia)!=0) 
+	{
+		printf( "\nContrasenia: ");
+		enterPassword(prof.contrasenia);
+	}
+
+	printf("DNI: ");
+	scanf("%d", &prof.dniProfesional);
+
+	printf("Telefono: ");
+	_flushall();
+	gets(prof.telefono);
+
+	fwrite(&prof, sizeof(Profesional), 1,archProfesional);
+
+	fclose(archProfesional);
+
+}
+
+void RegistrarUsuario (char userfile[], Login logins [255], int *cantLogins) //modulo administracion
+{
+	FILE *fp;
+	struct Usuario reg;
+	string continua = "S"; 
+	int valida =0;
+
+	fp = fopen(userfile, "a+b");
+
+	if(fp == NULL)
+	{
+		printf("Error al abrir el archivo \n");
+		exit(EXIT_FAILURE);
 	}
 	
-	return retorno; 
+	 do 
+    {
+
+	printf("\nUsuario: ");
+	_flushall();
+	gets(reg.usuario);
 	
+	valida = ValidUser(reg.usuario, logins, cantLogins);
+
+	while (valida == 1) 
+	{
+		printf( "\nUsuario: ");
+		_flushall();
+		gets(reg.usuario);
+		valida =ValidUser(reg.usuario, logins, cantLogins);
+	
+	}
+
+	printf("\nContrasenia: ");
+	_flushall();
+	enterPassword(reg.password);//lee caracter a caracter la constraseña y la enmascara 
+		
+	while (checkPassword(reg.password)!=0) 
+	{
+		printf( "\nContrasenia: ");
+		enterPassword(reg.password);
+	}
+	
+	printf("\nNombre y Apellido: ");
+	_flushall();
+	gets(reg.ApeNom);
+
+	fwrite(&reg, sizeof(reg), 1,fp);
+		
+  	printf ("\nContinua cargando usuarios (S/N)?");
+  	_flushall();
+	gets (continua);
+
+	cantLogins++;
+	//al usuario registrado lo agrego al vector de logins para futuar validaciones 
+	strcpy(logins[*cantLogins].usuario,reg.usuario);
+	
+	}while(strcmp (continua, "N")!= 0); 
+
+	fclose(fp);
+
 }
 
 bool login(char userfile[])
@@ -369,6 +538,7 @@ bool login(char userfile[])
     printf ("Bienvenido - Inicio de Sesion \n") ;
     printf ("------------------------------\n") ;
     printf ("Usuario:") ; 
+    _flushall ();
 	gets(usuario)  ;
 	 
 	printf ("Contrasenia: "); 
@@ -409,145 +579,6 @@ bool login(char userfile[])
 	return flag;
 }
 
-//Carga en un vector todos los usuarios existentes
-int leerLogins (char userfile[], Login logins [255])
-{
-	FILE *fp; 
-	Usuario reg;
-	int i =0;
-	fp=fopen(userfile,"rb");
-	if (fp==NULL)
-	{
-		printf("Error al abrir el archivo % \n",userfile);
-		//exit(EXIT_FAILURE);
-		return -1; 
-	}
-
-	rewind(fp);
-	fread(&reg,sizeof(reg),1,fp);
-    strcpy(logins[i].usuario, reg.usuario);
-    //printf ("reg usuario: %s", reg.usuario);
-	while (!feof(fp))
-	{
-		if (!feof(fp))
-		{
-			strcpy(logins[i++].usuario, reg.usuario);
-			//printf ("reg usuario: %s\n", reg.usuario);
-     }
-		fread(&reg,sizeof(reg),1,fp);
-	}  
-	fclose(fp);
-	//system ("pause");
-	return i;
-}
-
-void RegistrarUsuario (char userfile[], Login logins [255], int *cantLogins)
-{
-	FILE *fp;
-	struct Usuario reg;
-	string continua = "S"; 
-	int valida =0;
-
-	fp = fopen(userfile, "a+b");
-
-	if(fp == NULL)
-	{
-		printf("Error al abrir el archivo \n");
-		exit(EXIT_FAILURE);
-	}
-	
-	 do 
-    {
-
-	printf("\nUsuario: ");
-	_flushall();
-	gets(reg.usuario);
-	
-	valida = ValidUser(reg.usuario, logins, cantLogins);
-
-	while (valida == 0) 
-	{
-		printf( "\nUsuario: ");
-		_flushall();
-		gets(reg.usuario);
-		valida =ValidUser(reg.usuario, logins, cantLogins);
-	
-	}
-
-	printf("\nContrasenia: ");
-	_flushall();
-	enterPassword(reg.password);//lee caracter a caracter la constraseña y la enmascara 
-		
-	while (checkPassword(reg.password)!=0) 
-	{
-		printf( "\nContrasenia: ");
-		enterPassword(reg.password);
-	}
-	
-	printf("\nNombre y Apellido: ");
-	_flushall();
-	gets(reg.ApeNom);
-
-	fwrite(&reg, sizeof(reg), 1,fp);
-		
-  	printf ("\nContinua cargando usuarios (S/N)?");
-  	_flushall();
-	gets (continua);
-
-	cantLogins++;
-	//al usuario registrado lo agrego al vector de logins para futuar validaciones 
-	strcpy(logins[*cantLogins].usuario,reg.usuario);
-	
-	}while(strcmp (continua, "N")!= 0); 
-
-	fclose(fp);
-
-}
-
-
-void RegistrarProfesional(FILE *archProfesional)
-{
-
-	Profesional prof;
-
-	archProfesional = fopen("Profesionales.dat", "r+b");
-
-	if(archProfesional == NULL)
-	{
-		archProfesional = fopen("Profesionales.dat", "w+b");
-
-		if(archProfesional == NULL)printf("\nNo se pudo crear archivo Profesionales.dat");
-	}
-
-	fseek(archProfesional, 0, SEEK_END);
-
-	printf("ID de Profesional: ");
-	scanf("%d", &prof.idProfesional);
-
-	printf("Nombre y Apellido: ");
-	_flushall();
-	gets(prof.apeNom);
-
-	printf("Contrasenia: ");
-	_flushall();
-	gets(prof.contrasenia);
-
-	printf("DNI: ");
-	scanf("%d", &prof.dniProfesional);
-
-	printf("Telefono: ");
-	_flushall();
-	gets(prof.telefono);
-
-	fwrite(&prof, sizeof(Profesional), 1,archProfesional);
-
-	fclose(archProfesional);
-
-}
-
-
-
-
 void regiTurnos(FILE *turno) //modulo recepcionista
 {
 	Turnos turnos;
@@ -582,7 +613,7 @@ void regiTurnos(FILE *turno) //modulo recepcionista
 	_flushall();
 	gets(turnos.detalleDeAtencion);
 
-	fwrite(&turno,sizeof(Turnos),1,turno);	
+	fwrite(&turnos,sizeof(Turnos),1,turno);	
 	
 	printf("\nEl turno fue guardado correctamente...");
 	
@@ -610,9 +641,9 @@ void AtencionPorProf (FILE *turno,FILE *prof) //modulo admin
 	rewind(turno);
 	rewind(prof);
 	
-	fread(&prof,sizeof(Profesional),1,prof);
+	fread(&profs,sizeof(Profesional),1,prof);
 	
-	fread(&turno,sizeof(Turnos),1,turno);
+	fread(&turnos,sizeof(Turnos),1,turno);
 	while(!feof(prof) && band == false)
 	{
 		if(strcmp(auxpro , profs.apeNom) == 0)
@@ -633,12 +664,12 @@ void AtencionPorProf (FILE *turno,FILE *prof) //modulo admin
 					printf("\n --------- \n");
 					i=i+1;
 					
-					fread(&turno,sizeof(Turnos),1,turno);
+					fread(&turnos,sizeof(Turnos),1,turno);
 				}
 				
 				else
 				{
-					fread(&turno,sizeof(Turnos),1,turno);		
+					fread(&turnos,sizeof(Turnos),1,turno);		
 				}
 				
 				band = true;
@@ -649,7 +680,7 @@ void AtencionPorProf (FILE *turno,FILE *prof) //modulo admin
 		else
 		{
 			
-			fread(&prof,sizeof(Profesional),1,prof);
+			fread(&profs,sizeof(Profesional),1,prof);
 			
 		}
 							
@@ -681,9 +712,9 @@ void listadoAtencionProf (FILE *prof , FILE *turno , FILE *cliente) //modulo rec
 	_flushall();
 	gets(auxpro);
 	
-	fread(&prof,sizeof(Profesional),1,prof);
-	fread(&turno,sizeof(Turnos),1,turno);
-	fread(&cliente,sizeof(Cliente),1,cliente);
+	fread(&profs,sizeof(Profesional),1,prof);
+	fread(&turnos,sizeof(Turnos),1,turno);
+	fread(&clientes,sizeof(Cliente),1,cliente);
 	
 	while(!feof(prof)&&!feof(turno)&&!feof(cliente))
 	{
@@ -700,16 +731,16 @@ void listadoAtencionProf (FILE *prof , FILE *turno , FILE *cliente) //modulo rec
 					printf("\nNombre del profesional: %s",profs.apeNom);
 					printf("\nID: %d",profs.idProfesional);
 					
-					fread(&prof,sizeof(Profesional),1,prof);
-					fread(&turno,sizeof(Turnos),1,turno);
-					fread(&cliente,sizeof(Cliente),1,cliente);
+					fread(&profs,sizeof(Profesional),1,prof);
+					fread(&turnos,sizeof(Turnos),1,turno);
+					fread(&clientes,sizeof(Cliente),1,cliente);
 				}	
 		}
 		else
 		{
-			fread(&prof,sizeof(Profesional),1,prof);
-			fread(&turno,sizeof(Turnos),1,turno);
-			fread(&cliente,sizeof(Cliente),1,cliente);
+			fread(&profs,sizeof(Profesional),1,prof);
+			fread(&turnos,sizeof(Turnos),1,turno);
+			fread(&clientes,sizeof(Cliente),1,cliente);
 		}
 	}
 	
@@ -717,6 +748,69 @@ void listadoAtencionProf (FILE *prof , FILE *turno , FILE *cliente) //modulo rec
 	fclose (turno);
 	fclose (cliente);
 
+}
+
+ void listaEspera (FILE *turno, FILE *prof, FILE *cliente) // modulo espacios
+{
+
+	turno=fopen("turnos.dat","r+b");
+	prof=fopen("Profesionales.dat","r+b");
+	cliente=fopen("Clientes.dat","r+b");
+	Turnos turnos;
+	Profesioanl profs;
+	Clientes clientes;
+	int i=0;
+    int op;
+               
+		
+	system("cls");
+	printf("LISTA DE ESPERA DE CLIENTES");
+	
+	rewind(turno);
+	rewind(prof);
+	rewind(cliente);
+				
+	fread(&profs,sizeof(Profesional),1,prof);
+	fread(&turnos,sizeof(Turnos),1,turno);
+	fread(&clientes,sizeof(Cliente),1,cliente);
+				
+	do
+	{
+		printf("\nFecha");
+		if(profs.idProfesional==turnos.idProfesional)
+		{
+					
+			printf("\nTurno %d:",i+1);
+			printf("\nFecha De Turno :");
+			printf("\n\nDia: %d",turnos.fechaDeTurno.dia);
+			printf("\nMes: %d",turnos.fechaDeTurno.mes);
+			printf("\nA%co: %d",164,turnos.fechaDeTurno.anio);
+			printf("\nDNI del cliente: %d", turnos.dniCliente);
+			printf("\nNombre y apellido: %s",clientes.apeNom);
+			printf("\nEdad: %d a%cos",t.fn.anio-m.fn.anio, 164);
+			printf("\nLocalidad: %s" );
+			puts(m.localidad);
+			printf("\nPeso: %.2f",c.peso);
+						
+			fread(&profs,sizeof(Profesional),1,prof);
+			fread(&turnos,sizeof(Turnos),1,turno);
+			fread(&clientes,sizeof(Cliente),1,cliente);
+		}
+		
+		else
+		{
+			fread(&profs,sizeof(Profesional),1,prof);
+			fread(&turnos,sizeof(Turnos),1,turno);
+			fread(&clientes,sizeof(Cliente),1,cliente);
+		}
+		
+	}while(!feof(prof)&&!feof(turno)&&!feof(cliente));
+				
+	fclose(prof);
+	fclose(turno);
+	fclose(cliente);
+	
+	printf("\n\n");
 }
 
 main()
@@ -735,6 +829,7 @@ main()
     Login logins [255];
     
     cantLogins= leerLogins (userfile, logins);//leo inicialmente todos los usuarios existentes 
+    
     do
     {
 
@@ -822,7 +917,8 @@ main()
                             case 1:
                             {
 								printf("Iniciar sesion.");
-							
+									
+								sesionInic = login (userfile );
 								
                                 break;
                             }
