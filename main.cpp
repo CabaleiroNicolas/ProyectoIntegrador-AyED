@@ -297,11 +297,7 @@ int leerLogins (char userfile[], Login logins [255])
 
 int ValidUser(char usuario[10], Login logins [255], int *cantLogins)
 {
-<<<<<<< HEAD
-	
-=======
-
->>>>>>> f069413af8800430c971845e2826670a00da91db
+<<<<<<< HEAD=======>>>>>>> f069413af8800430c971845e2826670a00da91db
  int flag = 0;
  int longitud;
  int mayusculas=0;
