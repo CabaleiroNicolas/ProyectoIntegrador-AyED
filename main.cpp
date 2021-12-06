@@ -10,19 +10,22 @@
 #include <wincon.h>
 #include <cstdlib>
 #include <unistd.h>
-//#include "ModuloAdministracion.h"
-typedef char string [2];
+#include "utiles.h"
+using namespace std;
+
+typedef char cadena [2];
 
 int MenuGeneral()
 {
     int opc = 0;
     
-	printf("-- Menu Principal --");
-    printf("\n\n1.- Modulo Espacios.");
-    printf("\n2.- Modulo Recepcionista");
-    printf("\n3.- Modulo Administracion");
-    printf("\n0.- Cerrar Aplicacion");
-    printf("\n\nIngrese una Opcion: ");
+	printf("\t\t\t-- Menu Principal --");
+    printf("\n\n\t\t\t1.- Modulo Espacios.");
+    printf("\n\t\t\t2.- Modulo Recepcionista");
+    printf("\n\t\t\t3.- Modulo Administracion");
+    printf("\n\t\t\t4.- Acerca de...");
+    printf("\n\t\t\t0.- Cerrar Aplicacion");
+    printf("\n\n\t\t\tIngrese una Opcion: ");
     scanf("%d", &opc);
 	
     return opc;
@@ -38,7 +41,7 @@ int MenuRecepcion(bool sesionInic)
 
     if(sesionInic == false)
 	{
-		printf("\n\t1.- Iniciar Sesion");
+		printf("\n1.- Iniciar Sesion");
 	}
     printf("\n2.- Registrar Cliente");
     printf("\n3.- Registrar Turno");
@@ -82,7 +85,7 @@ int MenuAdministracion()
     printf("\n      MODULO ADMINISTRACION");
     printf("\n==================================");
 
-    printf("\n\n1.- Registrar Profesional");
+    printf("\n1.- Registrar Profesional");
     printf("\n2.- Registrar Usuario Recepcionista");
     printf("\n3.- Atenciones por Profesional");
     printf("\n4.- Ranking de Profesionales por Atenciones");
@@ -295,10 +298,7 @@ int leerLogins (char userfile[], Login logins [255])
 
 int ValidUser(char usuario[10], Login logins [255], int *cantLogins) 
 {
-<<<<<<< HEAD
-	
-=======
->>>>>>> 20f3c6ce5e29b482a76b3ce83ffa376ab0e42c40
+
  int flag = 0;
  int longitud;
  int mayusculas=0;
@@ -355,10 +355,6 @@ if (mayusculas < 2)
        flag = 1;
 }
 
-<<<<<<< HEAD
- 
-=======
->>>>>>> 20f3c6ce5e29b482a76b3ce83ffa376ab0e42c40
  i=0;
  while (usuario[i])
   {
@@ -375,10 +371,6 @@ if (mayusculas < 2)
   } 
  
  //Valida que no contenga espacios en blanco
-<<<<<<< HEAD
- 
-=======
->>>>>>> 20f3c6ce5e29b482a76b3ce83ffa376ab0e42c40
  i=0;
  while (usuario[i])
   {
@@ -405,7 +397,7 @@ void enterPassword(char* verify) //Enmasca la contrasenia ingresada
  int i=0;
 
  do
- {
+ 	{
 	  ch=getch();
 	  if(ch!=13)
 		{
@@ -416,7 +408,8 @@ void enterPassword(char* verify) //Enmasca la contrasenia ingresada
 		{
 		   verify[i++]='\0';
 		}
- } while(ch!=13);
+ 	} while(ch!=13);
+ 
 }
 
 void RegistrarProfesional(FILE *archProfesional) //modulo Administracion
@@ -438,10 +431,10 @@ void RegistrarProfesional(FILE *archProfesional) //modulo Administracion
 
 	fseek(archProfesional, 0, SEEK_END);
 
-	printf("ID de Profesional: ");
+	printf("\nID de Profesional: ");
 	scanf("%d", &prof.idProfesional);
 
-	printf("Nombre y Apellido: ");
+	printf("\nNombre y Apellido: ");
 	_flushall();
 	gets(prof.apeNom);
 
@@ -455,15 +448,14 @@ void RegistrarProfesional(FILE *archProfesional) //modulo Administracion
 		printf("\n\n");
 		system("pause");
 		system("cls");
-		printf("Registrar a un profesioanl.\n\n");
 		printf( "\nContrasenia: ");
 		enterPassword(prof.contrasenia);
 	}
 
-	printf("DNI: ");
+	printf("\nDNI: ");
 	scanf("%d", &prof.dniProfesional);
 
-	printf("Telefono: ");
+	printf("\nTelefono: ");
 	_flushall();
 	gets(prof.telefono);
 
@@ -477,7 +469,7 @@ void RegistrarUsuario (char userfile[], Login logins [255], int *cantLogins) //m
 {
 	FILE *fp;
 	struct Usuario reg;
-	string continua = "S"; 
+	cadena continua = "S"; 
 	int valida =0;
 
 	fp = fopen(userfile, "a+b");
@@ -516,7 +508,6 @@ void RegistrarUsuario (char userfile[], Login logins [255], int *cantLogins) //m
 		printf("\n\n");
 		system("pause");
 		system("cls");
-		printf("Registrar a un Usuario.\n\n");
 		printf( "\nContrasenia:  ");
 		enterPassword(reg.password);
 	}
@@ -628,7 +619,7 @@ void regiTurnos(FILE *turno) //modulo recepcionista
 		printf("\nA%co: ",164);
 		scanf("%d", &turnos.fechaDeTurno.anio);
 		
-	printf("\nDNI del cliente: ",164);
+	printf("\nDNI del cliente: ");
 	scanf("%d",&turnos.dniCliente);
 	
 	printf("\nDetalle de atencion: ");
@@ -646,7 +637,7 @@ void regiTurnos(FILE *turno) //modulo recepcionista
 void RegistrarCliente (FILE *cliente)//modulo recepcionista
 {
 	Cliente clientes;
-	string continua ; 
+	cadena continua ; 
 	cliente = fopen("Clientes.dat", "r+b");
 
 	if(cliente == NULL)
@@ -691,9 +682,9 @@ void RegistrarCliente (FILE *cliente)//modulo recepcionista
 		printf ("Ingrese un Telefono de contacto del cliente: ");
 		_flushall();
 		gets (clientes.telefono);
-			
-		
 		fwrite(&clientes, sizeof(Cliente), 1,cliente);
+	
+	printf("\n\nProfesional Registrado con Exito!\n\n");
 	
 	fclose (cliente);
 }
@@ -909,6 +900,75 @@ void listadoAtencionProf (FILE *prof , FILE *turno , FILE *cliente) //modulo rec
 	printf("\n\n");
 }
 
+void RankingProf (FILE *turno , FILE *prof)
+{
+	int i=0;
+	int may = -1;
+	char umay[70];
+	Turnos turnos;
+	Profesional profs;
+	
+	prof=fopen("Profesionales.dat","r+b");
+	
+	turno=fopen("Turnos.dat","r+b");
+	
+	rewind(turno);
+	rewind(prof);
+	
+	fread(&profs,sizeof(Profesional),1,prof);
+	fread(&turnos,sizeof(Turnos),1,turno);
+	
+	while(!feof(prof))
+	{
+		while(!feof(turno))
+		{
+			
+			if(profs.idProfesional == turnos.idProfesional)
+			{
+			
+				i++;
+				
+				fread(&turnos,sizeof(Turnos),1,turno);
+			}
+			else
+			{
+				
+				fread(&turnos,sizeof(Turnos),1,turno);	
+			}
+		}
+		
+		profs.cantidad = i;
+		
+		fread(&profs,sizeof(Profesional),1,prof);
+		rewind(turno);
+		i = 0;				
+	}						
+						
+	rewind(prof);
+	
+	while(!feof(prof))
+	{
+		
+		if(profs.cantidad>may)
+		{
+			
+			may=profs.cantidad;
+			
+			strcpy(umay,profs.apeNom);
+			
+		}
+		
+		fread(&profs,sizeof(Profesional),1,prof);
+	}
+	fclose (turno);
+	fclose (prof);
+						
+					
+	printf("\nEl Profesional que registro mas Clientes es: %s con %d Clientes\n", umay, may-1);	
+				
+
+}
+
 main()
 {
     FILE *recep;
@@ -924,7 +984,9 @@ main()
     int cantLogins =0;
     Login logins[255];
     
-    cantLogins = leerLogins (userfile, logins);//leo inicialmente todos los usuarios existentes 
+    cantLogins = leerLogins (userfile, logins);//leo inicialmente todos los usuarios existentes
+	
+	logoutn(); 
     
     do
     {
@@ -1035,7 +1097,8 @@ main()
 								}
 								else
 								{
-									
+									RegistrarCliente (cliente);
+									system("pause");
 								}
                                 break;
                             }
@@ -1054,6 +1117,8 @@ main()
 								else
 								{
 									regiTurnos (turno);	
+									printf("\n\nTurno Registrado con Exito!\n\n");
+									system("pause");
 								}  
                                 break;
                             }
@@ -1071,7 +1136,8 @@ main()
 								}
 								else
 								{
-									listadoAtencionProf (prof, turno, cliente);		
+									listadoAtencionProf (prof, turno, cliente);	
+										
 								}
                                 break;
                             }
@@ -1124,13 +1190,14 @@ main()
 
                             case 3:
                             {
-   								listadoAtencionProf(prof, turno, cliente);
+   								AtencionPorProf(turno, prof);
                                 break;
                             }
 
                             case 4:
                             {
 								printf("Ranking de Profesionales por atencion.");
+								RankingProf (turno, prof);
                                 break;
                             }
 
@@ -1150,6 +1217,15 @@ main()
                                 break;
                             }
                         }
+                    break;
+                }
+                case 4:
+                {
+
+                    acercaDe ();
+                    setTextColor(2);
+                    system("pause");
+                    
                     break;
                 }
             case 0:
