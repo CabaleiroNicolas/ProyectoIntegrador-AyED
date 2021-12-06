@@ -390,53 +390,53 @@ void AtencionPorProf (FILE *turno,FILE *prof) //modulo admin
 {
 	int i=0;
 	bool band = false;
-	char auxpro;
-	Turnos turno; 
+	char auxpro [50];
+	Turnos turnos; 
 	Profesional profs;
 	
 	prof=fopen("Profesionales.dat","r+b"); // cambio a+b * r+b
 	
-	shift=fopen("turnos.dat","r+b");
+	turno= fopen("turnos.dat","r+b");
 
 	printf("\nATENCIONES POR PROFESIONALES\n");
 	_flushall();
 	printf("\nProfesional: ");
 	gets(auxpro);
 	
-	rewind(shift);
-	rewind(professional);
+	rewind(turno);
+	rewind(prof);
 	
 	fread(&prof,sizeof(Profesional),1,prof);
 	
-	fread(&t,sizeof(Turnos),1,shift);
-	while(!feof(professional) && band == false)
+	fread(&turno,sizeof(Turnos),1,turno);
+	while(!feof(prof) && band == false)
 	{
 		if(strcmp(auxpro , profs.apeNom) == 0)
 		{
-			while(!feof(shift))
+			while(!feof(turno))
 			{
 			
-				if(profs.idProfesional == turno.idProfesional)
+				if(profs.idProfesional == turnos.idProfesional)
 				{
 					
 					printf("\n Turno numero %d \n" , i);
 					printf("\n --------- \n");
 					printf("\nFecha:");
-					printf("\n\tDia: %d", turno.fechaDeTurno.dia);
-					printf("\n\tMes: %d", turno.fechaDeTurno.mes);
-					printf("\n\tA%co: %d",164, turno.fechaDeTurno.anio);
-					printf("\nDNI del Usuario a registrar: %d", turno.dniCliente);
+					printf("\n\tDia: %d", turnos.fechaDeTurno.dia);
+					printf("\n\tMes: %d", turnos.fechaDeTurno.mes);
+					printf("\n\tA%co: %d",164, turnos.fechaDeTurno.anio);
+					printf("\nDNI del Usuario a registrar: %d", turnos.dniCliente);
 					printf("\n --------- \n");
 					i=i+1;
 					
 
-					fread(&turno,sizeof(turnos),1,shift);
+					fread(&turno,sizeof(Turnos),1,turno);
 				}
 				
 				else
 				{
 					
-					fread(&turno,sizeof(turnos),1,shift);	
+					fread(&turno,sizeof(Turnos),1,turno);	
 					
 				}
 				
@@ -448,7 +448,7 @@ void AtencionPorProf (FILE *turno,FILE *prof) //modulo admin
 		else
 		{
 			
-			fread(&prof,sizeof(Profesional),1,professional);
+			fread(&prof,sizeof(Profesional),1,prof);
 			
 		}
 							
