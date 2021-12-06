@@ -113,7 +113,7 @@ void logoutn()
 				
 				printf("%c",220);
 				
-				Sleep(35);
+				Sleep(20);
 			}
 			
 			else if(j==0){

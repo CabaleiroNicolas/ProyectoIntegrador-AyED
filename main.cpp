@@ -115,6 +115,7 @@ struct Profesional
 	char contrasenia[10];
     int idProfesional;
     int dniProfesional;
+    int cantidad;
     char telefono[25];
 };
 struct Cliente
@@ -297,7 +298,7 @@ int leerLogins (char userfile[], Login logins [255])
 
 int ValidUser(char usuario[10], Login logins [255], int *cantLogins)
 {
-<<<<<<< HEAD=======>>>>>>> f069413af8800430c971845e2826670a00da91db
+
  int flag = 0;
  int longitud;
  int mayusculas=0;
@@ -354,10 +355,6 @@ if (mayusculas < 2)
        flag = 1;
 }
 
-<<<<<<< HEAD
- 
-=======
->>>>>>> f069413af8800430c971845e2826670a00da91db
  i=0;
  while (usuario[i])
   {
@@ -374,10 +371,7 @@ if (mayusculas < 2)
   } 
  
  //Valida que no contenga espacios en blanco
-<<<<<<< HEAD
- 
-=======
->>>>>>> f069413af8800430c971845e2826670a00da91db
+
  i=0;
  while (usuario[i])
   {
@@ -677,11 +671,12 @@ void RegistrarCliente (FILE *cliente)//modulo recepcionista
 		scanf ("%.2f", &clientes.peso);
 			
 		printf ("\nIngrese la fecha de nacimiento del cliente: ");
+		_flushall ();
 		printf ("\n\tDia: ");
 		scanf("%d" ,&clientes.fechaDeNacimiento.dia);
 		printf ("\n\tMes: ");
 		scanf("%d" ,&clientes.fechaDeNacimiento.mes);
-	    printf ("\n\tAnio: " );
+	    printf ("\n\tA%o: ", 164 );
 		scanf("%d" ,&clientes.fechaDeNacimiento.anio);
 		
 		clientes.edad = 2021 - clientes.fechaDeNacimiento.anio;
@@ -691,7 +686,7 @@ void RegistrarCliente (FILE *cliente)//modulo recepcionista
 		gets (clientes.telefono);
 		fwrite(&clientes, sizeof(Cliente), 1,cliente);
 	
-	printf("\n\nProfesional Registrado con Exito!\n\n");
+	printf("\n\nCliente Registrado con Exito!\n\n");
 	
 	fclose (cliente);
 }
@@ -1033,6 +1028,7 @@ main()
 								else
 								{
 									listaEspera(turno, prof, cliente);
+									system ("pause");
 								}
 								
                                 break;
@@ -1052,7 +1048,8 @@ main()
 								}
 								else
 								{
-										
+								
+								system("pause");		
 								}
                                 break;
                             }
@@ -1143,7 +1140,8 @@ main()
 								}
 								else
 								{
-									listadoAtencionProf (prof, turno, cliente);	
+									listadoAtencionProf (prof, turno, cliente);
+									system("pause");	
 										
 								}
                                 break;
@@ -1198,6 +1196,7 @@ main()
                             case 3:
                             {
    								AtencionPorProf(turno, prof);
+   								system("pause");
                                 break;
                             }
 
@@ -1205,6 +1204,7 @@ main()
                             {
 								printf("Ranking de Profesionales por atencion.");
 								RankingProf (turno, prof);
+								system("pause");
                                 break;
                             }
 
