@@ -386,10 +386,13 @@ void RegistrarRecepcionista(FILE *archRecepcionista)
 
 }
 
-void AtencionPorProf (Turnos turno, Profesional profs, char auxprof[80],FILE *turno,FILE *prof)
+void AtencionPorProf (FILE *turno,FILE *prof) //modulo admin
 {
 	int i=0;
 	bool band = false;
+	char auxpro;
+	Turnos turno; 
+	Profesional profs;
 	
 	prof=fopen("Profesionales.dat","r+b"); // cambio a+b * r+b
 	
@@ -655,6 +658,7 @@ main()
                             case 3:
                             {
    								printf("Atenciones por profesional.");
+   								
                                 break;
                             }
 
