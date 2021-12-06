@@ -112,6 +112,7 @@ struct Profesional
 	char contrasenia[10];
     int idProfesional;
     int dniProfesional;
+	int cantidad;
     char telefono[25];
 };
 struct Cliente
