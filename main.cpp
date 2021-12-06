@@ -79,7 +79,7 @@ int MenuEspacios(bool sesionInic)
    
     if(sesionInic == false)
 	{
-		printf("\n\t1.- Iniciar Sesion");
+		printf("\n1.- Iniciar Sesion");
 	}
     printf("\n2.- Visualizar Lista de Espera de Turnos (informe)");
     printf("\n3.- Registrar Evolucion del tratamiento");
@@ -386,6 +386,48 @@ void RegistrarRecepcionista(FILE *archRecepcionista)
 
 }
 
+void regiTurnos(FILE *turno) //modulo recepcionista
+{
+	Turnos turnos;
+	turno =fopen("turnos.dat","a+b");
+	
+	if(turno == NULL)
+	{
+		turno = fopen("turnos.dat", "w+b");
+
+		if(turno == NULL)printf("\nNo se pudo crear archivo Profesionales.dat");
+	}
+
+					
+	printf("\nREGISTRACION DE TURNO\n");
+	
+	printf("ID del profesional: ");
+	scanf("%d",&turnos.idProfesional);
+
+	printf("Fecha:\n");
+	
+		printf("\nDia: ");
+		scanf("%d", &turnos.fechaDeTurno.dia);
+		printf("\nMes: ");
+		scanf("%d", &turnos.fechaDeTurno.mes);
+		printf("\nA%co: ",164);
+		scanf("%d", &turnos.fechaDeTurno.anio);
+		
+	printf("\nDNI del cliente: ",164);
+	scanf("%d",&turnos.dniCliente);
+	
+	//printf("\nDetalle de atencion: ");
+	//_flushall();
+	//gets(t.detalle);
+
+	fwrite(&turno,sizeof(Turnos),1,turno);	
+	
+	printf("\nEl turno fue guardado correctamente...");
+	
+	fclose(turno);
+
+}
+
 void AtencionPorProf (FILE *turno,FILE *prof) //modulo admin
 {
 	int i=0;
@@ -429,15 +471,12 @@ void AtencionPorProf (FILE *turno,FILE *prof) //modulo admin
 					printf("\n --------- \n");
 					i=i+1;
 					
-
 					fread(&turno,sizeof(Turnos),1,turno);
 				}
 				
 				else
 				{
-					
-					fread(&turno,sizeof(Turnos),1,turno);	
-					
+					fread(&turno,sizeof(Turnos),1,turno);		
 				}
 				
 				band = true;
@@ -454,13 +493,69 @@ void AtencionPorProf (FILE *turno,FILE *prof) //modulo admin
 							
 	}
 
+	fclose (turno);
+	fclose (prof);
+	
 	printf("\n\n");
 	system("pause");
 	system("cls");
 	
 }
 
+void listadoAtencionProf (FILE *prof , FILE *turno , FILE *cliente) //modulo recepcionista
+{
 
+	char auxpro[40];
+	Profesional profs;
+	Turnos turnos;
+	Cliente clientes;
+	
+	prof=fopen("Profesionales.dat","r+b");
+	turno=fopen("turnos.dat","r+b");
+	cliente=fopen("Clientes.dat","r+b");
+	
+	printf("LISTADO DE ATENCIONES POR PROFESIONALES Y FECHA\n");
+	printf("Profesional: ");
+	_flushall();
+	gets(auxpro);
+	
+	fread(&prof,sizeof(Profesional),1,prof);
+	fread(&turno,sizeof(Turnos),1,turno);
+	fread(&cliente,sizeof(Cliente),1,cliente);
+	
+	while(!feof(prof)&&!feof(turno)&&!feof(cliente))
+	{
+		if(strcmp(auxpro,profs.apeNom)==0)
+		{
+			
+				if(turnos.idProfesional==profs.idProfesional)
+				{
+					printf("\nNombre del cliente: %s",clientes.apeNom);
+					printf("\nFecha de turno:");
+					printf("\nDia: %d", turnos.fechaDeTurno.dia);
+					printf("\nMes: %d", turnos.fechaDeTurno.mes);
+					printf("\nA%co: %d",164, turnos.fechaDeTurno.anio);
+					printf("\nNombre del profesional: %s",profs.apeNom);
+					printf("\nID: %d",profs.idProfesional);
+					
+					fread(&prof,sizeof(Profesional),1,prof);
+					fread(&turno,sizeof(Turnos),1,turno);
+					fread(&cliente,sizeof(Cliente),1,cliente);
+				}	
+		}
+		else
+		{
+			fread(&prof,sizeof(Profesional),1,prof);
+			fread(&turno,sizeof(Turnos),1,turno);
+			fread(&cliente,sizeof(Cliente),1,cliente);
+		}
+	}
+	
+	fclose(prof);
+	fclose (turno);
+	fclose (cliente);
+
+}
 
 main()
 {
@@ -561,6 +656,7 @@ main()
                             {
 								printf("Iniciar sesion.");
 								
+								
                                 break;
                             }
 
@@ -574,7 +670,7 @@ main()
 								}
 								else
 								{
-										
+									
 								}
                                 break;
                             }
@@ -589,7 +685,7 @@ main()
 								}
 								else
 								{
-										
+									regiTurnos (turno);	
 								}  
                                 break;
                             }
@@ -604,7 +700,7 @@ main()
 								}
 								else
 								{
-										
+									listadoAtencionProf (prof, turno, cliente);		
 								}
                                 break;
                             }
