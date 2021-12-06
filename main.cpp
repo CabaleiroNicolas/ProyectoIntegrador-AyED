@@ -1229,7 +1229,7 @@ main()
                 {
 
                     acercaDe ();
-                    setTextColor(2);
+                    setTextColor(9);
                     system("pause");
                     
                     break;

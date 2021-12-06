@@ -60,7 +60,7 @@ void logoutn()
 	
 	
 		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-		SetConsoleTextAttribute(hConsole,2);
+		SetConsoleTextAttribute(hConsole,9);
 
 	
 	
@@ -108,7 +108,18 @@ void logoutn()
 		for(j=0;j<80;j++){
 		
 		
-			if( logo[i][j]== 1  ){
+			if( logo[i][j]== 1  )
+			{
+				if(i>=0 && i<=7)
+				{ 
+				
+						setTextColor(1);
+				}
+				else 
+				{
+					setTextColor(9);
+				}	
+				
 				
 				
 				printf("%c",220);
