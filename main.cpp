@@ -310,7 +310,6 @@ void ValidUser(char usuario[10])
 	
 }
 
-
 void RegistrarProfesional(FILE *archProfesional)
 {
 
@@ -416,9 +415,9 @@ void regiTurnos(FILE *turno) //modulo recepcionista
 	printf("\nDNI del cliente: ",164);
 	scanf("%d",&turnos.dniCliente);
 	
-	//printf("\nDetalle de atencion: ");
-	//_flushall();
-	//gets(t.detalle);
+	printf("\nDetalle de atencion: ");
+	_flushall();
+	gets(turnos.detalle);
 
 	fwrite(&turno,sizeof(Turnos),1,turno);	
 	
