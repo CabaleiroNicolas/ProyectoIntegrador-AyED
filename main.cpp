@@ -481,7 +481,7 @@ void RegistrarUsuario (char userfile[], Login logins [255], int *cantLogins) //m
 	
 	valida = ValidUser(reg.usuario, logins, cantLogins);
 
-	while (valida == 1) 
+	while (valida == 0) 
 	{
 		printf( "\nNombre Usuario: ");
 		_flushall();
