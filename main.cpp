@@ -10,7 +10,7 @@
 #include <wincon.h>
 #include <cstdlib>
 #include <unistd.h>
-
+typedef char string [2];
 int MenuGeneral()
 {
     int opc = 0;
@@ -128,6 +128,19 @@ struct Turnos
     Fecha fechaDeTurno;
     int dniCliente;
     char detalleDeAtencion[380];
+};
+
+struct Usuario 
+{
+	char usuario [10];
+	char password [33];
+	char ApeNom [60];
+	
+};
+
+struct Login 
+{
+	char usuario [10];
 };
 
 
@@ -265,11 +278,33 @@ void enterPassword(char* verify) //Enmasca la contrasenia ingresada
  } while(ch!=13);
 }
 
-void ValidUser(char usuario[10])
+int ValidUser(char usuario[10], Login logins [255], int *cantLogins)
 {
 	int longitud = 0;
 	int letrasMayusculas = 0;
 	int digitos = 0;
+	int retorno = 0;
+	int flag =0;
+	int n=0;
+	
+	n = *cantLogins;
+	printf ("Long n: %d\n", n);
+	
+	for (int i=0; i<n; i++)
+	{
+		if (strcmp (usuario, logins[i].usuario)==0)
+		{
+			printf ("Usuario ya existente."); 
+			flag=1;
+			break;	
+		}
+		 
+	}
+	
+	if (flag ==1)
+	{
+		return retorno; 
+	}
 	
 	longitud = strlen(usuario);
 	
@@ -299,16 +334,176 @@ void ValidUser(char usuario[10])
 		
 		if(letrasMayusculas > 1 && digitos < 4)
 		{
-			printf("\nUsuario Creado correctamente");
+			retorno = 1; 
 		}
 		else
 		{
 			printf("\nEl Nombre de usuario ingresado no cumple con lo terminos indicados...");
+			retorno = 0;
 		}
 					
 	}
 	
+	return retorno; 
+	
 }
+
+bool login(char userfile[])
+{
+	FILE *fp;
+	struct Usuario reg;
+	char usuario[10];
+	char password[32];
+	bool flag = false;
+	int user;
+	int pass;
+	
+	
+	fp=fopen(userfile,"rb");
+	if (fp==NULL)
+	{
+			printf ("Error al abrir el archivo \n");
+			exit(EXIT_FAILURE);
+	}
+	
+	rewind(fp);
+    printf ("Bienvenido - Inicio de Sesion \n") ;
+    printf ("------------------------------\n") ;
+    printf ("Usuario:") ; 
+	gets(usuario)  ;
+	 
+	printf ("Contrasenia: "); 
+	enterPassword(password); 
+	printf ("\n"); 
+	fread(&reg,sizeof(reg),1,fp);
+	
+	user=strcmp(usuario,reg.usuario);
+	pass=strcmp(password,reg.password);
+
+	if ((user== 0) && (pass== 0))
+		{
+			flag = true;
+		}
+	
+	while ((!feof(fp)) && (flag == false))
+	{
+		if (!feof(fp))
+		{	
+			user=strcmp(usuario,reg.usuario);
+			pass=strcmp(password,reg.password);
+			if ((user== 0) && (pass== 0))
+			{
+				flag = true;
+				
+			}
+	   }
+		fread(&reg,sizeof(reg),1,fp);
+	}  
+	fclose(fp);
+	if (flag==true)
+	{
+		printf ("Inicio de sesion exitosa\n");
+	}
+	else
+	{	printf ("Las credenciales ingresadas son incorrectas\n");
+	}
+	return flag;
+}
+
+//Carga en un vector todos los usuarios existentes
+int leerLogins (char userfile[], Login logins [255])
+{
+	FILE *fp; 
+	Usuario reg;
+	int i =0;
+	fp=fopen(userfile,"rb");
+	if (fp==NULL)
+	{
+		printf("Error al abrir el archivo % \n",userfile);
+		exit(EXIT_FAILURE);
+	}
+
+	rewind(fp);
+	fread(&reg,sizeof(reg),1,fp);
+    strcpy(reg.usuario,logins[i].usuario);
+    printf ("reg usuario: %s", reg.usuario);
+	while (!feof(fp))
+	{
+		if (!feof(fp))
+		{
+			strcpy(reg.usuario,logins[i++].usuario);
+			printf ("reg usuario: %s\n", reg.usuario);
+       }
+		fread(&reg,sizeof(reg),1,fp);
+	}  
+	fclose(fp);
+	system ("pause");
+	return i;
+}
+
+void RegistrarUsuario (char userfile[], Login logins [255], int *cantLogins)
+{
+	FILE *fp;
+	struct Usuario reg;
+	string continua = "S"; 
+	int valida =0;
+
+	fp = fopen(userfile, "a+b");
+
+	if(fp == NULL)
+	{
+		printf("Error al abrir el archivo \n");
+		exit(EXIT_FAILURE);
+	}
+	
+	 do 
+    {
+
+	printf("\nUsuario: ");
+	_flushall();
+	gets(reg.usuario);
+	
+	valida = ValidUser(reg.usuario, logins, cantLogins);
+
+	while (valida == 0) 
+	{
+		printf( "\nUsuario: ");
+		_flushall();
+		gets(reg.usuario);
+		valida =ValidUser(reg.usuario, logins, cantLogins);
+	
+	}
+
+	printf("\nContrasenia: ");
+	_flushall();
+	enterPassword(reg.password);//lee caracter a caracter la constraseña y la enmascara 
+		
+	while (checkPassword(reg.password)!=0) 
+	{
+		printf( "\nContrasenia: ");
+		enterPassword(reg.password);
+	}
+	
+	printf("\nNombre y Apellido: ");
+	_flushall();
+	gets(reg.ApeNom);
+
+	fwrite(&reg, sizeof(reg), 1,fp);
+		
+  	printf ("\nContinua cargando usuarios (S/N)?");
+  	_flushall();
+	gets (continua);
+
+	cantLogins++;
+	//al usuario registrado lo agrego al vector de logins para futuar validaciones 
+	strcpy(reg.usuario,logins[*cantLogins].usuario);
+	
+	}while(strcmp (continua, "N")!= 0); 
+
+	fclose(fp);
+
+}
+
 
 void RegistrarProfesional(FILE *archProfesional)
 {
@@ -351,39 +546,7 @@ void RegistrarProfesional(FILE *archProfesional)
 }
 
 
-void RegistrarRecepcionista(FILE *archRecepcionista)
-{
 
-	Recepcionista recep;
-
-	archRecepcionista = fopen("Recepcionistas.dat", "r+b");
-
-	if(archRecepcionista == NULL)
-	{
-		archRecepcionista = fopen("Recepcionistas.dat", "w+b");
-
-		if(archRecepcionista == NULL)printf("\nNo se pudo crear archivo Profesionales.dat");
-	}
-
-	fseek(archRecepcionista, 0, SEEK_END);
-
-	printf("Usuario: ");
-	_flushall();
-	gets(recep.usuario);
-
-	printf("Contrasenia: ");
-	_flushall();
-	gets(recep.contrasenia);
-
-	printf("Nombre y Apellido: ");
-	_flushall();
-	gets(recep.apeNom);
-
-	fwrite(&recep, sizeof(Recepcionista), 1,archRecepcionista);
-
-	fclose(archRecepcionista);
-
-}
 
 void regiTurnos(FILE *turno) //modulo recepcionista
 {
@@ -417,7 +580,7 @@ void regiTurnos(FILE *turno) //modulo recepcionista
 	
 	printf("\nDetalle de atencion: ");
 	_flushall();
-	gets(turnos.detalle);
+	gets(turnos.detalleDeAtencion);
 
 	fwrite(&turno,sizeof(Turnos),1,turno);	
 	
@@ -562,13 +725,16 @@ main()
     FILE *prof;
     FILE *cliente;
     FILE *turno;
-	char myfile [255]={"Usuarios.dat"}; //Nombre del archivo de usuarios
+	char userfile [255]={"Usuarios.dat"}; //Nombre del archivo de usuarios
 	bool sesionInic = false;
 	int opcEspacios = 0;
     int opcRecep =0;
     int opcAdmin=0;
     int opcion = 0;
-
+    int cantLogins =0;
+    Login logins [255];
+    
+    cantLogins= leerLogins (userfile, logins);//leo inicialmente todos los usuarios existentes 
     do
     {
 
@@ -589,17 +755,19 @@ main()
                             case 1:
                             {
                             	printf("Iniciar sesion.");
-
+                            	sesionInic = login (userfile );
+									
                                 break;
                             }
 
                             case 2:
                             {
-								printf("Listado de espera de Turnos.");
+								printf("Listado de espera de Turnos.\n");
 								if(sesionInic == false)
 									{
-										printf("Debe iniciar sesion para realizar una accion, por favor escoja la opcion 1: ");
-									
+										printf("\nDebe iniciar sesion para realizar una accion, por favor escoja la opcion 1 ");
+										printf ("\n\n");
+										system ("pause");
 									}
 									else
 									{
@@ -654,7 +822,7 @@ main()
                             case 1:
                             {
 								printf("Iniciar sesion.");
-								
+							
 								
                                 break;
                             }
@@ -743,9 +911,9 @@ main()
 
                             case 2:
                             {
-								printf("Registrar a un recepcionista.\n\n");
-								RegistrarRecepcionista(recep);
-								printf("\n\nRecepcionista Registrado con Exito!\n\n");
+								printf("Registrar a un Usuario.\n\n");
+								RegistrarUsuario(userfile, logins, &cantLogins);
+								printf("\n\nUsuario Registrado con Exito!\n\n");
 								system("pause");
                                 break;
                             }
