@@ -115,7 +115,6 @@ struct Profesional
 	char contrasenia[10];
     int idProfesional;
     int dniProfesional;
-	int cantidad;
     char telefono[25];
 };
 struct Cliente
@@ -296,9 +295,9 @@ int leerLogins (char userfile[], Login logins [255])
 	return i;
 }
 
-int ValidUser(char usuario[10], Login logins [255], int *cantLogins) 
+int ValidUser(char usuario[10], Login logins [255], int *cantLogins)
 {
-
+<<<<<<< HEAD=======>>>>>>> f069413af8800430c971845e2826670a00da91db
  int flag = 0;
  int longitud;
  int mayusculas=0;
@@ -355,6 +354,10 @@ if (mayusculas < 2)
        flag = 1;
 }
 
+<<<<<<< HEAD
+ 
+=======
+>>>>>>> f069413af8800430c971845e2826670a00da91db
  i=0;
  while (usuario[i])
   {
@@ -371,6 +374,10 @@ if (mayusculas < 2)
   } 
  
  //Valida que no contenga espacios en blanco
+<<<<<<< HEAD
+ 
+=======
+>>>>>>> f069413af8800430c971845e2826670a00da91db
  i=0;
  while (usuario[i])
   {
