@@ -292,9 +292,9 @@ int leerLogins (char userfile[], Login logins [255])
 	return i;
 }
 
-int ValidUser(char usuario[10], Login logins [255], int *cantLogins)
+int ValidUser(char usuario[10], Login logins [255], int *cantLogins) 
 {
-	int flag = 0;
+ int flag = 0;
  int longitud;
  int mayusculas=0;
  int digitos = 0;
@@ -350,7 +350,6 @@ if (mayusculas < 2)
 
 }
 
- flag=0;
  i=0;
  while (usuario[i])
   {
@@ -367,7 +366,6 @@ if (mayusculas < 2)
   } 
  
  //Valida que no contenga espacios en blanco
- flag=0;
  i=0;
  while (usuario[i])
   {
