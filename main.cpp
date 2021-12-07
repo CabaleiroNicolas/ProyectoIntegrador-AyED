@@ -336,7 +336,7 @@ int ValidUser(char usuario[10], Login logins [255], int *cantLogins)
      flag = 1;
   }
 
- //Valida que contenga al 2 letra en mayuscula
+ //Valida que contenga al 2 menos letras en mayuscula
  
  i=0;
  for(i = 0; i < longitud; i++)
@@ -391,26 +391,59 @@ if (mayusculas < 2)
 	
 }
 
-void enterPassword(char* verify) //Enmasca la contrasenia ingresada
+
+void enterPassword(char* verify, short int x, short int y, short int xAux) //Enmascara la contraseña ingresada
 {
 
+ HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+ COORD pos = {x, y};
  char ch;
  int i=0;
-
+ 
  do
- 	{
+ {
 	  ch=getch();
 	  if(ch!=13)
+	  {
+		x = x+1;
+		
+		if (ch == 8)
 		{
-		   verify[i++]=ch; //Va cargando los caracteres ingresados
-		   printf("*");
+		     if (x > xAux)
+	     	{
+				 x = x - 1;
+				 pos = {x, y};
+				 SetConsoleCursorPosition(hConsole, pos);
+			 	 WriteConsole(hConsole, " ", 1, NULL, NULL);
+		 	     x=x-1;
+			     pos = {x, y};
+			 	 SetConsoleCursorPosition(hConsole, pos);
+			 	 verify[i--];
+				  
+			 	 if (x <= xAux)
+			 	 {
+			 	   x = xAux + 1 ;	
+			       pos = {x++, y};
+			 	   SetConsoleCursorPosition(hConsole, pos);
+				  }	
+			}	 
 		}
-		  else
-		{
-		   verify[i++]='\0';
-		}
- 	} while(ch!=13);
+		         
+       else
+        {
+	   		verify[i++]=ch; //Va cargando los caracteres ingresados
+	   		printf ("*");
+	   }
+	}
+	  else
+	  {
+	   verify[i++]='\0';
+	  }
+ }
+ while(ch!=13);
  
+printf ("\nverify: %s\n", verify);
+ system ("pause");	 	
 }
 
 void RegistrarProfesional(FILE *archProfesional) //modulo Administracion
@@ -441,7 +474,7 @@ void RegistrarProfesional(FILE *archProfesional) //modulo Administracion
 
 	printf("Contrasenia: ");
 	_flushall();
-	enterPassword(prof.contrasenia); //lee caracter a caracter la constraseña y la enmascara 
+	enterPassword(prof.contrasenia, 12,6,12 ); //lee caracter a caracter la constraseña y la enmascara 
 		
 	while (checkPassword(prof.contrasenia) != 0) 
 	{
@@ -450,7 +483,7 @@ void RegistrarProfesional(FILE *archProfesional) //modulo Administracion
 		system("pause");
 		system("cls");
 		printf( "\nContrasenia: ");
-		enterPassword(prof.contrasenia);
+		enterPassword(prof.contrasenia, 12,6,12);
 	}
 
 	printf("\nDNI: ");
@@ -502,7 +535,7 @@ void RegistrarUsuario (char userfile[], Login logins [255], int *cantLogins) //m
 
 	printf("\nContrasenia: ");
 	_flushall();
-	enterPassword(reg.password);//lee caracter a caracter la constraseña y la enmascara 
+	enterPassword(reg.password, 12,5,12);//lee caracter a caracter la constraseña y la enmascara 
 		
 	while (checkPassword(reg.password)!=0) 
 	{
@@ -510,7 +543,7 @@ void RegistrarUsuario (char userfile[], Login logins [255], int *cantLogins) //m
 		system("pause");
 		system("cls");
 		printf( "\nContrasenia:  ");
-		enterPassword(reg.password);
+		enterPassword(reg.password, 12,5,12);
 	}
 	
 	printf("\nNombre y Apellido del usuario: ");
@@ -556,7 +589,7 @@ bool login(char userfile[])
 	gets(usuario)  ;
 	 
 	printf ("Contrasenia: "); 
-	enterPassword(password); 
+	enterPassword(password, 12,3,12); 
 	printf ("\n"); 
 	fread(&reg,sizeof(reg),1,fp);
 	
@@ -902,74 +935,7 @@ void listadoAtencionProf (FILE *prof , FILE *turno , FILE *cliente) //modulo rec
 	printf("\n\n");
 }
 
-void RankingProf (FILE *turno , FILE *prof)
-{
-	int i=0;
-	int may = -1;
-	char umay[70];
-	Turnos turnos;
-	Profesional profs;
-	
-	prof=fopen("Profesionales.dat","r+b");
-	
-	turno=fopen("Turnos.dat","r+b");
-	
-	rewind(turno);
-	rewind(prof);
-	
-	fread(&profs,sizeof(Profesional),1,prof);
-	fread(&turnos,sizeof(Turnos),1,turno);
-	
-	while(!feof(prof))
-	{
-		while(!feof(turno))
-		{
-			
-			if(profs.idProfesional == turnos.idProfesional)
-			{
-			
-				i++;
-				
-				fread(&turnos,sizeof(Turnos),1,turno);
-			}
-			else
-			{
-				
-				fread(&turnos,sizeof(Turnos),1,turno);	
-			}
-		}
-		
-		profs.cantidad = i;
-		
-		fread(&profs,sizeof(Profesional),1,prof);
-		rewind(turno);
-		i = 0;				
-	}						
-						
-	rewind(prof);
-	
-	while(!feof(prof))
-	{
-		
-		if(profs.cantidad>may)
-		{
-			
-			may=profs.cantidad;
-			
-			strcpy(umay,profs.apeNom);
-			
-		}
-		
-		fread(&profs,sizeof(Profesional),1,prof);
-	}
-	fclose (turno);
-	fclose (prof);
-						
-					
-	printf("\nEl Profesional que registro mas Clientes es: %s con %d Clientes\n", umay, may-1);	
-				
 
-}
 
 main()
 {
@@ -1203,7 +1169,7 @@ main()
                             case 4:
                             {
 								printf("Ranking de Profesionales por atencion.");
-								RankingProf (turno, prof);
+								//RankingProf (turno, prof);
 								system("pause");
                                 break;
                             }
