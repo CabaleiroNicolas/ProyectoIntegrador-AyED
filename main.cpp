@@ -13,7 +13,7 @@
 #include "utiles.h"
 using namespace std;
 
-typedef char cadena [2];
+typedef char cadena [40];
 
 int MenuGeneral()
 {
@@ -138,6 +138,7 @@ struct Turnos
     char detalleDeAtencion[380];
 };
 
+/*
 struct Usuario 
 {
 	char usuario [10];
@@ -150,8 +151,10 @@ struct Login
 {
 	char usuario [10];
 };
+*/
 
-int checkPassword(char clave[32])
+
+/*int checkPassword(char clave[32])
 {
 	 int longitud;
 	 int i = 0;
@@ -262,8 +265,9 @@ int checkPassword(char clave[32])
 	  }
 	  return  retorno;
 	 
-}
+}*/
 
+/*
 //Carga en un vector todos los usuarios existentes
 int leerLogins (char userfile[], Login logins [255])
 {
@@ -294,8 +298,8 @@ int leerLogins (char userfile[], Login logins [255])
 	fclose(fp);
 	//system ("pause");
 	return i;
-}
-
+}*/
+/*
 int ValidUser(char usuario[10], Login logins [255], int *cantLogins)
 {
 
@@ -389,9 +393,9 @@ if (mayusculas < 2)
   
   return flag; 
 	
-}
+}*/
 
-
+/*
 void enterPassword(char* verify, short int x, short int y, short int xAux) //Enmascara la contraseña ingresada
 {
 
@@ -444,7 +448,7 @@ void enterPassword(char* verify, short int x, short int y, short int xAux) //Enm
  
 printf ("\nverify: %s\n", verify);
  system ("pause");	 	
-}
+}*/
 
 void RegistrarProfesional(FILE *archProfesional) //modulo Administracion
 {
@@ -563,6 +567,7 @@ void RegistrarUsuario (char userfile[], Login logins [255], int *cantLogins) //m
 
 }
 
+/*
 bool login(char userfile[])
 {
 	FILE *fp;
@@ -619,12 +624,17 @@ bool login(char userfile[])
 	if (flag==true)
 	{
 		printf ("Inicio de sesion exitosa\n");
+		printf("\n\n");
+		system("pause");
 	}
 	else
 	{	printf ("Las credenciales ingresadas son incorrectas\n");
+		printf("\n\n");
+		system("pause");	
+	
 	}
 	return flag;
-}
+}*/
 
 void regiTurnos(FILE *turno) //modulo recepcionista
 {
