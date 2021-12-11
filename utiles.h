@@ -13,11 +13,6 @@
 
 using namespace std;
 
-
-
-//////////
-
-
 struct Usuario 
 {
 	char usuario [10];
@@ -31,9 +26,6 @@ struct Login
 	char usuario [10];
 };
 
-
-
-///////////
 
 string replicate(string s, int n) 
 {
@@ -199,7 +191,6 @@ void logoutn()
 	
 	
 }
-
 void acercaDe ()
 {
 	int N = 6;
@@ -265,24 +256,6 @@ void acercaDe ()
 	cout << replicate(espacio,45)+"Canevaro Rafael\n";
 }
 
-
-
-
-
-
-
-
-////============================== FUNCINES AGREGADAS RECIENTEMENTE==============================
-
-
-
-
-
-
-
-
-
-
 //Carga en un vector todos los usuarios existentes
 int leerLogins (char userfile[], Login logins [255])
 {
@@ -314,10 +287,6 @@ int leerLogins (char userfile[], Login logins [255])
 	//system ("pause");
 	return i;
 }
-
-
-
-
 
 int ValidUser(char usuario[10], Login logins [255], int *cantLogins)
 {
@@ -413,8 +382,6 @@ if (mayusculas < 2)
   return flag; 
 	
 }
-
-
 
 int checkPassword(char clave[32])
 {
@@ -529,8 +496,6 @@ int checkPassword(char clave[32])
 	 
 }
 
-
-
 void enterPassword(char* verify, short int x, short int y, short int xAux) //Enmascara la contraseña ingresada
 {
 
@@ -581,10 +546,8 @@ void enterPassword(char* verify, short int x, short int y, short int xAux) //Enm
  }
  while(ch!=13);
  
-printf ("\nverify: %s\n", verify);
  system ("pause");	 	
 }
-
 
 bool login(char userfile[])
 {
@@ -652,5 +615,3 @@ bool login(char userfile[])
 	}
 	return flag;
 }
-
-

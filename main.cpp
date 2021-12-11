@@ -945,9 +945,6 @@ void listadoAtencionProf (FILE *prof , FILE *turno , FILE *cliente) //modulo rec
 	printf("\n\n");
 }
 
-
-
-
 void RankingProfesionales(FILE *tur , FILE *pro)
 {
 	
@@ -1051,7 +1048,7 @@ void RankingProfesionales(FILE *tur , FILE *pro)
 	
 	  }
 	  
-	  
+	  printf (" cant lista: %d",lista[i].cantidad);
 		for(i=0; i<size ;i++)
 		{
 	
@@ -1078,7 +1075,7 @@ main()
     
     cantLogins = leerLogins (userfile, logins);//leo inicialmente todos los usuarios existentes
 	
-	logoutn(); 
+	//logoutn(); 
     
     do
     {
