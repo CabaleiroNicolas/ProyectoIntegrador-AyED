@@ -676,6 +676,11 @@ void RankingProfesionales(FILE *tur , FILE *pro)
 			
 		}
 	}
+
+fclose(pro);
+fclose(tur);
+
+
 }
 
 void evolucionPacientes (FILE *tur,FILE *pro,FILE *client)	
@@ -708,10 +713,26 @@ void evolucionPacientes (FILE *tur,FILE *pro,FILE *client)
 	fread(&profe,sizeof(Profesional),1,pro);
 	fread(&clie,sizeof(Cliente),1,client);
 
-   while(!feof(pro)  && bandera != true)
+   while(!feof(pro)  && (bandera == false) && (pro != NULL) )
    {
 
-	   while (!feof(client) && centinela != true)
+	   
+	   
+		if(auxIdPro == profe.idProfesional)
+		{
+			bandera= true;
+		
+		fread(&profe,sizeof(Profesional),1,pro);
+		}
+		else{
+		
+		fread(&profe,sizeof(Profesional),1,pro);
+		}
+   }
+   
+   
+   
+   while (!feof(client) && centinela == false && (client != NULL) )
 	   {
 		   
 
@@ -728,105 +749,100 @@ void evolucionPacientes (FILE *tur,FILE *pro,FILE *client)
 			}
 
 	   }
-	   
-		if(auxIdPro == profe.idProfesional)
-		{
-			bandera= true;
-			fread(&profe,sizeof(Profesional),1,pro);
-		}
-		else
-		{
-			fread(&profe,sizeof(Profesional),1,pro);
-		}
 
-   }
-
-	if((bandera==true) && (centinela == true))
-	{
+	printf("\n\n");
+	
+	if((bandera==true) && (centinela == true)){
 			
-		rewind(pro);
-		rewind(client);
-		rewind(tur);
+			
+			
+ 				rewind(tur);
 
-		fread(&turn,sizeof(Turnos),1,tur);
+			fread(&turn,sizeof(Turnos),1,tur);
 
-		fread(&profe,sizeof(Profesional),1,pro);
+			
 
-		fread(&clie,sizeof(Cliente),1,client);
-		
-		bandera=false;
+			
+			
+			bandera=false;
 
-		while(!feof(pro) && bandera==false)
-		{
+			
 
+					
+				while(!feof(tur) && bandera==false && (tur != NULL) ){
 				
-			while(!feof(tur) && bandera==false)
-			{
-			
-							
-				while(!feof(client) && bandera==false)
-				{
-												
-												
-					if( (auxIdPro == turn.idProfesional ) && ( auxDniClien == turn.dniCliente ) )
-					{		
-						fseek(tur,(long) -sizeof(Turnos),SEEK_CUR);	
-							
-						printf("\nRegistre la evolucion del cliente: ");
-														
-						fflush(stdin);
-						gets(turn.detalleDeAtencion);
-						fwrite(&turn, sizeof(Turnos), 1,tur);
 								
-						bandera=true;
-												
-					}
+				
 													
-					else
-					{		
-						fread(&clie,sizeof(Cliente),1,client);
+													
+						if( (auxIdPro == turn.idProfesional ) && ( auxDniClien == turn.dniCliente ) ){
+									
+									
+							fseek(tur,(long) -sizeof(Turnos),SEEK_CUR);	
 								
-					}								
-										
-				}
-								
-				rewind(client);
-				fread(&turn,sizeof(Turnos),1,tur);
+							printf("\nRegistre la evolucion del cliente: ");
+															
+							fflush(stdin);
+							gets(turn.detalleDeAtencion);
+							fwrite(&turn, sizeof(Turnos), 1,tur);
+									
+							bandera=true;
+															
+							fread(&turn, sizeof(Turnos), 1,tur);								
+						}
+														
+						else{
+									
+							fread(&turn, sizeof(Turnos), 1,tur);
+									
+									
+						}
+									
+									
+													
+														
+											
+					}
+									
 				
-			}
 				
 				
-				rewind(tur);
-				fread(&profe,sizeof(Profesional),1,pro);
+				
+				
+				
 
-			}
+			
 
 
-			if( (auxIdPro != turn.idProfesional ) || ( auxDniClien != turn.dniCliente ) )
-			{
+			if( (auxIdPro != turn.idProfesional ) || ( auxDniClien != turn.dniCliente ) ){
+
 				printf("\n los valores ingresados no coinciden...\n");
 				
 			}
 
 	
 	}
-	else if((bandera==true) && (centinela == false))
-	{
-
+	else if((bandera==true) && (centinela == false)){
+	
 		printf("\n El Profesional esta Registrado pero el paciente No...\n");
-
+	
 	}
-    	else if((bandera==false) && (centinela == true))
-		{
-
+	else if((bandera==false) && (centinela == true)){
+	
 		printf("\n El paciente esta Registrado pero el Profesional No...\n");
-
-		}
-
+	
+	}
+	else if((bandera==false) && (centinela == false)){
+		
+		printf("\n El paciente No esta Registrado \n El Profesional No esta Registrado ...\n");
+		
+		
+		
+	}
+	
 	fclose(pro);
 	fclose(client);
 	fclose(tur);
-
 }
 
 bool login(char userfile[])
@@ -978,6 +994,7 @@ main()
 								{
 									
 									evolucionPacientes (turno, prof, cliente);
+									printf("\n\n");
 									system("pause");		
 								}
                                 break;
