@@ -265,9 +265,9 @@ int leerLogins (char userfile[], Login logins [255])
 	fp=fopen(userfile,"rb");
 	if (fp==NULL)
 	{
-		printf("Error al abrir el archivo % \n",userfile);
+		printf("No hay Usuarios Registrados  \n",userfile);
 		//exit(EXIT_FAILURE);
-		return -1; 
+		return 0; 
 	}
 
 	rewind(fp);

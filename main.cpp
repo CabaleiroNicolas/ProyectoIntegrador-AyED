@@ -807,14 +807,15 @@ void evolucionPacientes (FILE *tur,FILE *pro,FILE *client)
 				
 				
 				
-				
-				
-				
-
-			
+			if(tur == NULL){
 
 
-			if( (auxIdPro != turn.idProfesional ) || ( auxDniClien != turn.dniCliente ) ){
+			printf("*El profecional esta Registrado\n *El paciente esta Registrado\n *Pero ''No se Registraron Turnos ''...");
+		
+
+
+			}	
+			else if( (auxIdPro != turn.idProfesional ) || ( auxDniClien != turn.dniCliente ) ){
 
 				printf("\n los valores ingresados no coinciden...\n");
 				
@@ -931,7 +932,14 @@ main()
     
     cantLogins = leerLogins (userfile, logins);//leo inicialmente todos los usuarios existentes
     printf("cant logins: %d", cantLogins );
+    printf("\n\n");
 	system ("pause");
+	
+	if(cantLogins <= 0){
+		system("cls");
+		printf("Registrar a un Usuario.\n\n");
+		RegistrarUsuario(userfile, logins);
+	}
 	//logoutn(); 
     
     do
