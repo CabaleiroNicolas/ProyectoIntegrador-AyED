@@ -248,7 +248,7 @@ void RegistrarUsuario (char userfile[], Login logins [255]) //modulo administrac
 		
 
 	cantLogins++;
-	printf ("cant logins: %d", cantLogins); 
+	//printf ("cant logins: %d", cantLogins); 
 	//al usuario registrado lo agrego al vector de logins para futuras validaciones 
 	
 	strcpy(logins[cantLogins].usuario,reg.usuario);
@@ -860,7 +860,7 @@ bool login(char userfile[])
 	printf ("\n\n");
 	 
 	fread(&reg,sizeof(reg),1,fp);
-	printf ("password ingresada: %s -  otra pass: %s", password, reg.password);
+	//printf ("password ingresada: %s -  otra pass: %s", password, reg.password);
 	
 	user=strcmp(usuario,reg.usuario);
 	pass=strcmp(password,reg.password);
@@ -1116,7 +1116,7 @@ main()
                             case 2:
                             {
 								printf("Registrar a un Usuario.\n\n");
-								printf("antes cant logins: %d\n", cantLogins );
+								//printf("antes cant logins: %d\n", cantLogins );
 								RegistrarUsuario(userfile, logins);
 								
 								printf("\n\nUsuario Registrado con Exito!\n\n");
