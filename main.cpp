@@ -207,7 +207,7 @@ void RegistrarUsuario (char userfile[], Login logins [255]) //modulo administrac
 		exit(EXIT_FAILURE);
 	}
 	
-	printf ("cant logins: %d", cantLogins); 
+	//printf ("cant logins: %d", cantLogins);       													-------------------   BORRAR LINEA  ----------------- 
 	
 	printf("\nNombre de Usuario: ");
 	_flushall();
@@ -248,7 +248,7 @@ void RegistrarUsuario (char userfile[], Login logins [255]) //modulo administrac
 		
 
 	cantLogins++;
-	//printf ("cant logins: %d", cantLogins); 
+	//printf ("cant logins: %d", cantLogins);           														-------------	BORRAR LINEA   -----------------
 	//al usuario registrado lo agrego al vector de logins para futuras validaciones 
 	
 	strcpy(logins[cantLogins].usuario,reg.usuario);
@@ -937,15 +937,8 @@ main()
     Login logins[255];
     
     cantLogins = leerLogins (userfile, logins);//leo inicialmente todos los usuarios existentes
-    printf("cant logins: %d", cantLogins );
-    printf("\n\n");
-	
-	
-	if(cantLogins <= 0){
-		system("cls");
-		printf("Registrar a un Usuario.\n\n");
-		RegistrarUsuario(userfile, logins);
-	}
+  
+
 	//logoutn(); 
     
     do
@@ -1147,7 +1140,7 @@ main()
                             case 2:
                             {
 								printf("Registrar a un Usuario.\n\n");
-								//printf("antes cant logins: %d\n", cantLogins );
+								//printf("antes cant logins: %d\n", cantLogins );											---------	BORRAR LINEA   ------------
 								RegistrarUsuario(userfile, logins);
 								
 								printf("\n\nUsuario Registrado con Exito!\n\n");
