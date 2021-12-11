@@ -947,6 +947,120 @@ void listadoAtencionProf (FILE *prof , FILE *turno , FILE *cliente) //modulo rec
 
 
 
+
+void RankingProfesionales(FILE *tur , FILE *pro)
+{
+	
+	Profesional p;
+	Turnos t;
+	const int TAM = 40;
+	int i=0;
+	char umay[70];
+	Profesional lista[TAM];
+	int c= 0;
+	int step=0;   
+    int size=0;
+	
+	pro=fopen("Profesionales.dat","r+b");
+	
+	tur=fopen("turnos.dat","r+b");
+	
+	if(tur == NULL)
+	{
+		printf("\nNo se Atendio Ningun Paciente Hata el Momento...\n\n");
+	}
+	else
+	{
+	
+	
+		rewind(tur);
+		rewind(pro);
+		
+		fread(&p,sizeof(Profesional),1,pro);
+		fread(&t,sizeof(Turnos),1,tur);
+		
+		while(!feof(pro))
+		{
+			while(!feof(tur)){
+				
+				if(p.idProfesional == t.idProfesional)
+				{
+				
+					i++;
+					
+					
+					fread(&t,sizeof(Turnos),1,tur);
+				}
+				else
+				{
+					
+					fread(&t,sizeof(Turnos),1,tur);	
+				}
+			}
+			
+			p.cantidad=i;
+			
+			fwrite(&p,sizeof(Profesional),1,pro);
+	
+	
+			rewind(tur);
+			i = 0;			
+			fread(&p,sizeof(Profesional),1,pro);	
+		}						
+							
+		
+		
+		rewind(pro);
+		fread(&p,sizeof(Profesional),1,pro);
+		
+		while(!feof(pro))
+		{
+			
+			lista[c] = p;
+			c++;
+			
+			fread(&p,sizeof(Profesional),1,pro);	
+		
+		}
+			
+	   size=c;
+	   
+	  for(step = 0; step < (size-1) ; ++step) 
+	  {
+	
+	    int swapped = 0;
+	
+	    for(i = 0; i < (size-step-1); ++i) 
+	    {
+	
+	      if(lista[i].cantidad < lista[i+1].cantidad) 
+	      {
+	
+	        Profesional temp = lista[i];
+	        lista[i] = lista[i + 1];
+	        lista[i + 1] = temp;
+	
+	        swapped = 1;
+	      }
+	    }
+	
+	    if (swapped == 0) 
+	    {
+	      break;
+	    }
+	
+	  }
+	  
+	  
+		for(i=0; i<size ;i++)
+		{
+	
+	  	    printf("\n%d-- Profesional %s tiene %d cantidad de pacientes registrados",i+1,lista[i].apeNom,lista[i].cantidad);
+		}
+	}
+}
+
+
 main()
 {
     FILE *recep;
@@ -1178,8 +1292,9 @@ main()
 
                             case 4:
                             {
-								printf("Ranking de Profesionales por atencion.");
-								//RankingProf (turno, prof);
+								printf("Ranking de Profesionales por atencion.\n\n");
+								RankingProfesionales(turno, prof);
+								printf("\n\n");
 								system("pause");
                                 break;
                             }
