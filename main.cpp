@@ -14,6 +14,7 @@
 using namespace std;
 
 typedef char cadena [40];
+int cantLogins =0;
 
 int MenuGeneral()
 {
@@ -138,318 +139,6 @@ struct Turnos
     char detalleDeAtencion[380];
 };
 
-/*
-struct Usuario 
-{
-	char usuario [10];
-	char password [33];
-	char ApeNom [60];
-	
-};
-
-struct Login 
-{
-	char usuario [10];
-};
-*/
-
-
-/*int checkPassword(char clave[32])
-{
-	 int longitud;
-	 int i = 0;
-	 int flag = 0;
-	 int ascii=0;
-	 int aux = 0;
-	 int j;
-	 int retorno = 0;
-	 
-	 longitud = strlen(clave);
-	 //Valida la longitud de la clave
-	 if (longitud <6  || longitud > 32)
-	 {
-	 	printf("\nLa Clave tiene que tener 6 caracteres como minimo y 32 como maximo.");
-	 	retorno = 1;
-	 }
-	  //Valida que contenga al menos un caracter en mayuscula
-	 flag = 0;
-	 i=0;
-	 while ((clave[i]) && flag == 0)
-	  {
-	    if (isupper(clave[i])) 
-	    {
-				flag = 1;
-		}	
-	    i++;
-	  }
-	 if (flag == 0)  
-	 { 
-		printf("\nLa clave debe contener al menos una mayuscula.");
-		retorno = 1;
-	 }
-	 //Valida que contenga al menos un caracter en minuscula
-	 flag = 0;
-	 i=0;
-	 while ((clave[i]) && flag == 0)
-	  {
-	    if (islower(clave[i])) 
-	    {
-				flag = 1;
-		}	
-	    i++;
-	  }
-	 if (flag == 0)  
-	 { 
-		printf("\nLa clave debe contener al menos una minuscula.");
-		retorno = 1;
-	 }
-	 
-	 //Valida que contenga solo caracteres alfanumericos
-	 i=0;
-	 flag = 0;
-	 while ((clave[i]) && flag == 0)
-	  {
-	    if (!isalnum(clave[i]) ) 
-	    {
-			printf("\nLa clave debe tener solo caracteres alfanumericos.");
-			flag = 1;
-			retorno = 1;
-		}	
-	    i++;
-	  }
-	  
-	  //Valida que no contenga mas de 3 caracteres numericos consecutivos
-	 flag=0;
-	 i=0;
-	 while (clave[i])
-	  {
-	    if (isdigit(clave[i])) 
-	    {
-			flag++;
-		}	
-		else
-		 {
-		 	if (flag > 0)
-		 	   flag = flag - 1;
-		 }
-		
-	    i++;
-	  }
-	  
-	  if (flag > 3)
-	  {
-	  	printf("\nLa clave no puede tener mas de 3 numeros consecutivos seguidos.");
-	  	retorno = 1;
-	  }
-	 
-	 //Valida que no existan letras consecutivas
-	 flag=0;
-	 i=0;
-	 while ((clave[i]) && flag == 0)
-	  {
-	    if (isalpha(clave[i])) 
-	    {
-	    	
-	    	aux = (int) toupper(clave[i]); //Obtiene el valor ascii del caracter
-	    	j = i+1;
-	    	if (j<= longitud)
-	    		ascii = (int) toupper(clave[j]);//Obtiene el valor ascii del sgte caracter
-	    		if ((aux+1) == ascii)
-	    			{
-	    				printf("\nLa clave no puede contener caracteres alfabeticos consecutivos.");
-	    				flag = 1;
-	    				retorno = 1;
-					}
-		}	
-	    i++;
-	  }
-	  return  retorno;
-	 
-}*/
-
-/*
-//Carga en un vector todos los usuarios existentes
-int leerLogins (char userfile[], Login logins [255])
-{
-	FILE *fp; 
-	Usuario reg;
-	int i =0;
-	fp=fopen(userfile,"rb");
-	if (fp==NULL)
-	{
-		printf("Error al abrir el archivo % \n",userfile);
-		//exit(EXIT_FAILURE);
-		return -1; 
-	}
-
-	rewind(fp);
-	fread(&reg,sizeof(reg),1,fp);
-    strcpy(logins[i].usuario, reg.usuario);
-    //printf ("reg usuario: %s", reg.usuario);
-	while (!feof(fp))
-	{
-		if (!feof(fp))
-		{
-			strcpy(logins[i++].usuario, reg.usuario);
-			//printf ("reg usuario: %s\n", reg.usuario);
-     }
-		fread(&reg,sizeof(reg),1,fp);
-	}  
-	fclose(fp);
-	//system ("pause");
-	return i;
-}*/
-/*
-int ValidUser(char usuario[10], Login logins [255], int *cantLogins)
-{
-
- int flag = 0;
- int longitud;
- int mayusculas=0;
- int digitos = 0;
- int espacios=0;
- int i=0;
- int n=0;
-	
-	n = *cantLogins;
-	
-	for (int j=0; j<=n; j++)
-	{
-		if (strcmp (usuario, logins[j].usuario)==0)
-		{
-			printf ("Usuario ya existente."); 
-			flag=1;
-			break;	
-		}
-		 
-	}
- 
- longitud = strlen(usuario);
- 
- //Valida la longitud de la clave
- if (longitud < 6  || longitud > 10)
- {
- 	printf ("\nLa longitud del nombre debe estar entre 6 y 10 caracteres.");
- 	flag = 1;
- }
-  
-  //Chequea el nombre del usuario empice con minuscula
- if (islower(usuario[0]) == 0)
-  {
-     printf("\nEl nombre del usuario debe comenzar con una letra en minuscula.");
-     flag = 1;
-  }
-
- //Valida que contenga al 2 menos letras en mayuscula
- 
- i=0;
- for(i = 0; i < longitud; i++)
-  {
-  	
-    if (usuario[i] >= 'A' && usuario[i] <= 'Z') 
-    {
-		mayusculas++;
-	}	
-
-  }
-  
-if (mayusculas < 2)
-{
-	   printf("\nEl nombre del usuario debe contener al menos 2 letra en mayuscula.");
-       flag = 1;
-}
-
- i=0;
- while (usuario[i])
-  {
-    if (isdigit(usuario[i])) 
-    {
-		digitos++;
-	}	
-    i++;
-  }
- if (digitos >3)
- {
-	   printf("\nEl nombre del usuario no debe contener mas de 3 digitos.");
-      flag = 1;
-  } 
- 
- //Valida que no contenga espacios en blanco
-
- i=0;
- while (usuario[i])
-  {
-    if (isspace(usuario[i])) 
-    {
-		espacios++;
-	}	
-    i++;
-  }
- if (espacios > 0)
- {
-	  printf("\nEl nombre del usuario no puede contener espacios.");
-      flag = 1;
-  } 
-  
-  return flag; 
-	
-}*/
-
-/*
-void enterPassword(char* verify, short int x, short int y, short int xAux) //Enmascara la contraseña ingresada
-{
-
- HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
- COORD pos = {x, y};
- char ch;
- int i=0;
- 
- do
- {
-	  ch=getch();
-	  if(ch!=13)
-	  {
-		x = x+1;
-		
-		if (ch == 8)
-		{
-		     if (x > xAux)
-	     	{
-				 x = x - 1;
-				 pos = {x, y};
-				 SetConsoleCursorPosition(hConsole, pos);
-			 	 WriteConsole(hConsole, " ", 1, NULL, NULL);
-		 	     x=x-1;
-			     pos = {x, y};
-			 	 SetConsoleCursorPosition(hConsole, pos);
-			 	 verify[i--];
-				  
-			 	 if (x <= xAux)
-			 	 {
-			 	   x = xAux + 1 ;	
-			       pos = {x++, y};
-			 	   SetConsoleCursorPosition(hConsole, pos);
-				  }	
-			}	 
-		}
-		         
-       else
-        {
-	   		verify[i++]=ch; //Va cargando los caracteres ingresados
-	   		printf ("*");
-	   }
-	}
-	  else
-	  {
-	   verify[i++]='\0';
-	  }
- }
- while(ch!=13);
- 
-printf ("\nverify: %s\n", verify);
- system ("pause");	 	
-}*/
-
 void RegistrarProfesional(FILE *archProfesional) //modulo Administracion
 {
 
@@ -487,7 +176,7 @@ void RegistrarProfesional(FILE *archProfesional) //modulo Administracion
 		system("pause");
 		system("cls");
 		printf( "\nContrasenia: ");
-		enterPassword(prof.contrasenia, 12,6,12);
+		enterPassword(prof.contrasenia, 12,1,12);
 	}
 
 	printf("\nDNI: ");
@@ -503,7 +192,7 @@ void RegistrarProfesional(FILE *archProfesional) //modulo Administracion
 
 }
 
-void RegistrarUsuario (char userfile[], Login logins [255], int *cantLogins) //modulo administracion
+void RegistrarUsuario (char userfile[], Login logins [255]) //modulo administracion
 {
 	FILE *fp;
 	struct Usuario reg;
@@ -518,7 +207,8 @@ void RegistrarUsuario (char userfile[], Login logins [255], int *cantLogins) //m
 		exit(EXIT_FAILURE);
 	}
 	
-
+	printf ("cant logins: %d", cantLogins); 
+	
 	printf("\nNombre de Usuario: ");
 	_flushall();
 	gets(reg.usuario);
@@ -558,83 +248,15 @@ void RegistrarUsuario (char userfile[], Login logins [255], int *cantLogins) //m
 		
 
 	cantLogins++;
+	printf ("cant logins: %d", cantLogins); 
 	//al usuario registrado lo agrego al vector de logins para futuras validaciones 
 	
-	strcpy(logins[*cantLogins].usuario,reg.usuario);
+	strcpy(logins[cantLogins].usuario,reg.usuario);
 	
 
 	fclose(fp);
 
 }
-
-/*
-bool login(char userfile[])
-{
-	FILE *fp;
-	struct Usuario reg;
-	char usuario[10];
-	char password[32];
-	bool flag = false;
-	int user;
-	int pass;
-	
-	
-	fp=fopen(userfile,"rb");
-	if (fp==NULL)
-	{
-			printf ("Error al abrir el archivo \n");
-			exit(EXIT_FAILURE);
-	}
-	
-	rewind(fp);
-    printf ("Bienvenido - Inicio de Sesion \n") ;
-    printf ("------------------------------\n") ;
-    printf ("Usuario:") ; 
-    _flushall ();
-	gets(usuario)  ;
-	 
-	printf ("Contrasenia: "); 
-	enterPassword(password, 12,3,12); 
-	printf ("\n"); 
-	fread(&reg,sizeof(reg),1,fp);
-	
-	user=strcmp(usuario,reg.usuario);
-	pass=strcmp(password,reg.password);
-
-	if ((user== 0) && (pass== 0))
-		{
-			flag = true;
-		}
-	
-	while ((!feof(fp)) && (flag == false))
-	{
-		if (!feof(fp))
-		{	
-			user=strcmp(usuario,reg.usuario);
-			pass=strcmp(password,reg.password);
-			if ((user== 0) && (pass== 0))
-			{
-				flag = true;
-				
-			}
-	   }
-		fread(&reg,sizeof(reg),1,fp);
-	}  
-	fclose(fp);
-	if (flag==true)
-	{
-		printf ("Inicio de sesion exitosa\n");
-		printf("\n\n");
-		system("pause");
-	}
-	else
-	{	printf ("Las credenciales ingresadas son incorrectas\n");
-		printf("\n\n");
-		system("pause");	
-	
-	}
-	return flag;
-}*/
 
 void regiTurnos(FILE *turno) //modulo recepcionista
 {
@@ -1056,6 +678,226 @@ void RankingProfesionales(FILE *tur , FILE *pro)
 	}
 }
 
+void evolucionPacientes (FILE *tur,FILE *pro,FILE *client)	
+{
+
+	Turnos turn;
+	Profesional profe;
+	Cliente clie;
+	int auxIdPro=0;
+	int auxDniClien=0;
+	bool bandera=false;
+	bool centinela=false;
+
+	tur=fopen("turnos.dat","r+b");
+	pro=fopen("Profesionales.dat","r+b");
+	client=fopen("Clientes.dat","r+b");
+
+	bandera=false;
+    centinela=false;
+
+	printf("\nIngrese el ID del profesional a buscar: ");
+	scanf("%d",&auxIdPro);
+
+	printf("\nIngrese el DNI del Cliente a buscar: ");
+	scanf("%d",&auxDniClien);
+
+
+	rewind(pro);
+	rewind(client);
+	fread(&profe,sizeof(Profesional),1,pro);
+	fread(&clie,sizeof(Cliente),1,client);
+
+   while(!feof(pro)  && bandera != true)
+   {
+
+	   while (!feof(client) && centinela != true)
+	   {
+		   
+
+		   if(auxDniClien == clie.dniCliente)
+		   {
+			centinela= true;
+			fread(&clie,sizeof(Cliente),1,client);
+
+		   }
+		 else
+		 	{
+			fread(&clie,sizeof(Cliente),1,client);
+
+			}
+
+	   }
+	   
+		if(auxIdPro == profe.idProfesional)
+		{
+			bandera= true;
+			fread(&profe,sizeof(Profesional),1,pro);
+		}
+		else
+		{
+			fread(&profe,sizeof(Profesional),1,pro);
+		}
+
+   }
+
+	if((bandera==true) && (centinela == true))
+	{
+			
+		rewind(pro);
+		rewind(client);
+		rewind(tur);
+
+		fread(&turn,sizeof(Turnos),1,tur);
+
+		fread(&profe,sizeof(Profesional),1,pro);
+
+		fread(&clie,sizeof(Cliente),1,client);
+		
+		bandera=false;
+
+		while(!feof(pro) && bandera==false)
+		{
+
+				
+			while(!feof(tur) && bandera==false)
+			{
+			
+							
+				while(!feof(client) && bandera==false)
+				{
+												
+												
+					if( (auxIdPro == turn.idProfesional ) && ( auxDniClien == turn.dniCliente ) )
+					{		
+						fseek(tur,(long) -sizeof(Turnos),SEEK_CUR);	
+							
+						printf("\nRegistre la evolucion del cliente: ");
+														
+						fflush(stdin);
+						gets(turn.detalleDeAtencion);
+						fwrite(&turn, sizeof(Turnos), 1,tur);
+								
+						bandera=true;
+												
+					}
+													
+					else
+					{		
+						fread(&clie,sizeof(Cliente),1,client);
+								
+					}								
+										
+				}
+								
+				rewind(client);
+				fread(&turn,sizeof(Turnos),1,tur);
+				
+			}
+				
+				
+				rewind(tur);
+				fread(&profe,sizeof(Profesional),1,pro);
+
+			}
+
+
+			if( (auxIdPro != turn.idProfesional ) || ( auxDniClien != turn.dniCliente ) )
+			{
+				printf("\n los valores ingresados no coinciden...\n");
+				
+			}
+
+	
+	}
+	else if((bandera==true) && (centinela == false))
+	{
+
+		printf("\n El Profesional esta Registrado pero el paciente No...\n");
+
+	}
+    	else if((bandera==false) && (centinela == true))
+		{
+
+		printf("\n El paciente esta Registrado pero el Profesional No...\n");
+
+		}
+
+	fclose(pro);
+	fclose(client);
+	fclose(tur);
+
+}
+
+bool login(char userfile[])
+{
+	FILE *fp;
+	struct Usuario reg;
+	char usuario[10];
+	char password[32];
+	bool flag = false;
+	int user;
+	int pass;
+	
+	
+	fp=fopen(userfile,"rb");
+	if (fp==NULL)
+	{
+			printf ("Error al abrir el archivo \n");
+			exit(EXIT_FAILURE);
+	}
+	
+	rewind(fp);
+    printf ("Bienvenido - Inicio de Sesion \n") ;
+    printf ("------------------------------\n") ;
+    printf ("Usuario:") ; 
+    _flushall ();
+	gets(usuario)  ;
+	 
+	printf ("Contrasenia: "); 
+	_flushall();
+	enterPassword(password, 12,3,12); 
+	printf ("\n\n");
+	 
+	fread(&reg,sizeof(reg),1,fp);
+	printf ("password ingresada: %s -  otra pass: %s", password, reg.password);
+	
+	user=strcmp(usuario,reg.usuario);
+	pass=strcmp(password,reg.password);
+
+	if ((user== 0) && (pass== 0))
+		{
+			flag = true;
+		}
+	
+	while ((!feof(fp)) && (flag == false))
+	{
+		if (!feof(fp))
+		{	
+			user=strcmp(usuario,reg.usuario);
+			pass=strcmp(password,reg.password);
+			if ((user== 0) && (pass== 0))
+			{
+				flag = true;
+				
+			}
+	   }
+		fread(&reg,sizeof(reg),1,fp);
+	}  
+	fclose(fp);
+	if (flag==true)
+	{
+		printf ("Inicio de sesion exitosa\n");
+		printf("\n\n");
+		system("pause");		
+	}
+	else
+	{	printf ("Las credenciales ingresadas son incorrectas\n");
+		printf("\n\n");
+		system("pause");	
+	}
+	return flag;
+}
 
 main()
 {
@@ -1069,11 +911,11 @@ main()
     int opcRecep = 0;
     int opcAdmin = 0;
     int opcion = 0;
-    int cantLogins =0;
     Login logins[255];
     
     cantLogins = leerLogins (userfile, logins);//leo inicialmente todos los usuarios existentes
-	
+    printf("cant logins: %d", cantLogins );
+	system ("pause");
 	//logoutn(); 
     
     do
@@ -1134,8 +976,9 @@ main()
 								}
 								else
 								{
-								
-								system("pause");		
+									
+									evolucionPacientes (turno, prof, cliente);
+									system("pause");		
 								}
                                 break;
                             }
@@ -1273,7 +1116,9 @@ main()
                             case 2:
                             {
 								printf("Registrar a un Usuario.\n\n");
-								RegistrarUsuario(userfile, logins, &cantLogins);
+								printf("antes cant logins: %d\n", cantLogins );
+								RegistrarUsuario(userfile, logins);
+								
 								printf("\n\nUsuario Registrado con Exito!\n\n");
 								system("pause");
                                 break;

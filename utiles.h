@@ -288,7 +288,7 @@ int leerLogins (char userfile[], Login logins [255])
 	return i;
 }
 
-int ValidUser(char usuario[10], Login logins [255], int *cantLogins)
+int ValidUser(char usuario[10], Login logins [255], int cantLogins)
 {
 
  int flag = 0;
@@ -299,7 +299,7 @@ int ValidUser(char usuario[10], Login logins [255], int *cantLogins)
  int i=0;
  int n=0;
 	
-	n = *cantLogins;
+	n = cantLogins;
 	
 	for (int j=0; j<=n; j++)
 	{
@@ -549,69 +549,3 @@ void enterPassword(char* verify, short int x, short int y, short int xAux) //Enm
  system ("pause");	 	
 }
 
-bool login(char userfile[])
-{
-	FILE *fp;
-	struct Usuario reg;
-	char usuario[10];
-	char password[32];
-	bool flag = false;
-	int user;
-	int pass;
-	
-	
-	fp=fopen(userfile,"rb");
-	if (fp==NULL)
-	{
-			printf ("Error al abrir el archivo \n");
-			exit(EXIT_FAILURE);
-	}
-	
-	rewind(fp);
-    printf ("Bienvenido - Inicio de Sesion \n") ;
-    printf ("------------------------------\n") ;
-    printf ("Usuario:") ; 
-    _flushall ();
-	gets(usuario)  ;
-	 
-	printf ("Contrasenia: "); 
-	enterPassword(password, 12,3,12); 
-	printf ("\n"); 
-	fread(&reg,sizeof(reg),1,fp);
-	
-	user=strcmp(usuario,reg.usuario);
-	pass=strcmp(password,reg.password);
-
-	if ((user== 0) && (pass== 0))
-		{
-			flag = true;
-		}
-	
-	while ((!feof(fp)) && (flag == false))
-	{
-		if (!feof(fp))
-		{	
-			user=strcmp(usuario,reg.usuario);
-			pass=strcmp(password,reg.password);
-			if ((user== 0) && (pass== 0))
-			{
-				flag = true;
-				
-			}
-	   }
-		fread(&reg,sizeof(reg),1,fp);
-	}  
-	fclose(fp);
-	if (flag==true)
-	{
-		printf ("Inicio de sesion exitosa\n");
-		printf("\n\n");
-		system("pause");		
-	}
-	else
-	{	printf ("Las credenciales ingresadas son incorrectas\n");
-		printf("\n\n");
-		system("pause");	
-	}
-	return flag;
-}
