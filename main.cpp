@@ -670,9 +670,15 @@ void RankingProfesionales(FILE *tur , FILE *pro)
 		
 		for(i = 0; i < size; i++)
 		{
-			
-			
-			printf("\n%d--> %s, %d Atenciones\n", i+1, vec[i].apeNom, vec[i].cantAtenciones);
+			if(i == 0)
+			{
+				printf("\n\nBono Mejor Profesional--> %s, %d Atenciones\n\n", vec[i].apeNom, vec[i].cantAtenciones);
+			}
+			else
+			{
+				printf("\n%d--> %s, %d Atenciones\n", i+1, vec[i].apeNom, vec[i].cantAtenciones);
+			}
+		
 			
 		}
 	}
@@ -933,7 +939,7 @@ main()
     cantLogins = leerLogins (userfile, logins);//leo inicialmente todos los usuarios existentes
     printf("cant logins: %d", cantLogins );
     printf("\n\n");
-	system ("pause");
+	
 	
 	if(cantLogins <= 0){
 		system("cls");
