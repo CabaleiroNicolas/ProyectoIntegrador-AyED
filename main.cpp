@@ -207,7 +207,6 @@ void RegistrarUsuario (char userfile[], Login logins [255]) //modulo administrac
 		exit(EXIT_FAILURE);
 	}
 	
-	//printf ("cant logins: %d", cantLogins);       													-------------------   BORRAR LINEA  ----------------- 
 	
 	printf("\nNombre de Usuario: ");
 	_flushall();
@@ -248,7 +247,7 @@ void RegistrarUsuario (char userfile[], Login logins [255]) //modulo administrac
 		
 
 	cantLogins++;
-	//printf ("cant logins: %d", cantLogins);           														-------------	BORRAR LINEA   -----------------
+
 	//al usuario registrado lo agrego al vector de logins para futuras validaciones 
 	
 	strcpy(logins[cantLogins].usuario,reg.usuario);
@@ -261,7 +260,7 @@ void RegistrarUsuario (char userfile[], Login logins [255]) //modulo administrac
 void regiTurnos(FILE *turno) //modulo recepcionista
 {
 	Turnos turnos;
-	turno =fopen("turnos.dat","a+b");
+	turno = fopen("turnos.dat","a+b");
 	
 	if(turno == NULL)
 	{
@@ -275,6 +274,8 @@ void regiTurnos(FILE *turno) //modulo recepcionista
 	
 	printf("ID del profesional: ");
 	scanf("%d",&turnos.idProfesional);
+	
+	
 
 	printf("Fecha:\n");
 	
@@ -317,15 +318,15 @@ void RegistrarCliente (FILE *cliente)//modulo recepcionista
 		}
 	}
 
-		printf ("\nIngrese el Apellido y nombre del cliente: ");
+		printf ("\nApellido y nombre del cliente: ");
 		_flushall();
 		gets (clientes.apeNom);
 		
-		printf ("\nIngrese el domicilio del cliente: ");
+		printf ("\nDomicilio del cliente: ");
 		_flushall();
 		gets (clientes.domicilio);	
 		
-		printf ("\nIngrese el D.N.I del cliente sin puntos ni espacios: ");
+		printf ("\nD.N.I del cliente sin puntos ni espacios: ");
 		scanf ("%d", &clientes.dniCliente);
 		
 		printf ("\nLocalidad a la que pertenece el cliente : ");
@@ -333,7 +334,7 @@ void RegistrarCliente (FILE *cliente)//modulo recepcionista
 		gets (clientes.localidad);
 		
 		printf ("\nIngrese el peso del cliente: ");
-		scanf ("%.2f", &clientes.peso);
+		scanf ("%f", &clientes.peso);
 			
 		printf ("\nIngrese la fecha de nacimiento del cliente: ");
 		_flushall ();
@@ -389,25 +390,23 @@ void AtencionPorProf (FILE *turno,FILE *prof) //modulo admin
 				if(profs.idProfesional == turnos.idProfesional)
 				{
 					
-					printf("\n Turno numero %d \n" , i);
+					printf("\n Turno numero %d \n" , i+1);
 					printf("\n --------- \n");
 					printf("\nFecha:");
 					printf("\n\tDia: %d", turnos.fechaDeTurno.dia);
 					printf("\n\tMes: %d", turnos.fechaDeTurno.mes);
-					printf("\n\tA%co: %d",164, turnos.fechaDeTurno.anio);
-					printf("\nDNI del Usuario a registrar: %d", turnos.dniCliente);
+					printf("\n\tAnio: %d",164, turnos.fechaDeTurno.anio);
+					printf("\nDNI del Paciente: %d", turnos.dniCliente);
+					printf("\n\nDetalle de Atencion: %s", turnos.detalleDeAtencion);
 					printf("\n --------- \n");
-					i=i+1;
-					
-					fread(&turnos,sizeof(Turnos),1,turno);
+					i++;
+
 				}
+			
+				fread(&turnos,sizeof(Turnos),1,turno);		
+			
 				
-				else
-				{
-					fread(&turnos,sizeof(Turnos),1,turno);		
-				}
-				
-				band = true;
+			band = true;
 				
 			}
 	
@@ -420,13 +419,17 @@ void AtencionPorProf (FILE *turno,FILE *prof) //modulo admin
 		}
 							
 	}
+	
+	if(strcmp(auxpro , profs.apeNom) != 0)
+	{
+		printf("Profesional No Encontrado...");
+	}
 
 	fclose (turno);
 	fclose (prof);
 	
 	printf("\n\n");
-	system("pause");
-	system("cls");
+
 	
 }
 
@@ -471,23 +474,19 @@ void listadoAtencionProf (FILE *prof , FILE *turno , FILE *cliente) //modulo rec
 						printf("\nFecha de turno:");
 						printf("\nDia: %d", turnos.fechaDeTurno.dia);
 						printf("\nMes: %d", turnos.fechaDeTurno.mes);
-						printf("\nA%co: %d",164, turnos.fechaDeTurno.anio);
-						printf("\nNombre del profesional: %s",profs.apeNom);
-						printf("\nID: %d",profs.idProfesional);
+						printf("\nA%co: %d\n",164, turnos.fechaDeTurno.anio);
+						printf("\nID: %d\n",profs.idProfesional);
+						printf("============================================\n");
 						
-						fread(&profs,sizeof(Profesional),1,prof);
-						fread(&turnos,sizeof(Turnos),1,turno);
-						fread(&clientes,sizeof(Cliente),1,cliente);
-					}	
+					}
+				
+					fread(&profs,sizeof(Profesional),1,prof);
+					fread(&turnos,sizeof(Turnos),1,turno);
+					fread(&clientes,sizeof(Cliente),1,cliente);		
 			}
-			else
-			{
-				fread(&profs,sizeof(Profesional),1,prof);
-				fread(&turnos,sizeof(Turnos),1,turno);
-				fread(&clientes,sizeof(Cliente),1,cliente);
-			}
-		}
-	}
+	
+	     }
+	 }
 	
 	fclose(prof);
 	fclose (turno);
@@ -495,7 +494,7 @@ void listadoAtencionProf (FILE *prof , FILE *turno , FILE *cliente) //modulo rec
 
 }
 
- void listaEspera(FILE *turno, FILE *prof, FILE *cliente) // modulo espacios
+void listaEspera(FILE *turno, FILE *prof, FILE *cliente) // modulo espacios
 {
 
 	turno=fopen("turnos.dat","r+b");
@@ -510,7 +509,7 @@ void listadoAtencionProf (FILE *prof , FILE *turno , FILE *cliente) //modulo rec
             
 	if(turno == NULL)
 	{
-		printf("No hay Turnos...");
+		printf("\nNo hay Turnos...\n\n");
 		system("pause");
 	}
 	else
@@ -558,6 +557,7 @@ void listadoAtencionProf (FILE *prof , FILE *turno , FILE *cliente) //modulo rec
 			
 			i++;
 		}while(!feof(prof)&&!feof(turno)&&!feof(cliente));	
+		
 	}
 	
 	fclose(prof);
@@ -678,8 +678,7 @@ void RankingProfesionales(FILE *tur , FILE *pro)
 			{
 				printf("\n%d--> %s, %d Atenciones\n", i+1, vec[i].apeNom, vec[i].cantAtenciones);
 			}
-		
-			
+				
 		}
 	}
 
@@ -707,10 +706,10 @@ void evolucionPacientes (FILE *tur,FILE *pro,FILE *client)
 	bandera=false;
     centinela=false;
 
-	printf("\nIngrese el ID del profesional a buscar: ");
+	printf("\nID del Profesional: ");
 	scanf("%d",&auxIdPro);
 
-	printf("\nIngrese el DNI del Cliente a buscar: ");
+	printf("\nDNI del Cliente: ");
 	scanf("%d",&auxDniClien);
 
 
@@ -719,131 +718,99 @@ void evolucionPacientes (FILE *tur,FILE *pro,FILE *client)
 	fread(&profe,sizeof(Profesional),1,pro);
 	fread(&clie,sizeof(Cliente),1,client);
 
-   while(!feof(pro)  && (bandera == false) && (pro != NULL) )
+   while(!feof(pro) && (bandera == false) && (pro != NULL) )
    {
 
-	   
-	   
 		if(auxIdPro == profe.idProfesional)
 		{
-			bandera= true;
-		
-		fread(&profe,sizeof(Profesional),1,pro);
+			bandera = true;
+
 		}
-		else{
-		
-		fread(&profe,sizeof(Profesional),1,pro);
-		}
+			
+	     fread(&profe,sizeof(Profesional),1,pro);
+	
    }
    
    
    
    while (!feof(client) && centinela == false && (client != NULL) )
-	   {
+    {
 		   
 
-		   if(auxDniClien == clie.dniCliente)
-		   {
-			centinela= true;
-			fread(&clie,sizeof(Cliente),1,client);
+		if(auxDniClien == clie.dniCliente)
+		{
+		    centinela = true;
 
-		   }
-		 else
-		 	{
-			fread(&clie,sizeof(Cliente),1,client);
+	    }
+	
+			fread(&clie,sizeof(Cliente),1,client);	
 
-			}
-
-	   }
+	}
 
 	printf("\n\n");
 	
-	if((bandera==true) && (centinela == true)){
+	if((bandera==true) && (centinela == true))
+	{
 			
-			
-			
- 				rewind(tur);
+ 		rewind(tur);
 
-			fread(&turn,sizeof(Turnos),1,tur);
+		fread(&turn,sizeof(Turnos),1,tur);
 
-			
-
-			
-			
-			bandera=false;
-
-			
-
-					
-				while(!feof(tur) && bandera==false && (tur != NULL) ){
-				
-								
-				
-													
-													
-						if( (auxIdPro == turn.idProfesional ) && ( auxDniClien == turn.dniCliente ) ){
-									
-									
-							fseek(tur,(long) -sizeof(Turnos),SEEK_CUR);	
-								
-							printf("\nRegistre la evolucion del cliente: ");
-															
-							fflush(stdin);
-							gets(turn.detalleDeAtencion);
-							fwrite(&turn, sizeof(Turnos), 1,tur);
-									
-							bandera=true;
-															
-							fread(&turn, sizeof(Turnos), 1,tur);								
-						}
-														
-						else{
-									
-							fread(&turn, sizeof(Turnos), 1,tur);
-									
-									
-						}
-									
-									
-													
-														
-											
-					}
-									
-				
-				
-				
-			if(tur == NULL){
-
-
-			printf("*El profecional esta Registrado\n *El paciente esta Registrado\n *Pero ''No se Registraron Turnos ''...");
+		bandera=false;
 		
-
-
-			}	
-			else if( (auxIdPro != turn.idProfesional ) || ( auxDniClien != turn.dniCliente ) ){
-
-				printf("\n los valores ingresados no coinciden...\n");
-				
+		while(!feof(tur) && bandera==false && (tur != NULL) )
+		{											
+		    if( (auxIdPro == turn.idProfesional ) && ( auxDniClien == turn.dniCliente ) )
+			{
+											
+				fseek(tur,(long) -sizeof(Turnos),SEEK_CUR);	
+								
+				printf("\nRegistre la evolucion del cliente: ");
+															
+				fflush(stdin);
+				gets(turn.detalleDeAtencion);
+				fwrite(&turn, sizeof(Turnos), 1,tur);
+									
+				bandera=true;
+															
+				fread(&turn, sizeof(Turnos), 1,tur);								
 			}
-
+														
+			else
+			{
+									
+			    fread(&turn, sizeof(Turnos), 1,tur);											
+			}																							
+		}
+											
+			if(tur == NULL)
+			{
+			    printf("*El profecional esta Registrado\n *El paciente esta Registrado\n *Pero ''No se Registraron Turnos ''...");
+			}	
+			else if((auxIdPro != turn.idProfesional ) || ( auxDniClien != turn.dniCliente ))
+			{
+			
+				printf("\nlos valores ingresados no coinciden...\n");	
+			}
 	
 	}
-	else if((bandera==true) && (centinela == false)){
+	
+	else if((bandera==true) && (centinela == false))
+	{
 	
 		printf("\n El Profesional esta Registrado pero el paciente No...\n");
 	
 	}
-	else if((bandera==false) && (centinela == true)){
+	else if((bandera==false) && (centinela == true))
+	{
 	
 		printf("\n El paciente esta Registrado pero el Profesional No...\n");
 	
 	}
-	else if((bandera==false) && (centinela == false)){
+	else if((bandera==false) && (centinela == false))
+	{
 		
-		printf("\n El paciente No esta Registrado \n El Profesional No esta Registrado ...\n");
-		
-		
+		printf("\n El paciente No esta Registrado \n El Profesional No esta Registrado ...\n");	
 		
 	}
 	
@@ -851,6 +818,7 @@ void evolucionPacientes (FILE *tur,FILE *pro,FILE *client)
 	fclose(client);
 	fclose(tur);
 }
+
 
 bool login(char userfile[])
 {
@@ -921,6 +889,7 @@ bool login(char userfile[])
 	}
 	return flag;
 }
+
 
 main()
 {
@@ -1140,7 +1109,6 @@ main()
                             case 2:
                             {
 								printf("Registrar a un Usuario.\n\n");
-								//printf("antes cant logins: %d\n", cantLogins );											---------	BORRAR LINEA   ------------
 								RegistrarUsuario(userfile, logins);
 								
 								printf("\n\nUsuario Registrado con Exito!\n\n");

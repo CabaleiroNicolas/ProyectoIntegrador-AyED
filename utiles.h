@@ -545,7 +545,6 @@ void enterPassword(char* verify, short int x, short int y, short int xAux) //Enm
 	  }
  }
  while(ch!=13);
- 
- system ("pause");	 	
+	 	
 }
 
