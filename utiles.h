@@ -265,8 +265,8 @@ int leerLogins (char userfile[], Login logins [255])
 	fp=fopen(userfile,"rb");
 	if (fp==NULL)
 	{
-	//	printf("Error al abrir el archivo %  \n",userfile);           ------------------------------ comentado si no se muestra antes del menu--------------------------------
-		//exit(EXIT_FAILURE);
+		printf("Error al abrir el archivo %  \n",userfile);  
+		exit(EXIT_FAILURE);
 		return -1; 
 	}
 
