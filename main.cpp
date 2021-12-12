@@ -841,9 +841,9 @@ bool login(char userfile[])
 	rewind(fp);
     printf ("Bienvenido - Inicio de Sesion \n") ;
     printf ("------------------------------\n") ;
-    printf ("Usuario:") ; 
+    printf ("Usuario: ") ; 
     _flushall ();
-	gets(usuario)  ;
+	gets(usuario);
 	 
 	printf ("Contrasenia: "); 
 	_flushall();
@@ -891,6 +891,75 @@ bool login(char userfile[])
 }
 
 
+bool loginProf(FILE *prof)
+{
+	int idVerificar = 0; 
+	char passVerificar[32];
+	Profesional reg;
+	bool flag = false;
+	
+	prof=fopen("Profesionales.dat","rb");
+	if (prof==NULL)
+	{
+			printf ("Error al abrir el archivo \n");
+			exit(EXIT_FAILURE);
+	}
+
+	
+    printf ("Bienvenido - Inicio de Sesion \n");
+    printf ("------------------------------\n");
+    printf ("ID de Profesional: "); 
+	scanf("%d", &idVerificar);
+	 
+	printf ("Contrasenia: "); 
+	_flushall();
+	enterPassword(passVerificar, 12,3,12);
+	printf("\n\n");
+	 
+	rewind(prof);
+	 
+	fread(&reg,sizeof(Profesional),1,prof);
+	
+	if (idVerificar == reg.idProfesional && strcmp(passVerificar, reg.contrasenia) == 0)
+			{
+				flag = true;
+			}
+	
+	
+	
+	while(!feof(prof) && flag == false)
+	{
+
+	
+		if (idVerificar == reg.idProfesional && strcmp(passVerificar, reg.contrasenia) == 0)
+			{
+				flag = true;
+			}
+			
+		fread(&reg,sizeof(Profesional),1,prof);
+			
+	}
+		
+		 
+	fclose(prof);
+	
+	if (flag==true)
+	{
+		printf ("Inicio de sesion exitosa\n");
+		printf("\n\n");
+		system("pause");		
+	}
+	else
+	{	printf ("Las credenciales ingresadas son incorrectas\n");
+		printf("\n\n");
+		system("pause");	
+	}
+	
+	
+	return flag;
+}
+
+
 main()
 {
     FILE *recep;
@@ -930,7 +999,7 @@ main()
                             case 1:
                             {
                             	printf("Iniciar sesion.");
-                            	sesionInic = login (userfile );
+                            	sesionInic = loginProf(prof);
 									
                                 break;
                             }
