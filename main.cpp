@@ -350,7 +350,7 @@ void regiTurnos(FILE *turno, FILE *archProfesional, FILE *cliente, int *contTurn
 }
 
 
-void RegistrarCliente (FILE *cliente, int *contPaci)//modulo recepcionista
+void RegistrarCliente (FILE *cliente, int &contPaci)//modulo recepcionista
 {
 	Cliente clientes;
 	
@@ -799,7 +799,7 @@ void borradoFisico(FILE *turno, FILE *auxTurno, int *contTurn, bool evolucion )
 	
 }
 
-void evolucionPacientes(FILE *turno,FILE *cliente, FILE *auxTurno , int *contClie, int *contTurn)	
+void evolucionPacientes(FILE *turno,FILE *cliente, FILE *auxTurno , int &contClie, int &contTurn)	
 {
 
 	Turnos turn;
@@ -813,7 +813,7 @@ void evolucionPacientes(FILE *turno,FILE *cliente, FILE *auxTurno , int *contCli
 
     centinela=false;
 
-	if(*contClie == 0)
+	if(contClie == 0)
 	{
 		printf("\nTodavia no se Registro Ningun Paciente...");
 	}
@@ -825,7 +825,7 @@ void evolucionPacientes(FILE *turno,FILE *cliente, FILE *auxTurno , int *contCli
 		rewind(cliente);
 		fread(&clie, sizeof(Cliente), 1, cliente);
 	   
-	   while (!feof(cliente) && centinela == false && *contClie > 0)
+	   while (!feof(cliente) && centinela == false && contClie > 0)
 	    {
 			   
 			if(auxDniClien == clie.dniCliente)
@@ -869,9 +869,9 @@ void evolucionPacientes(FILE *turno,FILE *cliente, FILE *auxTurno , int *contCli
 				}																							
 			}
 			
-			borradoFisico (turno, auxTurno, contTurn, evolucion );
+		
 												
-			if(*contTurn == 0)
+			if(contTurn == 0)
 			{
 			    printf("El paciente esta Registrado\n Pero 'No se Registraron Turnos a su Nombre '...");
 			}	
@@ -1106,7 +1106,7 @@ main()
 								}
 								else
 								{
-									evolucionPacientes(turno,cliente, auxTurno, &contadorPaci, &contadorTurn );
+									evolucionPacientes(turno,cliente, auxTurno, contadorPaci, contadorTurn );
 									printf("\n\n");
 									system("pause");		
 								}
@@ -1160,7 +1160,7 @@ main()
 								}
 								else
 								{
-									RegistrarCliente (cliente, &contadorPaci);
+									RegistrarCliente (cliente, contadorPaci);
 									system("pause");
 								}
                                 break;
