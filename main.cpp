@@ -140,12 +140,14 @@ struct Turnos
     char detalleDeAtencion[380];
 };
 
-void RegistrarProfesional(FILE *archProfesional, int *contProf) //modulo Administracion
+void RegistrarProfesional(FILE *archProfesional, char contadorProf [200]) //modulo Administracion
 {
 
 	Profesional prof;
+	FILE *contProf;
 
 	archProfesional = fopen("Profesionales.dat", "r+b");
+	contProf = fopen(contadorProf, "r+b");
 
 	if(archProfesional == NULL)
 	{
@@ -188,10 +190,10 @@ void RegistrarProfesional(FILE *archProfesional, int *contProf) //modulo Adminis
 	gets(prof.telefono);
 
 	fwrite(&prof, sizeof(Profesional), 1,archProfesional);
-
-	contProf++;
+	fwrite(&contProf, sizeof(contProf), 1,contProf);
 
 	fclose(archProfesional);
+	fclose(contProf);
 
 }
 
@@ -260,14 +262,20 @@ void RegistrarUsuario (char userfile[], Login logins [255]) //modulo administrac
 
 }
 
-void regiTurnos(FILE *turno, FILE *archProfesional, FILE *cliente, int *contTurn, int *contProf, int *contClie) //modulo recepcionista
+void regiTurnos(FILE *turno, FILE *archProfesional, FILE *cliente, char contadorTurno [200], char contadorProf [200], char contadorClientes [200]) //modulo recepcionista
 {
 	Turnos turnos;
 	Profesional prof;
 	Cliente clientes;
 	bool bandProf = false;
 	bool bandClie = false;
+	FILE *contClie; 
+	FILE *contTurn;
+	FILE *contProf;
 	
+	contClie = fopen(contadorClientes, "r+b");
+	contTurn = fopen(contadorTurno, "r+b");
+	contProf = fopen(contadorProf, "r+b");
 	turno = fopen("turnos.dat","a+b");
 	archProfesional = fopen("Profesionales.dat", "rb");
 	cliente = fopen("Clientes.dat", "rb");
@@ -286,7 +294,7 @@ void regiTurnos(FILE *turno, FILE *archProfesional, FILE *cliente, int *contTurn
 	
 	fread(&prof,sizeof(Profesional),1,archProfesional);
 	
-	while(!feof(archProfesional) && contProf > 0 && bandProf == false)
+	while(!feof(archProfesional) && contProf != NULL && bandProf == false)
 	{
 		if(turnos.idProfesional == prof.idProfesional)
 		{
@@ -303,7 +311,7 @@ void regiTurnos(FILE *turno, FILE *archProfesional, FILE *cliente, int *contTurn
 	
 	fread(&clientes,sizeof(Cliente),1,cliente);
 	
-	while(!feof(cliente) && contClie > 0 && bandClie == false)
+	while(!feof(cliente) && contClie != NULL && bandClie == false)
 	{
 		if(turnos.dniCliente == clientes.dniCliente)
 		{
@@ -335,7 +343,7 @@ void regiTurnos(FILE *turno, FILE *archProfesional, FILE *cliente, int *contTurn
 			
 		fwrite(&turnos,sizeof(Turnos),1,turno);	
 		
-		contTurn++;
+		fwrite (&contTurn, sizeof(contTurn), 1, contTurn);
 	}
 	else
 	{
@@ -346,15 +354,19 @@ void regiTurnos(FILE *turno, FILE *archProfesional, FILE *cliente, int *contTurn
 	fclose(turno);
 	fclose(archProfesional);
 	fclose(cliente);
+	fclose(contClie);
+	fclose(contTurn);
+	fclose(contProf);
 
 }
 
 
-void RegistrarCliente (FILE *cliente, int &contPaci)//modulo recepcionista
+void RegistrarCliente (FILE *cliente, char contadorClientes [200])//modulo recepcionista
 {
 	Cliente clientes;
-	
+	FILE *contClie; 
 	cliente = fopen("Clientes.dat", "r+b");
+	contClie = fopen(contadorClientes, "r+b");
 
 	if(cliente == NULL)
 	{
@@ -367,45 +379,45 @@ void RegistrarCliente (FILE *cliente, int &contPaci)//modulo recepcionista
 		}
 	}
 
-		printf ("\nApellido y nombre del cliente: ");
-		_flushall();
-		gets (clientes.apeNom);
+	printf ("\nApellido y nombre del cliente: ");
+	_flushall();
+	gets (clientes.apeNom);
+	
+	printf ("\nDomicilio del cliente: ");
+	_flushall();
+	gets (clientes.domicilio);	
+	
+	printf ("\nD.N.I del cliente sin puntos ni espacios: ");
+	scanf ("%d", &clientes.dniCliente);
+	
+	printf ("\nLocalidad a la que pertenece el cliente : ");
+	_flushall();
+	gets (clientes.localidad);
+	
+	printf ("\nIngrese el peso del cliente en kg: ");
+	scanf ("%f", &clientes.peso);
 		
-		printf ("\nDomicilio del cliente: ");
-		_flushall();
-		gets (clientes.domicilio);	
-		
-		printf ("\nD.N.I del cliente sin puntos ni espacios: ");
-		scanf ("%d", &clientes.dniCliente);
-		
-		printf ("\nLocalidad a la que pertenece el cliente : ");
-		_flushall();
-		gets (clientes.localidad);
-		
-		printf ("\nIngrese el peso del cliente en kg: ");
-		scanf ("%f", &clientes.peso);
-			
-		printf ("\nIngrese la fecha de nacimiento del cliente: ");
-		_flushall ();
-		printf ("\n\tDia: ");
-		scanf("%d" ,&clientes.fechaDeNacimiento.dia);
-		printf ("\n\tMes: ");
-		scanf("%d" ,&clientes.fechaDeNacimiento.mes);
-	    printf ("\n\tA%o (el anio debe ser de 4 digitos): ", 164 );
-		scanf("%d" ,&clientes.fechaDeNacimiento.anio);
-		
-		clientes.edad = 2021 - clientes.fechaDeNacimiento.anio;
-		
-		printf ("Ingrese un Telefono de contacto del cliente: ");
-		_flushall();
-		gets (clientes.telefono);
-		fwrite(&clientes, sizeof(Cliente), 1,cliente);
+	printf ("\nIngrese la fecha de nacimiento del cliente: ");
+	_flushall ();
+	printf ("\n\tDia: ");
+	scanf("%d" ,&clientes.fechaDeNacimiento.dia);
+	printf ("\n\tMes: ");
+	scanf("%d" ,&clientes.fechaDeNacimiento.mes);
+    printf ("\n\tA%o (el anio debe ser de 4 digitos): ", 164 );
+	scanf("%d" ,&clientes.fechaDeNacimiento.anio);
+	
+	clientes.edad = 2021 - clientes.fechaDeNacimiento.anio;
+	
+	printf ("Ingrese un Telefono de contacto del cliente: ");
+	_flushall();
+	gets (clientes.telefono);
+	fwrite(&clientes, sizeof(Cliente), 1,cliente);
+	fwrite(&contClie, sizeof(contClie), 1, contClie); 
 	
 	printf("\n\nCliente Registrado con Exito!\n\n");
 	
-	contPaci= contPaci+1;
-	
 	fclose (cliente);
+	fclose (contClie);
 }
 
 
@@ -481,7 +493,6 @@ void AtencionPorProf (FILE *turno,FILE *prof) //modulo admin
 	fclose (prof);
 	
 	printf("\n\n");
-
 	
 }
 
@@ -519,22 +530,21 @@ void listadoAtencionProf (FILE *prof , FILE *turno , FILE *cliente) //modulo rec
 		{
 			if(strcmp(auxpro,profs.apeNom)==0)
 			{
-				
-					if(turnos.idProfesional==profs.idProfesional)
-					{
-						printf("\nNombre del cliente: %s",clientes.apeNom);
-						printf("\nFecha de turno:");
-						printf("\nDia: %d", turnos.fechaDeTurno.dia);
-						printf("\nMes: %d", turnos.fechaDeTurno.mes);
-						printf("\nA%co: %d\n",164, turnos.fechaDeTurno.anio);
-						printf("\nID: %d\n",profs.idProfesional);
-						printf("============================================\n");
-						
-					}
-				
-					fread(&profs,sizeof(Profesional),1,prof);
-					fread(&turnos,sizeof(Turnos),1,turno);
-					fread(&clientes,sizeof(Cliente),1,cliente);		
+				if(turnos.idProfesional==profs.idProfesional)
+				{
+					printf("\nNombre del cliente: %s",clientes.apeNom);
+					printf("\nFecha de turno:");
+					printf("\nDia: %d", turnos.fechaDeTurno.dia);
+					printf("\nMes: %d", turnos.fechaDeTurno.mes);
+					printf("\nA%co: %d\n",164, turnos.fechaDeTurno.anio);
+					printf("\nID: %d\n",profs.idProfesional);
+					printf("============================================\n");
+					
+				}
+			
+				fread(&profs,sizeof(Profesional),1,prof);
+				fread(&turnos,sizeof(Turnos),1,turno);
+				fread(&clientes,sizeof(Cliente),1,cliente);		
 			}
 	
 	     }
@@ -546,8 +556,6 @@ void listadoAtencionProf (FILE *prof , FILE *turno , FILE *cliente) //modulo rec
 
 }
 
-
-
 void listaEspera(FILE *turno, FILE *prof, FILE *cliente) // modulo espacios
 {
 
@@ -558,7 +566,7 @@ void listaEspera(FILE *turno, FILE *prof, FILE *cliente) // modulo espacios
 	Turnos turnos;
 	Profesional profs;
 	Cliente clientes;
-	int auxId=0;
+	//int auxId=0;
 	int i=0;
     //int op;
             
@@ -582,12 +590,12 @@ void listaEspera(FILE *turno, FILE *prof, FILE *cliente) // modulo espacios
 		fread(&turnos,sizeof(Turnos),1,turno);
 		fread(&clientes,sizeof(Cliente),1,cliente);
 		
-		printf ("Ingrese el id del profesional para ver su lista de espera: ");
-		scanf ("%d", &auxId); 
+		//printf ("Ingrese el id del profesional para ver su lista de espera: ");
+		//scanf ("%d", &auxId); 
 					
 		do
 		{
-			if(auxId == profs.idProfesional && profs.idProfesional==turnos.idProfesional)
+			if(profs.idProfesional==turnos.idProfesional)
 			{
 						
 				printf("\nTurno %d:",i+1);
@@ -657,8 +665,6 @@ void RankingProfesionales(FILE *tur , FILE *pro)
 	}
 	else
 	{
-	
-	
 		rewind(tur);
 		rewind(pro);
 		
@@ -746,13 +752,15 @@ fclose(tur);
 
 }
 
-void borradoFisico(FILE *turno, FILE *auxTurno, int *contTurn, bool evolucion )
+void borradoFisico(FILE *turno, FILE *auxTurno, char contadorTurno [200] , bool evolucion )
 {
 	Turnos turnos;
 	Profesional profs; 
-	
+	FILE *contTurn; 
 	auxTurno = fopen("auxiliar.dat", "w+b");
 	turno = fopen("turnos.dat", "r+b");
+	contTurn =fopen (contadorTurno, "r+b");
+	
 	
 	if (auxTurno == NULL)
 	{
@@ -786,20 +794,22 @@ void borradoFisico(FILE *turno, FILE *auxTurno, int *contTurn, bool evolucion )
 		}
 		else 
 		{
-			contTurn = contTurn - 1; 
+			fwrite(&contTurn, sizeof(contTurn), -1, contTurn); 
 		}
 		fread(&turnos, sizeof(Turnos), 1, turno);
+		
 	}
 	
 	fclose(turno);
 	fclose(auxTurno);
+	fclose (contTurn);
 	
 	remove("turnos.dat");
 	rename("auxiliar.dat", "turnos.dat");
 	
 }
 
-void evolucionPacientes(FILE *turno,FILE *cliente, FILE *auxTurno , int &contClie, int &contTurn)	
+void evolucionPacientes(FILE *turno,FILE *cliente, FILE *auxTurno , char contadorClientes [200], char contadorTurno [200])	
 {
 
 	Turnos turn;
@@ -807,25 +817,32 @@ void evolucionPacientes(FILE *turno,FILE *cliente, FILE *auxTurno , int &contCli
 	int auxDniClien=0;
 	bool centinela=false;
 	bool evolucion = false;
+	FILE *contClie;
+	FILE *contTurn;
 
 	turno=fopen("turnos.dat","r+b");
 	cliente=fopen("Clientes.dat","r+b");
+	contClie = fopen (contadorClientes, "r+b");
+	contTurn = fopen (contadorTurno, "r+b");
 
-    centinela=false;
+	printf ("contador de clientes: %d", contClie);
 
-	if(contClie == 0)
+	if(contClie == NULL)
 	{
 		printf("\nTodavia no se Registro Ningun Paciente...");
 	}
+	
 	else
 	{
 		printf("\nDNI del Cliente: ");
 		scanf("%d", &auxDniClien);
 	
 		rewind(cliente);
+		rewind(contClie);
+		rewind(contTurn);
 		fread(&clie, sizeof(Cliente), 1, cliente);
 	   
-	   while (!feof(cliente) && centinela == false && contClie > 0)
+	   	while (!feof(cliente) && centinela == false && contClie != NULL)
 	    {
 			   
 			if(auxDniClien == clie.dniCliente)
@@ -846,12 +863,12 @@ void evolucionPacientes(FILE *turno,FILE *cliente, FILE *auxTurno , int &contCli
 	
 			fread(&turn,sizeof(Turnos),1,turno);
 			
-			while(!feof(turno) && (turno != NULL) )
+			while(!feof(turno))
 			{											
 			    if( auxDniClien == turn.dniCliente)
 				{
 												
-					fseek(turno,(long) -sizeof(Turnos),SEEK_CUR);	
+					//fseek(turno,(long) -sizeof(Turnos),SEEK_CUR);	
 									
 					printf("\nRegistre la evolucion del Paciente: ");
 																
@@ -869,16 +886,19 @@ void evolucionPacientes(FILE *turno,FILE *cliente, FILE *auxTurno , int &contCli
 				}																							
 			}
 			
-		
-												
-			if(contTurn == 0)
+			printf ("\nsali del while");
+			if(contTurn == NULL)
 			{
 			    printf("El paciente esta Registrado\n Pero 'No se Registraron Turnos a su Nombre '...");
-			}	
+			}
 			
-		}	
+			borradoFisico (turno, auxTurno, contadorTurno, evolucion);
+		}
+		
 	}
-	
+			
+	fclose (contTurn);
+	fclose (contClie);
 	fclose(cliente);
 	fclose(turno);
 }
@@ -1032,9 +1052,9 @@ main()
     FILE *cliente;
     FILE *turno;
     FILE *auxTurno; 
-    int contadorProf = 0;
-	int contadorPaci = 0;
-	int contadorTurn = 0;
+	char contadorProf [200] = {"contadorProf.dat"}; 
+	char contadorPaciente [200]= {"contadorPaciente.dat"};
+	char contadorTurno [200]= {"contadorTurno.dat"};
 	char userfile[255] = {"Usuarios.dat"}; //Nombre del archivo de usuarios
 	bool sesionInic = false;
 	bool sesionInicProf = false; 
@@ -1060,7 +1080,7 @@ main()
            case 1:
                 {
                     system("cls");
-                    opcEspacios = MenuEspacios(sesionInic);
+                    opcEspacios = MenuEspacios(sesionInicProf);
                     system("cls");
 
                         switch(opcEspacios)
@@ -1106,7 +1126,7 @@ main()
 								}
 								else
 								{
-									evolucionPacientes(turno,cliente, auxTurno, contadorPaci, contadorTurn );
+									evolucionPacientes(turno,cliente, auxTurno, contadorPaciente, contadorTurno );
 									printf("\n\n");
 									system("pause");		
 								}
@@ -1160,7 +1180,7 @@ main()
 								}
 								else
 								{
-									RegistrarCliente (cliente, contadorPaci);
+									RegistrarCliente (cliente, contadorPaciente);
 									system("pause");
 								}
                                 break;
@@ -1179,7 +1199,7 @@ main()
 								}
 								else
 								{
-									regiTurnos (turno, prof, cliente, &contadorTurn, &contadorProf, &contadorPaci);	
+									regiTurnos (turno, prof, cliente, contadorTurno, contadorProf, contadorPaciente);	
 									system("pause");
 								}  
                                 break;
@@ -1236,7 +1256,7 @@ main()
                             case 1:
                             {
 								printf("Registrar a un profesioanl.\n\n");
-								RegistrarProfesional(prof, &contadorProf);
+								RegistrarProfesional(prof, contadorProf);
 								printf("\n\nProfesional Registrado con Exito!\n\n");
 								system("pause");
                                 break;
