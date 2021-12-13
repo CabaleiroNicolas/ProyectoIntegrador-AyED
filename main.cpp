@@ -140,7 +140,7 @@ struct Turnos
     char detalleDeAtencion[380];
 };
 
-void RegistrarProfesional(FILE *archProfesional) //modulo Administracion
+void RegistrarProfesional(FILE *archProfesional, int &contProf) //modulo Administracion
 {
 
 	Profesional prof;
@@ -188,6 +188,8 @@ void RegistrarProfesional(FILE *archProfesional) //modulo Administracion
 	gets(prof.telefono);
 
 	fwrite(&prof, sizeof(Profesional), 1,archProfesional);
+
+	contProf++;
 
 	fclose(archProfesional);
 
@@ -258,11 +260,13 @@ void RegistrarUsuario (char userfile[], Login logins [255]) //modulo administrac
 
 }
 
-void regiTurnos(FILE *turno, FILE *archProfesional, FILE *cliente) //modulo recepcionista
+void regiTurnos(FILE *turno, FILE *archProfesional, FILE *cliente, int &contTurn, int &contProf, int &contClie) //modulo recepcionista
 {
 	Turnos turnos;
 	Profesional prof;
 	Cliente clientes;
+	bool bandProf = false;
+	bool bandClie = false;
 	
 	turno = fopen("turnos.dat","a+b");
 	archProfesional = fopen("Profesionales.dat", "rb");
@@ -272,58 +276,72 @@ void regiTurnos(FILE *turno, FILE *archProfesional, FILE *cliente) //modulo rece
 	{
 		turno = fopen("turnos.dat", "w+b");
 
-		if(turno == NULL)printf("\nNo se pudo crear archivo Profesionales.dat");
 	}
 		
-	fread(&prof,sizeof(Profesional),1,archProfesional);
-	fread(&clientes,sizeof(Cliente),1,cliente);
 	
 	printf("\nREGISTRACION DE TURNO\n");
 	
 	printf("\nID del profesional: ");
 	scanf("%d",&turnos.idProfesional);
 	
+	fread(&prof,sizeof(Profesional),1,archProfesional);
 	
-	while  (turnos.idProfesional != prof.idProfesional)
+	while(!feof(archProfesional) && contProf > 0 && bandProf == false)
 	{
-		printf ("\nEl id ingresado no fue encontrado, por favor, introduzca el id nuevamente.");
-		printf("\n\n");
-		system("pause");
-		system("cls");
-		printf("\nID del profesional: ");
-		scanf("%d",&turnos.idProfesional);
-		
-		fread(&prof,sizeof(Profesional),1,archProfesional);
-		
+		if(turnos.idProfesional == prof.idProfesional)
+		{
+			bandProf = true;
+		}
+		else
+		{
+			fread(&prof,sizeof(Profesional),1,archProfesional);
+		}		
 	} 
 		
-	printf("\nFecha del turno: ");
-	
-			printf("\n\tDia: ");
-			scanf("%d", &turnos.fechaDeTurno.dia);
-			printf("\n\tMes: ");
-			scanf("%d", &turnos.fechaDeTurno.mes);
-			printf("\n\tA%co: ",164);
-			scanf("%d", &turnos.fechaDeTurno.anio);
-			
 	printf("\nDNI del cliente: ");
 	scanf("%d",&turnos.dniCliente);
 	
-	while  (turnos.dniCliente != clientes.dniCliente)
-	{
-		printf ("\nEl DNI ingresado no fue encontrado, por favor, introduzca el DNI nuevamente.");
-		printf("\n\n");
-		system("pause");
-		system("cls");
-		printf("\nDNI del cliente:  ");
-		scanf("%d",&turnos.dniCliente);	
-	}  
+	fread(&clientes,sizeof(Cliente),1,cliente);
 	
-	printf("\nDetalle de atencion: ");
-	_flushall();
-	gets(turnos.detalleDeAtencion);
+	while(!feof(cliente) && contClie > 0 && bandClie == false)
+	{
+		if(turnos.dniCliente == clientes.dniCliente)
+		{
+			bandClie = true;
+		}
+		else
+		{
+			fread(&clientes,sizeof(Cliente),1,cliente);
+		}
+	}  	
 		
-	fwrite(&turnos,sizeof(Turnos),1,turno);	
+	
+	if(bandClie == true && bandProf == true)
+	{
+			
+		printf("\nFecha del turno: ");
+		
+				printf("\n\tDia: ");
+				scanf("%d", &turnos.fechaDeTurno.dia);
+				printf("\n\tMes: ");
+				scanf("%d", &turnos.fechaDeTurno.mes);
+				printf("\n\tA%co: ",164);
+				scanf("%d", &turnos.fechaDeTurno.anio);
+				
+		
+		printf("\nDetalle de atencion: ");
+		_flushall();
+		gets(turnos.detalleDeAtencion);
+			
+		fwrite(&turnos,sizeof(Turnos),1,turno);	
+		
+		contTurn++;
+	}
+	else
+	{
+		system("cls");
+		printf("\nNo Se registro Paciente o Profesional con esas Credenciales...");
+	}
 	
 	fclose(turno);
 	fclose(archProfesional);
@@ -331,7 +349,8 @@ void regiTurnos(FILE *turno, FILE *archProfesional, FILE *cliente) //modulo rece
 
 }
 
-void RegistrarCliente (FILE *cliente)//modulo recepcionista
+
+void RegistrarCliente (FILE *cliente, int &contPaci)//modulo recepcionista
 {
 	Cliente clientes;
 	cadena continua ; 
@@ -384,8 +403,11 @@ void RegistrarCliente (FILE *cliente)//modulo recepcionista
 	
 	printf("\n\nCliente Registrado con Exito!\n\n");
 	
+	contPaci++;
+	
 	fclose (cliente);
 }
+
 
 void AtencionPorProf (FILE *turno,FILE *prof) //modulo admin
 {
@@ -592,6 +614,7 @@ void listaEspera(FILE *turno, FILE *prof, FILE *cliente) // modulo espacios
 			}
 			
 			i++;
+			
 		}while(!feof(prof)&&!feof(turno)&&!feof(cliente));	
 		
 	}
@@ -630,7 +653,7 @@ void RankingProfesionales(FILE *tur , FILE *pro)
 	}
 	if(pro == NULL)
 	{
-		printf("\nNo hay ningun profesional registrado hasta el momento Hasta el Momento...\n\n");
+		printf("\nNo hay ningun profesional registrado hasta el momento...\n\n");
 	}
 	else
 	{
@@ -649,12 +672,10 @@ void RankingProfesionales(FILE *tur , FILE *pro)
 				
 				if(p.idProfesional == t.idProfesional)
 				{
-				
 					i++;
 				}
 				
 				fread(&t,sizeof(Turnos),1,tur);	
-
 			}
 			
 			p.cantAtenciones = i;
@@ -723,10 +744,9 @@ void RankingProfesionales(FILE *tur , FILE *pro)
 fclose(pro);
 fclose(tur);
 
-
 }
 
-void evolucionPacientes (FILE *tur,FILE *client)	
+void evolucionPacientes(FILE *tur,FILE *client, int &contClie, int &contTurn)	
 {
 
 	Turnos turn;
@@ -739,71 +759,72 @@ void evolucionPacientes (FILE *tur,FILE *client)
 
     centinela=false;
 
-
-	printf("\nDNI del Cliente: ");
-	scanf("%d",&auxDniClien);
-
-	rewind(client);
-	fread(&clie,sizeof(Cliente),1,client);
-   
-   while (!feof(client) && centinela == false && (client != NULL) )
-    {
-		   
-
-		if(auxDniClien == clie.dniCliente)
-		{
-		    centinela = true;
-
-	    }
-	
-		fread(&clie,sizeof(Cliente),1,client);	
-
-	}
-
-	printf("\n\n");
-	
-	if(centinela == true)
+	if(contClie == 0)
 	{
-			
- 		rewind(tur);
+		printf("\nTodavia no se Registro Ningun Paciente...");
+	}
+	else
+	{
+	
+	
 
-		fread(&turn,sizeof(Turnos),1,tur);
-		
-		while(!feof(tur) && (tur != NULL) )
-		{											
-		    if( auxDniClien == turn.dniCliente)
+		printf("\nDNI del Cliente: ");
+		scanf("%d", &auxDniClien);
+	
+		rewind(client);
+		fread(&clie, sizeof(Cliente), 1, client);
+	   
+	   while (!feof(client) && centinela == false && contClie > 0)
+	    {
+			   
+			if(auxDniClien == clie.dniCliente)
 			{
-											
-				fseek(tur,(long) -sizeof(Turnos),SEEK_CUR);	
-								
-				printf("\nRegistre la evolucion del cliente: ");
-															
-				fflush(stdin);
-				gets(turn.detalleDeAtencion);
-				fwrite(&turn, sizeof(Turnos), 1,tur);
-															
-				fread(&turn, sizeof(Turnos), 1,tur);								
-			}
-														
+			    centinela = true;
+	
+		    }
 			else
 			{
-									
-			    fread(&turn, sizeof(Turnos), 1,tur);											
-			}																							
-		}
-											
-			if(tur == NULL)
-			{
-			    printf("El paciente esta Registrado\n Pero 'No se Registraron Turnos '...");
-			}	
-			else if( auxDniClien != turn.dniCliente )
-			{
-			
-				printf("\nlos valores ingresados no coinciden...\n");	
+				fread(&clie,sizeof(Cliente),1,client);	
 			}
+		}
 	
+	
+		printf("\n\n");
+		
+		if(centinela == true)
+		{
+				
+	 		rewind(tur);
+	
+			fread(&turn,sizeof(Turnos),1,tur);
+			
+			while(!feof(tur) && (tur != NULL) )
+			{											
+			    if( auxDniClien == turn.dniCliente)
+				{
+												
+					fseek(tur,(long) -sizeof(Turnos),SEEK_CUR);	
+									
+					printf("\nRegistre la evolucion del Paciente: ");
+																
+					fflush(stdin);
+					gets(turn.detalleDeAtencion);
+					fwrite(&turn, sizeof(Turnos), 1,tur);						
+				}											
+				else
+				{
+										
+				    fread(&turn, sizeof(Turnos), 1,tur);											
+				}																							
+			}
+												
+				if(contTurn == 0)
+				{
+				    printf("El paciente esta Registrado\n Pero 'No se Registraron Turnos a su Nombre '...");
+				}	
+		
+		}
 	}
-	
 	
 	fclose(client);
 	fclose(tur);
@@ -877,59 +898,64 @@ bool login(char userfile[])
 	fp=fopen(userfile,"rb");
 	if (fp==NULL)
 	{
-			printf ("Error al abrir el archivo \n");
-			exit(EXIT_FAILURE);
-	}
-	
-	rewind(fp);
-    printf ("Bienvenido - Inicio de Sesion \n") ;
-    printf ("------------------------------\n") ;
-    printf ("Usuario: ") ; 
-    _flushall ();
-	gets(usuario);
-	 
-	printf ("Contrasenia: "); 
-	_flushall();
-	enterPassword(password, 12,3,12); 
-	printf ("\n\n");
-	 
-	fread(&reg,sizeof(reg),1,fp);
-	//printf ("password ingresada: %s -  otra pass: %s", password, reg.password);
-	
-	user=strcmp(usuario,reg.usuario);
-	pass=strcmp(password,reg.password);
-
-	if ((user== 0) && (pass== 0))
-		{
-			flag = true;
-		}
-	
-	while ((!feof(fp)) && (flag == false))
-	{
-		if (!feof(fp))
-		{	
-			user=strcmp(usuario,reg.usuario);
-			pass=strcmp(password,reg.password);
-			if ((user== 0) && (pass== 0))
-			{
-				flag = true;
-				
-			}
-	   }
-		fread(&reg,sizeof(reg),1,fp);
-	}  
-	fclose(fp);
-	if (flag==true)
-	{
-		printf ("Inicio de sesion exitosa\n");
-		printf("\n\n");
-		system("pause");		
+			printf ("\nNo se Registro Ningun Recepcionista...\n\n");
+			system("pause");
 	}
 	else
-	{	printf ("Las credenciales ingresadas son incorrectas\n");
-		printf("\n\n");
-		system("pause");	
+	{
+	
+	
+		rewind(fp);
+	    printf ("Bienvenido - Inicio de Sesion \n") ;
+	    printf ("------------------------------\n") ;
+	    printf ("Usuario: ") ; 
+	    _flushall ();
+		gets(usuario);
+		 
+		printf ("Contrasenia: "); 
+		_flushall();
+		enterPassword(password, 12,3,12); 
+		printf ("\n\n");
+		 
+		fread(&reg,sizeof(reg),1,fp);
+		//printf ("password ingresada: %s -  otra pass: %s", password, reg.password);
+		
+		user=strcmp(usuario,reg.usuario);
+		pass=strcmp(password,reg.password);
+	
+		if ((user== 0) && (pass== 0))
+			{
+				flag = true;
+			}
+		
+		while ((!feof(fp)) && (flag == false))
+		{
+			if (!feof(fp))
+			{	
+				user=strcmp(usuario,reg.usuario);
+				pass=strcmp(password,reg.password);
+				if ((user== 0) && (pass== 0))
+				{
+					flag = true;
+					
+				}
+		   }
+			fread(&reg,sizeof(reg),1,fp);
+		}  
+		fclose(fp);
+		if (flag==true)
+		{
+			printf ("Inicio de sesion exitosa\n");
+			printf("\n\n");
+			system("pause");		
+		}
+		else
+		{	printf ("Las credenciales ingresadas son incorrectas\n");
+			printf("\n\n");
+			system("pause");	
+		}
 	}
+	
 	return flag;
 }
 
@@ -944,58 +970,62 @@ bool loginProf(FILE *prof)
 	prof=fopen("Profesionales.dat","rb");
 	if (prof==NULL)
 	{
-			printf ("Error al abrir el archivo \n");
-			exit(EXIT_FAILURE);
-	}
-
-	
-    printf ("Bienvenido - Inicio de Sesion \n");
-    printf ("------------------------------\n");
-    printf ("ID de Profesional: "); 
-	scanf("%d", &idVerificar);
-	 
-	printf ("Contrasenia: "); 
-	_flushall();
-	enterPassword(passVerificar, 12,3,12);
-	printf("\n\n");
-	 
-	rewind(prof);
-	 
-	fread(&reg,sizeof(Profesional),1,prof);
-	
-	if (idVerificar == reg.idProfesional && strcmp(passVerificar, reg.contrasenia) == 0)
-		{
-				flag = true;
-		}
-	
-	while(!feof(prof) && flag == false)
-	{
-
-	
-		if (idVerificar == reg.idProfesional && strcmp(passVerificar, reg.contrasenia) == 0)
-			{
-				flag = true;
-			}
-			
-		fread(&reg,sizeof(Profesional),1,prof);
-			
-	}
-		
-		 
-	fclose(prof);
-	
-	if (flag==true)
-	{
-		printf ("Inicio de sesion exitosa\n");
-		printf("\n\n");
-		system("pause");		
+			printf ("\nNo se Registro Ningun Profesional...\n\n");
+			system("Pause");
 	}
 	else
-	{	printf ("Las credenciales ingresadas son incorrectas\n");
-		printf("\n\n");
-		system("pause");	
-	}
+	{
+		
 	
+
+	
+	    printf ("Bienvenido - Inicio de Sesion \n");
+	    printf ("------------------------------\n");
+	    printf ("ID de Profesional: "); 
+		scanf("%d", &idVerificar);
+		 
+		printf ("Contrasenia: "); 
+		_flushall();
+		enterPassword(passVerificar, 12,3,12);
+		printf("\n\n");
+		 
+		rewind(prof);
+		 
+		fread(&reg,sizeof(Profesional),1,prof);
+		
+		if (idVerificar == reg.idProfesional && strcmp(passVerificar, reg.contrasenia) == 0)
+			{
+					flag = true;
+			}
+		
+		while(!feof(prof) && flag == false)
+		{
+	
+		
+			if (idVerificar == reg.idProfesional && strcmp(passVerificar, reg.contrasenia) == 0)
+				{
+					flag = true;
+				}
+				
+			fread(&reg,sizeof(Profesional),1,prof);
+				
+		}
+			
+			 
+		fclose(prof);
+		
+		if (flag==true)
+		{
+			printf ("Inicio de sesion exitosa\n");
+			printf("\n\n");
+			system("pause");		
+		}
+		else
+		{	printf ("Las credenciales ingresadas son incorrectas\n");
+			printf("\n\n");
+			system("pause");	
+		}
+	}
 	
 	return flag;
 }
@@ -1008,6 +1038,9 @@ main()
     FILE *cliente;
     FILE *turno;
     FILE *auxTurno; 
+    int contadorProf = 0;
+	int contadorPaci = 0;
+	int contadorTurn = 0;
 	char userfile[255] = {"Usuarios.dat"}; //Nombre del archivo de usuarios
 	bool sesionInic = false;
 	bool sesionInicProf = false; 
@@ -1017,7 +1050,7 @@ main()
     int opcion = 0;
     Login logins[255];
     
-    cantLogins = leerLogins (userfile, logins);//leo inicialmente todos los usuarios existentes
+   // cantLogins = leerLogins (userfile, logins);//leo inicialmente todos los usuarios existentes
   
 
 	//logoutn(); 
@@ -1080,7 +1113,7 @@ main()
 								}
 								else
 								{
-									evolucionPacientes (turno,cliente);
+									evolucionPacientes(turno,cliente, contadorPaci, contadorTurn);
 									printf("\n\n");
 									system("pause");		
 								}
@@ -1115,7 +1148,7 @@ main()
                         {
                             case 1:
                             {
-									
+								printf("Iniciar sesion.");	
 								sesionInic = login (userfile );
 								
                                 break;
@@ -1134,7 +1167,7 @@ main()
 								}
 								else
 								{
-									RegistrarCliente (cliente);
+									RegistrarCliente (cliente, contadorPaci);
 									system("pause");
 								}
                                 break;
@@ -1153,7 +1186,7 @@ main()
 								}
 								else
 								{
-									regiTurnos (turno, prof, cliente);	
+									regiTurnos (turno, prof, cliente, contadorTurn, contadorProf, contadorPaci);	
 									system("pause");
 								}  
                                 break;
@@ -1210,7 +1243,7 @@ main()
                             case 1:
                             {
 								printf("Registrar a un profesioanl.\n\n");
-								RegistrarProfesional(prof);
+								RegistrarProfesional(prof, contadorProf);
 								printf("\n\nProfesional Registrado con Exito!\n\n");
 								system("pause");
                                 break;
