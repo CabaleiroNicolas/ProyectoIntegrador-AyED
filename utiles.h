@@ -257,12 +257,13 @@ void acercaDe ()
 }
 
 //Carga en un vector todos los usuarios existentes
-/*int leerLogins (char userfile[], Login logins [255])
+int leerLogins (char userfile[], Login logins [255])
 {
 	FILE *fp; 
 	Usuario reg;
 	int i =0;
-	fp=fopen(userfile,"rb");
+	fp=fopen(userfile,"r+b");
+	
 	if (fp==NULL)
 	{
 		printf("Error al abrir el archivo %  \n",userfile);  
@@ -286,7 +287,7 @@ void acercaDe ()
 	fclose(fp);
 	//system ("pause");
 	return i;
-}*/
+}
 
 int ValidUser(char usuario[10], Login logins [255], int cantLogins)
 {
