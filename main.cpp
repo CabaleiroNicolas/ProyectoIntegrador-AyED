@@ -190,7 +190,8 @@ void RegistrarProfesional(FILE *archProfesional, char contadorProf [200]) //modu
 	gets(prof.telefono);
 
 	fwrite(&prof, sizeof(Profesional), 1,archProfesional);
-	fwrite(&contProf, sizeof(contProf), 1,contProf);
+	
+	//fwrite(&contProf, sizeof(contProf), 1,contProf);
 
 	fclose(archProfesional);
 	fclose(contProf);
@@ -294,7 +295,7 @@ void regiTurnos(FILE *turno, FILE *archProfesional, FILE *cliente, char contador
 	
 	fread(&prof,sizeof(Profesional),1,archProfesional);
 	
-	while(!feof(archProfesional) && contProf != NULL && bandProf == false)
+	while(!feof(archProfesional) && bandProf == false)
 	{
 		if(turnos.idProfesional == prof.idProfesional)
 		{
@@ -311,7 +312,7 @@ void regiTurnos(FILE *turno, FILE *archProfesional, FILE *cliente, char contador
 	
 	fread(&clientes,sizeof(Cliente),1,cliente);
 	
-	while(!feof(cliente) && contClie != NULL && bandClie == false)
+	while(!feof(cliente) && bandClie == false)
 	{
 		if(turnos.dniCliente == clientes.dniCliente)
 		{
@@ -322,33 +323,31 @@ void regiTurnos(FILE *turno, FILE *archProfesional, FILE *cliente, char contador
 			fread(&clientes,sizeof(Cliente),1,cliente);
 		}
 	}  	
-		
-	
+
 	if(bandClie == true && bandProf == true)
 	{
 			
 		printf("\nFecha del turno: ");
 		
-				printf("\n\tDia: ");
-				scanf("%d", &turnos.fechaDeTurno.dia);
-				printf("\n\tMes: ");
-				scanf("%d", &turnos.fechaDeTurno.mes);
-				printf("\n\tA%co: ",164);
-				scanf("%d", &turnos.fechaDeTurno.anio);
+		printf("\n\tDia: ");
+		scanf("%d", &turnos.fechaDeTurno.dia);
+		printf("\n\tMes: ");
+		scanf("%d", &turnos.fechaDeTurno.mes);
+		printf("\n\tA%o: ",164);
+		scanf("%d", &turnos.fechaDeTurno.anio);
 				
-		
 		printf("\nDetalle de atencion: ");
 		_flushall();
 		gets(turnos.detalleDeAtencion);
 			
 		fwrite(&turnos,sizeof(Turnos),1,turno);	
 		
-		fwrite (&contTurn, sizeof(contTurn), 1, contTurn);
+		//fwrite (&contTurn, sizeof(contTurn), 1, contTurn);
 	}
 	else
 	{
 		system("cls");
-		printf("\nNo Se registro Paciente o Profesional con esas Credenciales...");
+		printf("\n\nNo Se registro Paciente o Profesional con esas Credenciales...");
 	}
 	
 	fclose(turno);
@@ -411,8 +410,10 @@ void RegistrarCliente (FILE *cliente, char contadorClientes [200])//modulo recep
 	printf ("Ingrese un Telefono de contacto del cliente: ");
 	_flushall();
 	gets (clientes.telefono);
+	
 	fwrite(&clientes, sizeof(Cliente), 1,cliente);
-	fwrite(&contClie, sizeof(contClie), 1, contClie); 
+	
+	//fwrite(&contClie, sizeof(contClie), 1, contClie); 
 	
 	printf("\n\nCliente Registrado con Exito!\n\n");
 	
