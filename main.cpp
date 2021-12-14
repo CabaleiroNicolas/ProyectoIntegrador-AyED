@@ -820,12 +820,22 @@ void evolucionPacientes(FILE *turno,FILE *cliente, FILE *auxTurno , char contado
 	bool evolucion = false;
 	FILE *contClie;
 	FILE *contTurn;
-
+    int i=0;
+    
 	turno=fopen("turnos.dat","r+b");
 	cliente=fopen("Clientes.dat","r+b");
 	contClie = fopen (contadorClientes, "r+b");
 	contTurn = fopen (contadorTurno, "r+b");
+	
+   	fread(&turn,sizeof(Turnos),1,turno);
 
+		while (!feof(turn) )
+	    {
+			   
+			i++;
+			fread(&turn,sizeof(Turnos),1,turno);
+
+		}
 	printf ("contador de clientes: %d", contClie);
 
 	if(contClie == NULL)
@@ -888,7 +898,8 @@ void evolucionPacientes(FILE *turno,FILE *cliente, FILE *auxTurno , char contado
 			}
 			
 			printf ("\nsali del while");
-			if(contTurn == NULL)
+			
+			if(centinela== true &&  evolucion == false)
 			{
 			    printf("El paciente esta Registrado\n Pero 'No se Registraron Turnos a su Nombre '...");
 			}
