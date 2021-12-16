@@ -647,6 +647,7 @@ void RankingProfesionales(FILE *tur , FILE *pro)
 	
 	Profesional vec[TAM];
 	
+	int c = 0;
 	int i = 0;
 	int size = 0;
 	bool flag = false;
@@ -655,47 +656,19 @@ void RankingProfesionales(FILE *tur , FILE *pro)
 	pro=fopen("Profesionales.dat","r+b");
 	
 	tur=fopen("turnos.dat","r+b");
-	
+		
 	if(tur == NULL)
 	{
 		printf("\nNo se Atendio Ningun Paciente Hasta el Momento...\n\n");
+		system("pause");
 	}
 	if(pro == NULL)
 	{
 		printf("\nNo hay ningun profesional registrado hasta el momento...\n\n");
+		system("pause");
 	}
 	else
 	{
-		rewind(tur);
-		rewind(pro);
-		
-		fread(&p,sizeof(Profesional),1,pro);
-		fread(&t,sizeof(Turnos),1,tur);
-		
-		while(!feof(pro))
-		{
-			while(!feof(tur))
-			{
-				
-				if(p.idProfesional == t.idProfesional)
-				{
-					i++;
-				}
-				
-				fread(&t,sizeof(Turnos),1,tur);	
-			}
-			
-			p.cantAtenciones = i;
-			
-			fwrite(&p,sizeof(Profesional),1,pro);
-	
-	
-			rewind(tur);
-			i = 0;			
-			
-			fread(&p,sizeof(Profesional),1,pro);
-			fread(&t,sizeof(Turnos),1,tur);	
-		}						
 	
 		rewind(pro);
 		fread(&p,sizeof(Profesional),1,pro);
@@ -734,15 +707,15 @@ void RankingProfesionales(FILE *tur , FILE *pro)
 		}while(flag == true);
 		
 		
-		for(i = 0; i < size; i++)
+		for(int j = 0; j < size; j++)
 		{
-			if(i == 0)
+			if(j == 0)
 			{
-				printf("\n\nBono Mejor Profesional--> %s, %d Atenciones\n\n", vec[i].apeNom, vec[i].cantAtenciones);
+				printf("\n\nBono Mejor Profesional--> %s, %d Atenciones\n\n", vec[j].apeNom, vec[j].cantAtenciones);
 			}
 			else
 			{
-				printf("\n%d--> %s, %d Atenciones\n", i+1, vec[i].apeNom, vec[i].cantAtenciones);
+				printf("\n%d--> %s, %d Atenciones\n", j+1, vec[j].apeNom, vec[j].cantAtenciones);
 			}
 				
 		}
@@ -753,14 +726,14 @@ fclose(tur);
 
 }
 
-void borradoFisico(FILE *turno, FILE *auxTurno, char contadorTurno [200] , bool evolucion )
+void borradoFisico(FILE *turno, FILE *auxTurno, bool evolucion)
 {
 	Turnos turnos;
 	Profesional profs; 
 	FILE *contTurn; 
 	auxTurno = fopen("auxiliar.dat", "w+b");
 	turno = fopen("turnos.dat", "r+b");
-	contTurn =fopen (contadorTurno, "r+b");
+
 	
 	
 	if (auxTurno == NULL)
@@ -789,7 +762,7 @@ void borradoFisico(FILE *turno, FILE *auxTurno, char contadorTurno [200] , bool 
 	
 	while (!feof(turno))
 	{
-		if ( evolucion == false)
+		if (evolucion == false)
 		{
 			fwrite(&turnos, sizeof(Turnos), 1, auxTurno);
 		}
@@ -810,7 +783,7 @@ void borradoFisico(FILE *turno, FILE *auxTurno, char contadorTurno [200] , bool 
 	
 }
 
-void evolucionPacientes(FILE *turno,FILE *cliente, FILE *auxTurno , char contadorClientes [200], char contadorTurno [200])	
+void evolucionPacientes(FILE *turno,FILE *cliente, FILE *auxTurn)	
 {
 
 	Turnos turn;
@@ -818,42 +791,36 @@ void evolucionPacientes(FILE *turno,FILE *cliente, FILE *auxTurno , char contado
 	int auxDniClien=0;
 	bool centinela=false;
 	bool evolucion = false;
-	FILE *contClie;
-	FILE *contTurn;
     int i=0;
     
 	turno=fopen("turnos.dat","r+b");
 	cliente=fopen("Clientes.dat","r+b");
-	contClie = fopen (contadorClientes, "r+b");
-	contTurn = fopen (contadorTurno, "r+b");
 	
    	fread(&turn,sizeof(Turnos),1,turno);
 
-		while (!feof(turn) )
+		while (!feof(turno))
 	    {
 			   
 			i++;
 			fread(&turn,sizeof(Turnos),1,turno);
 
 		}
-	printf ("contador de clientes: %d", contClie);
+	printf ("contador de clientes: %d", i);
 
-	if(contClie == NULL)
+	if(i == 0)
 	{
 		printf("\nTodavia no se Registro Ningun Paciente...");
 	}
-	
 	else
 	{
 		printf("\nDNI del Cliente: ");
 		scanf("%d", &auxDniClien);
 	
 		rewind(cliente);
-		rewind(contClie);
-		rewind(contTurn);
+
 		fread(&clie, sizeof(Cliente), 1, cliente);
 	   
-	   	while (!feof(cliente) && centinela == false && contClie != NULL)
+	   	while (!feof(cliente) && centinela == false)
 	    {
 			   
 			if(auxDniClien == clie.dniCliente)
@@ -897,20 +864,18 @@ void evolucionPacientes(FILE *turno,FILE *cliente, FILE *auxTurno , char contado
 				}																							
 			}
 			
-			printf ("\nsali del while");
-			
 			if(centinela== true &&  evolucion == false)
 			{
 			    printf("El paciente esta Registrado\n Pero 'No se Registraron Turnos a su Nombre '...");
 			}
 			
-			borradoFisico (turno, auxTurno, contadorTurno, evolucion);
+			borradoFisico(turno, auxTurn, evolucion);
 		}
 		
 	}
+		
 			
-	fclose (contTurn);
-	fclose (contClie);
+
 	fclose(cliente);
 	fclose(turno);
 }
@@ -1138,7 +1103,7 @@ main()
 								}
 								else
 								{
-									evolucionPacientes(turno,cliente, auxTurno, contadorPaciente, contadorTurno );
+									evolucionPacientes(turno,cliente, auxTurno);
 									printf("\n\n");
 									system("pause");		
 								}
