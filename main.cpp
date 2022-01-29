@@ -138,6 +138,13 @@ struct Turnos
     Fecha fechaDeTurno;
     int dniCliente;
     char detalleDeAtencion[380];
+    bool mostrado;
+};
+
+struct Atenciones
+{
+	int matriculamedico;
+	int cant_atenciones;
 };
 
 void RegistrarProfesional(FILE *archProfesional, char contadorProf [200]) //modulo Administracion
@@ -635,95 +642,108 @@ void listaEspera(FILE *turno, FILE *prof, FILE *cliente) // modulo espacios
 	printf("\n\n");
 }
 
-void RankingProfesionales(FILE *tur , FILE *pro)
+void RankingProfesionales()
 {
-	
-	Profesional p;
-	Turnos t;
-	
-	const int TAM = 40;
-	char umay[70];
-	Profesional aux;
-	
-	Profesional vec[TAM];
-	
-	int c = 0;
-	int i = 0;
-	int size = 0;
-	bool flag = false;
-	int L = 0;
-	
-	pro=fopen("Profesionales.dat","r+b");
-	
-	tur=fopen("turnos.dat","r+b");
-		
-	if(tur == NULL)
+	FILE *Prof;
+	FILE *Turno;
+    
+	Profesional prof[50];
+	Turnos turnos[50];
+	Atenciones reg_atenciones[50],aux;
+	bool band = true,stop;
+    int i = 0;
+	int num_meds = 0;
+	int num_turnos = 0; 
+	int contador = 0;
+
+    Prof=fopen("Profesionales.dat","rb");
+
+    if (Prof==NULL)
+    {
+        printf("\nEl archivo 'Profesionales.dat' no fue creado o se elimino.");
+		band = false;
+    }
+    else
+    {
+        fread(&prof[i],sizeof(Profesional ),1,Prof);
+        while (!feof(Prof))
+        {
+            i++;
+            fread(&prof[i],sizeof(Profesional ),1,Prof);
+        }
+        num_meds = i;
+        i = 0;
+        fclose(Prof);
+    }
+
+	//Archivo de turnos:
+    Turno=fopen("Turnos.dat","rb");
+
+    if (Turno==NULL)
+    {
+        printf("\nEl archivo 'Turnos.dat' no fue creado o se elimino.");
+		band = false;
+    }
+    else
+    {
+        fread(&turnos[i],sizeof(Turnos),1,Turno);
+        while (!feof(Turno))
+        {
+            i++;
+            fread(&turnos[i],sizeof(Turnos),1,Turno); 
+        }
+        num_turnos = i;
+        i = 0;
+        fclose(Turno);
+    }
+
+	if (band)
 	{
-		printf("\nNo se Atendio Ningun Paciente Hasta el Momento...\n\n");
-		system("pause");
-	}
-	if(pro == NULL)
-	{
-		printf("\nNo hay ningun profesional registrado hasta el momento...\n\n");
-		system("pause");
-	}
-	else
-	{
-	
-		rewind(pro);
-		fread(&p,sizeof(Profesional),1,pro);
-		
-		i = 0;
-		
-		while(!feof(pro))
+		//Obtiene la cantidad de turnos por Medico:
+		for (i = 0; i < num_meds; i++)
 		{
+			contador = 0;
+
+			for (int k = 0; k < num_turnos; k++)
+			{
+				if ((prof[i].idProfesional == turnos[k].idProfesional) && (turnos[k].mostrado == 1))
+				{
+					contador++;
+				}
+			}
 			
-			vec[i] = p;
-			
-			i++;
-			size = i;
+			reg_atenciones[i].matriculamedico = prof[i].idProfesional;
+			reg_atenciones[i].cant_atenciones = contador;
 		}
 		
-		L = size - 1;
-			
+		//Ordena el ranking de mayor a menor:
 		do
 		{
-			flag = false;
+			stop=false;
 			
-			for(int i = 0; i < L; i++)
-			{	
-				
-				if(vec[i].cantAtenciones > vec[i+1].cantAtenciones)
+			for (i = 0 ; i < num_meds-1 ; i++)
+			{
+				if(reg_atenciones[i].cant_atenciones < reg_atenciones[i+1].cant_atenciones)
 				{
-					aux = vec[i];
-					vec[i] = vec[i+1];
-					vec[i+1] = aux;
-						
-					flag = true;
-				}	
+					aux=reg_atenciones[i];
+					reg_atenciones[i]=reg_atenciones[i+1];
+					reg_atenciones[i+1]=aux;
+					stop=true;
+				}
 			}
-			L--;
-			
-		}while(flag == true);
-		
-		
-		for(int j = 0; j < size; j++)
-		{
-			if(j == 0)
-			{
-				printf("\n\nBono Mejor Profesional--> %s, %d Atenciones\n\n", vec[j].apeNom, vec[j].cantAtenciones);
-			}
-			else
-			{
-				printf("\n%d--> %s, %d Atenciones\n", j+1, vec[j].apeNom, vec[j].cantAtenciones);
-			}
-				
 		}
+		while (stop);
+
+		//Muestra el ranking de Medicos:
+		for (i = 0; i < num_meds; i++)
+		{
+			printf("\nPuesto %d:",i+1);
+			printf("\nid del profesional: %d",reg_atenciones[i].matriculamedico);
+			printf("\nCantidad de atenciones: %d",reg_atenciones[i].cant_atenciones);
+			printf("\n--------------------------------\n");
+		}
+		
 	}
-
-fclose(pro);
-fclose(tur);
-
 }
 
 void borradoFisico(FILE *turno, FILE *auxTurno, bool evolucion)
@@ -1259,7 +1279,7 @@ main()
                             case 4:
                             {
 								printf("Ranking de Profesionales por atencion.\n\n");
-								RankingProfesionales(turno, prof);
+								RankingProfesionales();
 								printf("\n\n");
 								system("pause");
                                 break;
