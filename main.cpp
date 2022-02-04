@@ -186,7 +186,7 @@ void RegistrarProfesional(FILE *archProfesional, char contadorProf [200]) //modu
 		system("pause");
 		system("cls");
 		printf( "\nContrasenia: ");
-		enterPassword(prof.contrasenia, 12,1,12);
+		enterPassword(prof.contrasenia, 12,1,11);
 	}
 
 	printf("\nDNI: ");
