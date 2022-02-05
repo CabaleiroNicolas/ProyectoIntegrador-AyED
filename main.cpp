@@ -90,6 +90,8 @@ int MenuAdministracion()
     printf("\n2.- Registrar Usuario Recepcionista");
     printf("\n3.- Atenciones por Profesional");
     printf("\n4.- Ranking de Profesionales por Atenciones");
+    printf("\n5.- Listado de Profesionales");
+    printf("\n6.- Listado de Clientes");
     printf("\n0.- Retornar al menu principal");
 
     printf("\n\nIngrese una Opcion: ");
@@ -270,6 +272,63 @@ void RegistrarUsuario (char userfile[], Login logins [255]) //modulo administrac
 
 }
 
+void listarProf (FILE *prof)
+{
+	Profesional profs;
+	prof = fopen("Profesionales.dat", "rb");
+	
+	if(prof == NULL)
+	{
+		prof = fopen("Profesionales.dat", "rb");
+		
+		printf("\nNo se pudo crear archivo Profesionales.dat");
+		exit(EXIT_FAILURE);
+	}
+	
+	fread(&profs,sizeof(Profesional),1,prof);
+	
+	while (!feof(prof))
+	{
+	 printf("\nApellido y Nombre:");
+	 puts(profs.apeNom);
+	 printf("ID: %d\n",profs.idProfesional);
+	
+	 fread(&profs,sizeof(Profesional),1,prof);
+	}
+	
+	fclose (prof);
+	
+}
+
+void listarClientes (FILE *cliente)
+{
+	Cliente clientes;
+	cliente = fopen("Clientes.dat", "rb");
+	
+	if(cliente == NULL)
+	{
+		cliente = fopen("Clientes.dat", "rb");
+
+		printf("\nNo se pudo crear archivo Clientes.dat");
+		exit(EXIT_FAILURE);
+	}
+	
+	fread(&clientes,sizeof(Cliente),1,cliente);
+	
+	while (!feof(cliente))
+	{
+	 
+	 printf("Apellido y Nombre:");
+	 puts(clientes.apeNom);
+	 printf("\nDNI: %d\n\n",clientes.dniCliente);
+
+	 fread(&clientes,sizeof(Cliente),1,cliente);
+	}
+	
+	fclose (cliente);
+	
+}
+
 void regiTurnos(FILE *turno, FILE *archProfesional, FILE *cliente, char contadorTurno [200], char contadorProf [200], char contadorClientes [200]) //modulo recepcionista
 {
 	Turnos turnos;
@@ -307,10 +366,12 @@ void regiTurnos(FILE *turno, FILE *archProfesional, FILE *cliente, char contador
 		if(turnos.idProfesional == prof.idProfesional)
 		{
 			bandProf = true;
+			printf ("true");
 		}
 		else
 		{
 			fread(&prof,sizeof(Profesional),1,archProfesional);
+			printf ("false");
 		}		
 	} 
 		
@@ -324,6 +385,7 @@ void regiTurnos(FILE *turno, FILE *archProfesional, FILE *cliente, char contador
 		if(turnos.dniCliente == clientes.dniCliente)
 		{
 			bandClie = true;
+			printf ("true");
 		}
 		else
 		{
@@ -370,9 +432,9 @@ void regiTurnos(FILE *turno, FILE *archProfesional, FILE *cliente, char contador
 void RegistrarCliente (FILE *cliente, char contadorClientes [200])//modulo recepcionista
 {
 	Cliente clientes;
-	FILE *contClie; 
+	//FILE *contClie; 
 	cliente = fopen("Clientes.dat", "r+b");
-	contClie = fopen(contadorClientes, "r+b");
+	//contClie = fopen(contadorClientes, "r+b");
 
 	if(cliente == NULL)
 	{
@@ -425,7 +487,7 @@ void RegistrarCliente (FILE *cliente, char contadorClientes [200])//modulo recep
 	printf("\n\nCliente Registrado con Exito!\n\n");
 	
 	fclose (cliente);
-	fclose (contClie);
+	//fclose (contClie);
 }
 
 
@@ -1280,6 +1342,24 @@ main()
                             {
 								printf("Ranking de Profesionales por atencion.\n\n");
 								RankingProfesionales();
+								printf("\n\n");
+								system("pause");
+                                break;
+                            }
+                            
+                            case 5:
+                            {
+								printf("Listado de Profesionales.\n\n");
+								listarProf (prof);
+								printf("\n\n");
+								system("pause");
+                                break;
+                            }
+                            
+                            case 6:
+                            {
+								printf("Listado de clientes.\n\n");
+								listarClientes (cliente);
 								printf("\n\n");
 								system("pause");
                                 break;
