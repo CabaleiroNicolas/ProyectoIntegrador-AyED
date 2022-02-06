@@ -12,9 +12,6 @@
 #include <unistd.h>
 #include "utiles.h"
 #include "funciones.h"
-//#include "estructuras.h"
-//using namespace std;
-//const int TAM = 100;
 typedef char cadena [60];
 int cantLogins =0;
 int idProfesional=0;
@@ -25,15 +22,15 @@ int MenuGeneral()
 {
     int opc = 0;
     
-	cout <<replicate(" ",12)+"-- Menu Principal --\n";
+	cout <<replicate(" ",50)+"-- Menu Principal --\n";
 	cout <<"\n";
-    cout <<replicate(" ",10)+"1.- Modulo Espacios.\n";
-    cout <<replicate(" ",10)+"2.- Modulo Recepcionista\n";
-    cout <<replicate(" ",10)+"3.- Modulo Administracion\n";
-    cout <<replicate(" ",10)+"4.- Acerca de...\n";
-    cout <<replicate(" ",10)+"0.- Cerrar Aplicacion\n";
+    cout <<replicate(" ",50)+"1.- Modulo Espacios.\n";
+    cout <<replicate(" ",50)+"2.- Modulo Recepcionista\n";
+    cout <<replicate(" ",50)+"3.- Modulo Administracion\n";
+    cout <<replicate(" ",50)+"4.- Acerca de...\n";
+    cout <<replicate(" ",50)+"0.- Cerrar Aplicacion\n";
     cout <<"\n";
-    cout <<replicate(" ",10)+"    Ingrese una Opcion: \n";
+    cout <<replicate(" ",50)+"  Ingrese una Opcion: ";
     scanf("%d", &opc);
 	
     return opc;
@@ -43,9 +40,9 @@ int MenuRecepcion(bool sesionInic)
 {
     int opc = 0;
 
-    printf("\n===============================");
-    printf("\n     MODULO RECEPCION");
-    printf("\n===============================\n");
+    printf("\n================================");
+    printf("\n       MODULO RECEPCION");
+    printf("\n================================\n");
 
     if(sesionInic == false)
 	{
@@ -66,9 +63,9 @@ int MenuEspacios(bool sesionInicProf)
 {
     int opc = 0;
 
-    printf("\n===============================");
-    printf("\n      MODULO ESPACIOS");
-    printf("\n===============================\n");
+    printf("\n================================");
+    printf("\n       MODULO ESPACIOS");
+    printf("\n================================\n");
 
    
     if(sesionInicProf == false)
@@ -89,9 +86,9 @@ int MenuAdministracion()
 {
      int opc = 0;
 
-    printf("\n==================================");
-    printf("\n      MODULO ADMINISTRACION");
-    printf("\n==================================\n");
+    printf("\n====================================");
+    printf("\n       MODULO ADMINISTRACION");
+    printf("\n====================================\n");
 
     printf("\n1.- Registrar Profesional");
     printf("\n2.- Registrar Usuario Recepcionista");
@@ -118,8 +115,8 @@ int loginProf(FILE *prof)
 	prof=fopen("Profesionales.dat","rb");
 	if (prof==NULL)
 	{
-			printf ("\nNo se Registro Ningun Profesional...\n\n");
-			system("Pause");
+		printf ("\nNo se Registro Ningun Profesional...\n\n");
+		system("Pause");
 	}
 	else
 	{
@@ -139,26 +136,21 @@ int loginProf(FILE *prof)
 		fread(&reg,sizeof(Profesional),1,prof);
 		
 		if (idVerificar == reg.idProfesional && strcmp(passVerificar, reg.contrasenia) == 0)
-			{
-					flag = true;
-					idProfesional=idVerificar;
-			}
+		{
+			flag = true;
+			idProfesional=idVerificar;
+		}
 		
 		while(!feof(prof) && flag == false)
 		{
-	
-		
 			if (idVerificar == reg.idProfesional && strcmp(passVerificar, reg.contrasenia) == 0)
-				{
-					flag = true;
-					idProfesional=idVerificar;
-				}
-				
-			fread(&reg,sizeof(Profesional),1,prof);
-				
+			{
+				flag = true;
+				idProfesional=idVerificar;
+			}	
+			fread(&reg,sizeof(Profesional),1,prof);		
 		}
-			
-			 
+ 
 		fclose(prof);
 		
 		if (flag==true)
@@ -177,91 +169,89 @@ int loginProf(FILE *prof)
 	return idProfesional;
 }
 
-
 void fespacio(bool sesionInicProf, FILE *prof )
 {
-	FILE * turno;
-	FILE * cliente;
-	FILE * auxTurno;
+	FILE *turno;
+	FILE *cliente;
+	FILE *auxTurno;
 	int opcEspacios;
 	  do
 	  {
-   	  system("cls");	  	
-      opcEspacios = MenuEspacios(sesionInicProf);
-      system("cls");
+   	    system("cls");	  	
+        opcEspacios = MenuEspacios(sesionInicProf);
+        system("cls");
 
-                switch(opcEspacios)
-                {
-                    case 1:
-                    {
-                    	idProfesional = loginProf(prof);
-                    	if (idProfesional > 0 )
-                    	{
-                    		sesionInicProf = true;
-						}
-						else
-						{
-							sesionInicProf = false;
-						}
-                        break;
-                    }
+        switch(opcEspacios)
+        {
+            case 1:
+            {
+            	idProfesional = loginProf(prof);
+            	if (idProfesional > 0 )
+            	{
+            		sesionInicProf = true;
+				}
+				else
+				{
+					sesionInicProf = false;
+				}
+                break;
+            }
 
-                    case 2:
-                    {
-						if(sesionInicProf == false)
-						{
-							printf("\n=============================================================================");
-		                 	printf("\nDebe iniciar sesion para realizar una accion, por favor escoja la opcion 1");
-		                 	printf("\n=============================================================================\n\n");
-							system ("pause");
-						}
-						else
-						{
-     						printf("Listado de espera de Turnos.\n\n");
-		     				listaEspera(turno, prof, cliente,idProfesional);
-							system ("pause");
-						}
-						
-                        break;
-                    }
+            case 2:
+            {
+				if(sesionInicProf == false)
+				{
+					printf("\n=============================================================================");
+                 	printf("\nDebe iniciar sesion para realizar una accion, por favor escoja la opcion 1");
+                 	printf("\n=============================================================================\n\n");
+					system ("pause");
+				}
+				else
+				{
+					printf("Listado de espera de Turnos.\n\n");
+     				listaEspera(turno, prof, cliente,idProfesional);
+					system ("pause");
+				}
+                break;
+            }
 
-                    case 3:
-                    {
+            case 3:
+            {
 
-                        if(sesionInicProf == false)
-						{
-							
-							printf("\n=============================================================================");
-		                 	printf("\nDebe iniciar sesion para realizar una accion, por favor escoja la opcion 1");
-		                 	printf("\n=============================================================================\n\n");
-							system("pause");
-							
-						}
-						else
-						{
-                            printf("Registrar evolucion del tratamiento.\n\n");							
-							evolucionPacientes(turno,cliente, auxTurno);
-							printf("\n\n");
-							system("pause");		
-						}
-                        break;
-                    }
+                if(sesionInicProf == false)
+				{
+					
+					printf("\n=============================================================================");
+                 	printf("\nDebe iniciar sesion para realizar una accion, por favor escoja la opcion 1");
+                 	printf("\n=============================================================================\n\n");
+					system("pause");
+					
+				}
+				else
+				{
+                    printf("Registrar evolucion del tratamiento.\n\n");							
+					evolucionPacientes(turno,cliente, auxTurno);
+					printf("\n\n");
+					system("pause");		
+				}
+                break;
+            }
 
-                    case 0:
-                    {
-						printf("Salir. ");
-                        break;
-                    }
+            case 0:
+            {
+				printf("Salir. ");
+                break;
+            }
 
-                    default:
-                    {
-					     printf("\n=======================================");
-		                 printf("\nEsa opcion no se encuentra en el Menu.\n");
-		                 printf("\n=======================================\n\n");
-		                 system("pause");
-                        break;
-                    }
-                }
+            default:
+            {
+			    printf("\n=======================================");
+	            printf("\nEsa opcion no se encuentra en el Menu.\n");
+	            printf("\n=======================================\n\n");
+	            system("pause");
+                break;
+            }
+    	 }
 	} while(opcEspacios !=0);
 }
 
@@ -283,7 +273,6 @@ void frecepcion(char userfile[])
             {
 				printf("Iniciar sesion.");	
 				sesionInic = login (userfile );
-				
                 break;
             }
 
@@ -489,7 +478,7 @@ main()
                 }
             case 3:
                 {
-                  	fadmin(userfile,logins);
+                	fadmin(userfile,logins);
 					break;
                 }
                 
@@ -499,7 +488,6 @@ main()
                     acercaDe ();
                     setTextColor(9);
                     system("pause");
-                    
                     break;
                 }
             case 0:
@@ -509,7 +497,6 @@ main()
                     printf("\nCerrando Programa...");
                     printf("\n=======================================\n\n");
                     system("pause");
-                    
                     break;
                 }
             default :
@@ -518,7 +505,6 @@ main()
                     printf("\nEsa Opcion no se encuentra en el Menu.");
                     printf("\n=======================================\n\n");
                     system("pause");
-
                     break;
                 }
               

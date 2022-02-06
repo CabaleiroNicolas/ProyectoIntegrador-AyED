@@ -36,7 +36,6 @@ string fGetDatoMedico( int idProfesional)
 	return medico;
 }
 
-
 //Devuelve los datos del Cliente
 string fGetDatoCliente( int dniCliente)
 {
@@ -79,10 +78,7 @@ void RegistrarProfesional(FILE *archProfesional) //modulo Administracion
 {
 
 	Profesional prof;
-	//FILE *contProf;
-
 	archProfesional = fopen("Profesionales.dat", "r+b");
-	//contProf = fopen(contadorProf, "r+b");
 
 	if(archProfesional == NULL)
 	{
@@ -126,11 +122,7 @@ void RegistrarProfesional(FILE *archProfesional) //modulo Administracion
 
 	fwrite(&prof, sizeof(Profesional), 1,archProfesional);
 	
-	//fwrite(&contProf, sizeof(contProf), 1,contProf);
-
 	fclose(archProfesional);
-	//fclose(contProf);
-
 }
 
 
@@ -149,8 +141,7 @@ void RegistrarUsuario (char userfile[], Login logins [255]) //modulo administrac
 		printf("Error al abrir el archivo %s \n",userfile);
 		exit(EXIT_FAILURE);
 	}
-	
-	
+		
 	printf("\nNombre de Usuario: ");
 	_flushall();
 	gets(reg.usuario);
@@ -190,16 +181,12 @@ void RegistrarUsuario (char userfile[], Login logins [255]) //modulo administrac
 
 	fwrite(&reg, sizeof(Usuario), 1,fp);
 		
-
 	cantLogins++;
-
+	
 	//al usuario registrado lo agrego al vector de logins para futuras validaciones 
-	
 	strcpy(logins[cantLogins].usuario,reg.usuario);
-	
 
 	fclose(fp);
-
 }
 
 
@@ -246,8 +233,7 @@ void AtencionPorProf (FILE *turno) //modulo admin
 	while(!feof(turno))
 	{
 		if(turnos.idProfesional==auxpro)
-		{
-				
+		{	
 			dia = replicate("0",2-to_string(turnos.fechaDeTurno.dia).length())+to_string(turnos.fechaDeTurno.dia);
 			mes = replicate("0",2-to_string(turnos.fechaDeTurno.mes).length())+to_string(turnos.fechaDeTurno.mes);
 			fecha = dia+"/"+mes+"/"+to_string(turnos.fechaDeTurno.anio);
@@ -266,8 +252,7 @@ void AtencionPorProf (FILE *turno) //modulo admin
 			cantidad = 50 - detalle.length(); 
 			detalle = detalle + replicate(" ",cantidad);
 			
-			cout << fecha+dni+paciente+detalle+"\n";		
-			
+			cout << fecha+dni+paciente+detalle+"\n";			
 		}
 		fread(&turnos,sizeof(Turnos),1,turno);
     }
@@ -306,8 +291,7 @@ void listarProf (FILE *prof)
 	 fread(&profs,sizeof(Profesional),1,prof);
 	}
 	
-	fclose (prof);
-	
+	fclose (prof);	
 }
 
 void listarClientes (FILE *cliente)
@@ -327,7 +311,6 @@ void listarClientes (FILE *cliente)
 	
 	while (!feof(cliente))
 	{
-	 
 	 printf("Apellido y Nombre:");
 	 puts(clientes.apeNom);
 	 printf("\nDNI: %d\n\n",clientes.dniCliente);
@@ -339,7 +322,6 @@ void listarClientes (FILE *cliente)
 	
 }
 
-//#include "estructuras.h"
 void evolucionPacientes(FILE *fp_turno,FILE *cliente, FILE *auxTurn)	
 {
 
@@ -355,13 +337,13 @@ void evolucionPacientes(FILE *fp_turno,FILE *cliente, FILE *auxTurn)
 	
    	fread(&turn,sizeof(Turnos),1,fp_turno);
 
-		while (!feof(fp_turno))
-	    {
-			   
-			i++;
-			fread(&turn,sizeof(Turnos),1,fp_turno);
+	while (!feof(fp_turno))
+    {
+		   
+		i++;
+		fread(&turn,sizeof(Turnos),1,fp_turno);
 
-		}
+	}
 
 	if(i == 0)
 	{
@@ -376,12 +358,10 @@ void evolucionPacientes(FILE *fp_turno,FILE *cliente, FILE *auxTurn)
 		fread(&clie, sizeof(Cliente), 1, cliente);
 	   
 	   	while (!feof(cliente) && centinela == false)
-	    {
-			   
+	    {   
 			if(auxDniClien == clie.dniCliente)
 			{
 			    centinela = true;
-	
 		    }
 			else
 			{
@@ -413,7 +393,7 @@ void evolucionPacientes(FILE *fp_turno,FILE *cliente, FILE *auxTurn)
 				{
 					fread(&turn, sizeof(Turnos), 1,fp_turno);	
 					evolucion = false;							
-			   }
+			    }
 			}
 			
 			if(centinela== true &&  evolucion == false)
@@ -427,7 +407,6 @@ void evolucionPacientes(FILE *fp_turno,FILE *cliente, FILE *auxTurn)
 	fclose(cliente);
 	fclose(fp_turno);
 }
-
 
 void regiTurnos(FILE *turno, FILE *archProfesional, FILE *cliente) //modulo recepcionista
 {
@@ -503,7 +482,6 @@ void regiTurnos(FILE *turno, FILE *archProfesional, FILE *cliente) //modulo rece
 		turnos.atendido = false; //indica que el cliente no fue atendido 
 			
 		fwrite(&turnos,sizeof(Turnos),1,turno);	
-		//fwrite (&contTurn, sizeof(contTurn), 1, contTurn);
 	}
 	else
 	{
@@ -574,7 +552,6 @@ void RegistrarCliente (FILE *cliente)//modulo recepcionista
 	fclose (cliente);
 }
 
-
 //Listado de atención por profesional y por fecha
 void listadoAtencionProf (struct Profesional vecProf [TAM], struct Cliente vecCliente [TAM],  FILE *turno) //modulo recepcionista
 {
@@ -602,24 +579,23 @@ void listadoAtencionProf (struct Profesional vecProf [TAM], struct Cliente vecCl
 	while(!feof(turno))
 		{
 			if(turnos.idProfesional==auxpro && turnos.atendido == true)
-				{
-					cantidad = 2 - to_string(turnos.fechaDeTurno.dia).length();
-					dia = replicate("0",cantidad)+to_string(turnos.fechaDeTurno.dia);
-					cantidad = 2 - to_string(turnos.fechaDeTurno.mes).length();
-					mes = replicate("0",cantidad)+to_string(turnos.fechaDeTurno.mes);
-					fecha = dia  +'/'+mes+"/"+to_string(turnos.fechaDeTurno.anio);
-					cliente = fGetDatoCliente(turnos.dniCliente);
-					cantidad = 30 - cliente.length();
-					cliente = cliente + replicate(" ",cantidad);
-					cout <<fecha+" | "+cliente+" | "+to_string(turnos.dniCliente)+"\n";
-					//cout <<fecha+" | "+to_string(turnos.dniCliente)+"\n";
-				}
+			{
+				cantidad = 2 - to_string(turnos.fechaDeTurno.dia).length();
+				dia = replicate("0",cantidad)+to_string(turnos.fechaDeTurno.dia);
+				cantidad = 2 - to_string(turnos.fechaDeTurno.mes).length();
+				mes = replicate("0",cantidad)+to_string(turnos.fechaDeTurno.mes);
+				fecha = dia  +'/'+mes+"/"+to_string(turnos.fechaDeTurno.anio);
+				cliente = fGetDatoCliente(turnos.dniCliente);
+				cantidad = 30 - cliente.length();
+				cliente = cliente + replicate(" ",cantidad);
+				cout <<fecha+" | "+cliente+" | "+to_string(turnos.dniCliente)+"\n";
+				//cout <<fecha+" | "+to_string(turnos.dniCliente)+"\n";
+			}
 			fread(&turnos,sizeof(Turnos),1,turno);
 	    }
 
 	fclose (turno);
 }
-
 
 void listaEspera(FILE *fp_turno, FILE *prof, FILE *cliente,int idProfesional) // modulo espacios
 {
@@ -713,15 +689,13 @@ void listaEspera(FILE *fp_turno, FILE *prof, FILE *cliente,int idProfesional) //
 			
 			fread(&turnos,sizeof(Turnos),1,fp_turno);
 			
-			i++;
-			
+			i++;	
 		}while(!feof(fp_turno));
 		
 		if (tengopacientes == false)
 		{
 			printf ("No tiene pacientes en su lista de espera.\n");					
-		}	
-		
+		}		
 	}
 	
 	fclose(fp_turno);
@@ -841,8 +815,6 @@ void RankingProfesionales()
 	}
 }
 
-
-
 bool login(char userfile[])
 {
 	FILE *fp;
@@ -880,9 +852,9 @@ bool login(char userfile[])
 		pass=strcmp(password,reg.password);
 	
 		if ((user== 0) && (pass== 0))
-			{
-				flag = true;
-			}
+		{
+			flag = true;
+		}
 		
 		while ((!feof(fp)) && (flag == false))
 		{
@@ -892,8 +864,7 @@ bool login(char userfile[])
 				pass=strcmp(password,reg.password);
 				if ((user== 0) && (pass== 0))
 				{
-					flag = true;
-					
+					flag = true;	
 				}
 		   }
 			fread(&reg,sizeof(reg),1,fp);
@@ -914,4 +885,3 @@ bool login(char userfile[])
 	
 	return flag;
 }
-
