@@ -205,7 +205,6 @@ void AtencionPorProf (FILE *turno) //modulo admin
 	turno=fopen("turnos.dat","rb");
 	
 	printf("\nAtenciones por Profesionales\n");
-	
 	printf("Ingrese ID del Profesional a buscar: ");
 	scanf ("%d", &auxpro);
 	
@@ -382,6 +381,7 @@ void evolucionPacientes(FILE *fp_turno,FILE *cliente, FILE *auxTurn)
 			    if( auxDniClien == turn.dniCliente && 	evolucion == false && turn.atendido == false )
 				{
 					printf("\nRegistre la evolucion del Paciente: ");
+					printf ("\n-------------------------------------\n");
 					fflush(stdin);
 					turn.atendido = true; //Marca que fue atendido el paciente
 					gets(turn.detalleDeAtencion);
@@ -637,7 +637,6 @@ void listaEspera(FILE *fp_turno, FILE *prof, FILE *cliente,int idProfesional) //
 	{
 		system("cls");
 		cout << "Lista de Espera de Clientes\n";
-		cout << "---------------------------\n";
 		
 		fread(&turnos,sizeof(Turnos),1,fp_turno);
 		

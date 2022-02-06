@@ -145,15 +145,15 @@ void logoutn()
 	
 	 }
 		cout<< "\n";		
-		cout<< "";
+		cout<< " ";
 		cout <<linea+"\n";	
 	
 		Sleep(1000);
 		cout<< "\n\n";		
-		cout<< "\t\t\t\t\tFACULTAD REGIONAL TUCUMAN";
+		cout <<replicate(" ",50)+"FACULTAD REGIONAL TUCUMAN";
 		Sleep(1000);
 		cout<< "\n";		
-		cout<< "\t\t\t\t\tIngenieria en Sistemas ";
+		cout <<replicate(" ",50)+"Ingenieria en Sistemas ";
 		Sleep(1000);
 
 	

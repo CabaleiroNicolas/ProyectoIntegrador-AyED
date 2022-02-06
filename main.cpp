@@ -23,8 +23,11 @@ int MenuGeneral()
     int opc = 0;
     
     cout <<"\n\n\n";
-	cout <<replicate(" ",50)+"-- Menu Principal --\n";
-	cout <<"\n";
+    setTextColor(1);
+    cout <<replicate(" ",50)+"================================\n";
+	cout <<replicate(" ",50)+"          MENU PRINCIPAL\n";
+	cout <<replicate(" ",50)+"================================\n\n";
+	setTextColor(9);
     cout <<replicate(" ",50)+"1.- Modulo Espacios.\n";
     cout <<replicate(" ",50)+"2.- Modulo Recepcionista\n";
     cout <<replicate(" ",50)+"3.- Modulo Administracion\n";
@@ -40,21 +43,24 @@ int MenuGeneral()
 int MenuRecepcion(bool sesionInic)
 {
     int opc = 0;
-
-    printf("\n================================");
-    printf("\n       MODULO RECEPCION");
-    printf("\n================================\n");
+	
+	cout <<"\n\n\n";
+	setTextColor(1);
+	cout <<replicate(" ",45)+"================================\n";
+    cout <<replicate(" ",45)+"       MODULO RECEPCION\n";
+	cout <<replicate(" ",45)+"================================\n\n";
+	setTextColor(9);
 
     if(sesionInic == false)
 	{
-		printf("\n1.- Iniciar Sesion");
+		cout <<replicate(" ",40)+"1.- Iniciar Sesion\n";
 	}
-    printf("\n2.- Registrar Cliente");
-    printf("\n3.- Registrar Turno");
-    printf("\n4.- Listado de Atenciones por Profesional y Fecha");
-    printf("\n0.- Retornar al menu principal");
+    cout <<replicate(" ",40)+"2.- Registrar Cliente\n";
+    cout <<replicate(" ",40)+"3.- Registrar Turno\n";
+    cout <<replicate(" ",40)+"4.- Listado de Atenciones por Profesional y Fecha\n";
+    cout <<replicate(" ",40)+"0.- Retornar al menu principal\n\n";
 
-    printf("\n\nIngrese una Opcion: ");
+    cout <<replicate(" ",40)+"Ingrese una Opcion: ";
     scanf("%d", &opc);
 
     return opc;
@@ -63,21 +69,26 @@ int MenuRecepcion(bool sesionInic)
 int MenuEspacios(bool sesionInicProf)
 {
     int opc = 0;
+    
+    cout <<"\n\n\n";
+    
+    setTextColor(1);
+    
+	cout <<replicate(" ",45)+"================================\n";
+    cout <<replicate(" ",45)+"       MODULO ESPACIOS\n";
+	cout <<replicate(" ",45)+"================================\n\n";
+	
+	setTextColor(9);
 
-    printf("\n================================");
-    printf("\n       MODULO ESPACIOS");
-    printf("\n================================\n");
-
-   
     if(sesionInicProf == false)
 	{
-		printf("\n1.- Iniciar Sesion");
+		cout <<replicate(" ",40)+"1.- Iniciar Sesion\n";
 	}
-    printf("\n2.- Visualizar Lista de Espera de Turnos (informe)");
-    printf("\n3.- Registrar Evolucion del tratamiento");
-    printf("\n0.- Retornar al menu principal");
+    cout <<replicate(" ",40)+"2.- Visualizar Lista de Espera de Turnos (informe)\n";
+    cout <<replicate(" ",40)+"3.- Registrar Evolucion del tratamiento\n";
+    cout <<replicate(" ",40)+"0.- Retornar al menu principal\n\n";
 
-    printf("\n\nIngrese una Opcion: ");
+    cout <<replicate(" ",40)+"Ingrese una Opcion: ";
     scanf("%d", &opc);
 
     return opc;
@@ -86,20 +97,26 @@ int MenuEspacios(bool sesionInicProf)
 int MenuAdministracion()
 {
      int opc = 0;
+     
+    cout <<"\n\n\n";
+    
+    setTextColor(1);
+    
+	cout <<replicate(" ",45)+"================================\n";
+    cout <<replicate(" ",45)+"       MODULO ADMINISTRACION\n";
+	cout <<replicate(" ",45)+"================================\n\n";
+	
+	setTextColor(9);
+	
+    cout <<replicate(" ",40)+"1.- Registrar Profesional\n";
+    cout <<replicate(" ",40)+"2.- Registrar Usuario Recepcionista\n";
+    cout <<replicate(" ",40)+"3.- Atenciones por Profesional\n";
+    cout <<replicate(" ",40)+"4.- Ranking de Profesionales por Atenciones\n";
+    cout <<replicate(" ",40)+"5.- Listado de Profesionales\n";
+    cout <<replicate(" ",40)+"6.- Listado de Clientes\n";
+    cout <<replicate(" ",40)+"0.- Retornar al menu principal\n\n";
 
-    printf("\n====================================");
-    printf("\n       MODULO ADMINISTRACION");
-    printf("\n====================================\n");
-
-    printf("\n1.- Registrar Profesional");
-    printf("\n2.- Registrar Usuario Recepcionista");
-    printf("\n3.- Atenciones por Profesional");
-    printf("\n4.- Ranking de Profesionales por Atenciones");
-    printf("\n5.- Listado de Profesionales");
-    printf("\n6.- Listado de Clientes");
-    printf("\n0.- Retornar al menu principal");
-
-    printf("\n\nIngrese una Opcion: ");
+    printf("Ingrese una Opcion: ");
     scanf("%d", &opc);
 
     return opc;
@@ -370,7 +387,8 @@ void fadmin(char userfile[], Login logins [255])
             {
                 case 1:
                 {
-					printf("Registrar a un profesioanl.\n\n");
+					printf("Registrar a un profesional.\n");
+					printf ("------------------------------\n\n");
 					RegistrarProfesional(prof);
 					printf("\n\nProfesional Registrado con Exito!\n\n");
 					system("pause");
@@ -379,7 +397,8 @@ void fadmin(char userfile[], Login logins [255])
 
                 case 2:
                 {
-					printf("Registrar a un Usuario.\n\n");
+					printf("Registrar a un Usuario.\n");
+					printf ("------------------------------\n\n");
 					RegistrarUsuario(userfile, logins);
 					
 					printf("\n\nUsuario Registrado con Exito!\n\n");
@@ -406,6 +425,7 @@ void fadmin(char userfile[], Login logins [255])
                 case 5:
                 {
 					printf("Listado de Profesionales.\n\n");
+					printf ("----------------------------\n\n");
 					listarProf (prof);
 					printf("\n\n");
 					system("pause");
@@ -415,6 +435,7 @@ void fadmin(char userfile[], Login logins [255])
                 case 6:
                 {
 					printf("Listado de clientes.\n\n");
+					printf ("--------------------------\n\n");
 					listarClientes (cliente);
 					printf("\n\n");
 					system("pause");
