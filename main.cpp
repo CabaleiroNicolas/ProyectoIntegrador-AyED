@@ -22,6 +22,7 @@ int MenuGeneral()
 {
     int opc = 0;
     
+    cout <<"\n\n\n";
 	cout <<replicate(" ",50)+"-- Menu Principal --\n";
 	cout <<"\n";
     cout <<replicate(" ",50)+"1.- Modulo Espacios.\n";
