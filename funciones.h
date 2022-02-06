@@ -557,6 +557,9 @@ void listadoAtencionProf (struct Profesional vecProf [TAM], struct Cliente vecCl
 {
 
 	int auxpro=0;
+	int auxdia=0;
+	int auxmes=0;
+	int auxanio=0;
 	string mes;
 	string dia;
 	int cantidad;
@@ -568,8 +571,15 @@ void listadoAtencionProf (struct Profesional vecProf [TAM], struct Cliente vecCl
 
 	printf("Ingrese ID del Profesional: ");
 	scanf ("%d", &auxpro);
+	cout <<"\nDoctor: "+fGetDatoMedico(auxpro)+"\n";
 	
-	cout <<"Doctor: "+fGetDatoMedico(auxpro)+"\n";
+	printf("\nIngrese la fecha de consulta\n");
+	printf("\t\nD%ca:",161);
+	scanf ("%d", &auxdia);
+	printf("\t\nMes:");
+	scanf ("%d", &auxmes);
+	printf("\t\nA%co:",164);
+	scanf ("%d", &auxanio);
 	
 	cout << replicate("-",60)+"\n";
 	cout <<"  Fecha    | Paciente                   | DNI\n";
@@ -578,19 +588,19 @@ void listadoAtencionProf (struct Profesional vecProf [TAM], struct Cliente vecCl
 	fread(&turnos,sizeof(Turnos),1,turno);
 	while(!feof(turno))
 		{
-			if(turnos.idProfesional==auxpro && turnos.atendido == true)
-			{
-				cantidad = 2 - to_string(turnos.fechaDeTurno.dia).length();
-				dia = replicate("0",cantidad)+to_string(turnos.fechaDeTurno.dia);
-				cantidad = 2 - to_string(turnos.fechaDeTurno.mes).length();
-				mes = replicate("0",cantidad)+to_string(turnos.fechaDeTurno.mes);
-				fecha = dia  +'/'+mes+"/"+to_string(turnos.fechaDeTurno.anio);
-				cliente = fGetDatoCliente(turnos.dniCliente);
-				cantidad = 30 - cliente.length();
-				cliente = cliente + replicate(" ",cantidad);
-				cout <<fecha+" | "+cliente+" | "+to_string(turnos.dniCliente)+"\n";
-				//cout <<fecha+" | "+to_string(turnos.dniCliente)+"\n";
-			}
+			if((turnos.idProfesional==auxpro) && (turnos.atendido == true)&&(turnos.fechaDeTurno.anio == auxanio)&&(turnos.fechaDeTurno.mes == auxmes)&&(turnos.fechaDeTurno.dia == auxdia))
+				{
+					cantidad = 2 - to_string(turnos.fechaDeTurno.dia).length();
+					dia = replicate("0",cantidad)+to_string(turnos.fechaDeTurno.dia);
+					cantidad = 2 - to_string(turnos.fechaDeTurno.mes).length();
+					mes = replicate("0",cantidad)+to_string(turnos.fechaDeTurno.mes);
+					fecha = dia  +'/'+mes+"/"+to_string(turnos.fechaDeTurno.anio);
+					cliente = fGetDatoCliente(turnos.dniCliente);
+					cantidad = 30 - cliente.length();
+					cliente = cliente + replicate(" ",cantidad);
+					cout <<fecha+" | "+cliente+" | "+to_string(turnos.dniCliente)+"\n";
+					//cout <<fecha+" | "+to_string(turnos.dniCliente)+"\n";
+				}
 			fread(&turnos,sizeof(Turnos),1,turno);
 	    }
 
