@@ -122,6 +122,66 @@ int MenuAdministracion()
     return opc;
 }
 
+void RegistrarUsuario (char userfile[], Login logins [255], int &cantLogins ) //modulo administracion
+{
+	FILE *fp;
+	struct Usuario reg;
+	cadena continua = "S"; 
+	int valida =0;
+
+	fp = fopen(userfile, "a+b");
+
+	if(fp == NULL)
+	{
+		printf("Error al abrir el archivo %s \n",userfile);
+		exit(EXIT_FAILURE);
+	}
+		
+	printf("\nNombre de Usuario: ");
+	_flushall();
+	gets(reg.usuario);
+	
+	
+	valida = ValidUser(reg.usuario, logins, cantLogins);
+	
+	while (valida == 1) 
+	{
+		printf("\n\n");
+		system("pause");
+		system("cls");
+		printf("Registrar a un Usuario.\n\n");
+		printf( "\nNombre Usuario: ");
+		_flushall();
+		gets(reg.usuario);
+		valida = ValidUser(reg.usuario, logins, cantLogins);
+	}
+
+	printf("\nContrasenia: ");
+	_flushall();
+	enterPassword(reg.password, 12,5,12);//lee caracter a caracter la constraseña y la enmascara 
+		
+	while (checkPassword(reg.password)!=0) 
+	{
+		printf("\n\n");
+		system("pause");
+		system("cls");
+		printf( "\nContrasenia:  ");
+		enterPassword(reg.password, 12,5,12);
+	}
+	
+	printf("\nNombre y Apellido del usuario: ");
+	_flushall();
+	gets(reg.ApeNom);
+
+	fwrite(&reg, sizeof(Usuario), 1,fp);
+		
+	cantLogins++;
+	
+	//al usuario registrado lo agrego al vector de logins para futuras validaciones 
+	strcpy(logins[cantLogins].usuario,reg.usuario);
+
+	fclose(fp);
+}
 int loginProf(FILE *prof)
 {
 	int idVerificar = 0; 
@@ -399,7 +459,7 @@ void fadmin(char userfile[], Login logins [255])
                 {
 					printf("Registrar a un Usuario.\n");
 					printf ("------------------------------\n\n");
-					RegistrarUsuario(userfile, logins);
+					RegistrarUsuario(userfile, logins, cantLogins);
 					
 					printf("\n\nUsuario Registrado con Exito!\n\n");
 					system("pause");
@@ -476,7 +536,7 @@ main()
     Login logins[255];
     
    cantLogins = leerLogins (userfile, logins);//leo inicialmente todos los usuarios existentes
-   
+   //logins es un vec que contiene los usuarios registrados
    logoutn(); 
     
     do
