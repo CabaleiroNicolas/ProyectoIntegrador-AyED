@@ -125,10 +125,6 @@ void RegistrarProfesional(FILE *archProfesional) //modulo Administracion
 	fclose(archProfesional);
 }
 
-
-
-
-
 void AtencionPorProf (FILE *turno) //modulo admin
 {
 	string fecha;
@@ -144,8 +140,10 @@ void AtencionPorProf (FILE *turno) //modulo admin
 	turno=fopen("turnos.dat","rb");
 	
 	printf("\nAtenciones por Profesionales\n");
-	printf("Ingrese ID del Profesional a buscar: ");
+	printf("\nIngrese ID del Profesional a buscar: ");
 	scanf ("%d", &auxpro);
+	
+	cout <<"\nDoctor: "+fGetDatoMedico(auxpro)+"\n";
 	
 	cout << replicate("-",85)+"\n";
 	fecha ="| Fecha";
@@ -199,7 +197,6 @@ void AtencionPorProf (FILE *turno) //modulo admin
 	printf("\n\n");
 	
 }
-
 
 void listarProf (FILE *prof)
 {
@@ -451,25 +448,25 @@ void RegistrarCliente (FILE *cliente)//modulo recepcionista
 		}
 	}
 
-	printf ("\nApellido y nombre del cliente: ");
+	printf ("\nApellido y nombre: ");
 	_flushall();
 	gets (clientes.apeNom);
 	
-	printf ("\nDomicilio del cliente: ");
+	printf ("\nDomicilio: ");
 	_flushall();
 	gets (clientes.domicilio);	
 	
-	printf ("\nD.N.I del cliente sin puntos ni espacios: ");
+	printf ("\nD.N.I sin puntos ni espacios: ");
 	scanf ("%d", &clientes.dniCliente);
 	
-	printf ("\nLocalidad a la que pertenece el cliente : ");
+	printf ("\nLocalidad: ");
 	_flushall();
 	gets (clientes.localidad);
 	
-	printf ("\nIngrese el peso del cliente en kg: ");
+	printf ("\nIngrese el peso en kg: ");
 	scanf ("%f", &clientes.peso);
 		
-	printf ("\nIngrese la fecha de nacimiento del cliente: ");
+	printf ("\nIngrese la fecha de nacimiento: ");
 	_flushall ();
 	printf ("\n\tDia: ");
 	scanf("%d" ,&clientes.fechaDeNacimiento.dia);
@@ -480,7 +477,7 @@ void RegistrarCliente (FILE *cliente)//modulo recepcionista
 	
 	clientes.edad = 2021 - clientes.fechaDeNacimiento.anio;
 	
-	printf ("Ingrese un Telefono de contacto del cliente: ");
+	printf ("Ingrese un Telefono de contacto: ");
 	_flushall();
 	gets (clientes.telefono);
 	
@@ -603,7 +600,7 @@ void listaEspera(FILE *fp_turno, FILE *prof, FILE *cliente,int idProfesional) //
 		cout << turno+fecha+dni+paciente+detalle+"\n";					
 		cout << replicate("-",75)+"\n";
 		
-		do
+		do 
 		{
 			if(idProfesional==turnos.idProfesional && turnos.atendido == false)
 			{
@@ -631,19 +628,20 @@ void listaEspera(FILE *fp_turno, FILE *prof, FILE *cliente,int idProfesional) //
 				
 				cout << turno+fecha+dni+paciente+detalle+"\n";					
 				
-				tengopacientes=true;
-
+				tengopacientes= true;
 			}
 			
 			fread(&turnos,sizeof(Turnos),1,fp_turno);
-			
-			i++;	
-		}while(!feof(fp_turno));
+	
+			i++;
+				
+		} while(!feof(fp_turno));
 		
 		if (tengopacientes == false)
 		{
 			printf ("No tiene pacientes en su lista de espera.\n");					
-		}		
+		}
+				
 	}
 	
 	fclose(fp_turno);

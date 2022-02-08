@@ -140,9 +140,6 @@ void logoutn()
 			}
 		}
 	
-	
-	
-	
 	 }
 		cout<< "\n";		
 		cout<< " ";
@@ -153,30 +150,8 @@ void logoutn()
 		cout <<replicate(" ",50)+"FACULTAD REGIONAL TUCUMAN";
 		Sleep(1000);
 		cout<< "\n";		
-		cout <<replicate(" ",50)+"Ingenieria en Sistemas ";
+		cout <<replicate(" ",51)+"Ingenieria en Sistemas ";
 		Sleep(1000);
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }
 void acercaDe ()

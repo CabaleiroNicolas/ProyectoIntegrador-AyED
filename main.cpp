@@ -144,6 +144,7 @@ void RegistrarUsuario (char userfile[], Login logins [255], int &cantLogins ) //
 	
 	valida = ValidUser(reg.usuario, logins, cantLogins);
 	
+	
 	while (valida == 1) 
 	{
 		printf("\n\n");
