@@ -215,7 +215,7 @@ void listarProf (FILE *prof)
 	fread(&profs,sizeof(Profesional),1,prof);
 	
 	cout << replicate("-",60)+"\n";
-	cout << "Apelliodo y Nombre       |    ID Prof.   |   DNI   \n";
+	cout << "Apellido y Nombre       |    ID Prof.   |   DNI   \n";
 	cout <<replicate("-",60)+"\n";
 	
 	while (!feof(prof))
@@ -517,6 +517,7 @@ void listadoAtencionProf (struct Profesional vecProf [TAM], struct Cliente vecCl
 	printf("\t\nA%co:",164);
 	scanf ("%d", &auxanio);
 	
+	cout << "\n\n";
 	cout << replicate("-",60)+"\n";
 	cout <<"  Fecha    | Paciente                   | DNI\n";
 	cout << replicate("-",60)+"\n";
@@ -573,6 +574,7 @@ void listaEspera(FILE *fp_turno, FILE *prof, FILE *cliente,int idProfesional) //
 	{
 		system("cls");
 		cout << "Lista de Espera de Clientes\n";
+		cout << "\n\n";
 		
 		fread(&turnos,sizeof(Turnos),1,fp_turno);
 		
@@ -665,7 +667,6 @@ void RankingProfesionales()
 	int li_puesto;
 	int li_cantidad;
 	int li_matricula;
-
     Prof=fopen("Profesionales.dat","rb");
 
     if (Prof==NULL)
@@ -743,7 +744,8 @@ void RankingProfesionales()
 			}
 		}
 		while (stop);
-
+		
+		cout << "\n\n";
 		cout << replicate("-",40)+"\n";
 		cout << "Puesto | Id. Prof.  | Cant. Atenciones \n";
 		cout << replicate("-",40)+"\n";

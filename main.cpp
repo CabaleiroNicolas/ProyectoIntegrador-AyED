@@ -167,7 +167,7 @@ void RegistrarUsuario (char userfile[], Login logins [255], int &cantLogins ) //
 		system("pause");
 		system("cls");
 		printf( "\nContrasenia:  ");
-		enterPassword(reg.password, 12,5,12);
+		enterPassword(reg.password, 12,5,5);
 	}
 	
 	printf("\nNombre y Apellido del usuario: ");
